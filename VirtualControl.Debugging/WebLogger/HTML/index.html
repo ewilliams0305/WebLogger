@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8" />  
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="theme-color" content="#000000">
+    <title>Virtual Control Console</title>  
+	<link rel="manifest" href="webmanifest.json">
+    <link rel="stylesheet" href="src/style.css">
+	<link rel="apple-touch-icon" href="images/alien-192x192.png">
+</head>
+
+	<script src="src/console.js">	</script>  
+	<script src="src/index.js"> </script>
+
+	<body>
+
+		<div class="flex-column-container">
+
+		
+			<section class="connection-window" >
+				<h2 id="connection">VC-4 Server: Unknown</h2>  
+				<h5>Please enter a hostname:port and press connect (Default Port 54321)</h5>  
+				<p>
+					<input id="wsurladdress" type="text" hsize="500" placeholder="Host:Port"></input>
+					<button id="wsconnect" onclick="JavaScript:startWebsocket();">Connect</button>
+					<button id="wsdisconnect" class="hidden" onclick="JavaScript:socketclose();">Disconnect</button>
+				</p>
+			</section> 
+
+			<section id="output" class="disabled">
+				<div  id="scroll-window" class="console-window custom-scroll" >
+						<p id="consoleWindow"> </p> 
+				</div> 
+		    </section>
+
+			<section class="command-window" >
+			<div id="commandWindow" class="disabled">
+				<h3>Send Console Commands</h3>
+				<p>
+					<input id="command-input" onkeyup="commandKeyUp(event)" type="text" hsize="500"></input>
+					<button id="sendCommand" onclick="JavaScript:sendString();">Send</button>
+					<button id="clear-btn" onclick="clearConsole()">Clear</button>
+					<h5 id="last-command">Last Command: </h5>
+				</p>
+			</div>
+			
+		</section> 
+
+
+		</div>
+	</body>
+</html>

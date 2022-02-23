@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebLoggerExample", "VirtualControl.Program\WebLoggerExample.csproj", "{8EA0453F-A901-4E67-BF3A-876689CCCA37}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6262D8DB-BE1D-4064-93C0-B1BCB9AA255A} = {6262D8DB-BE1D-4064-93C0-B1BCB9AA255A}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualControl.Debugging", "VirtualControl.Debugging\VirtualControl.Debugging.csproj", "{6262D8DB-BE1D-4064-93C0-B1BCB9AA255A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8EA0453F-A901-4E67-BF3A-876689CCCA37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EA0453F-A901-4E67-BF3A-876689CCCA37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EA0453F-A901-4E67-BF3A-876689CCCA37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EA0453F-A901-4E67-BF3A-876689CCCA37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6262D8DB-BE1D-4064-93C0-B1BCB9AA255A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6262D8DB-BE1D-4064-93C0-B1BCB9AA255A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6262D8DB-BE1D-4064-93C0-B1BCB9AA255A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6262D8DB-BE1D-4064-93C0-B1BCB9AA255A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CC880CEC-E2D7-463C-9DD6-BB23C046B20D}
+	EndGlobalSection
+EndGlobal
