@@ -34,13 +34,12 @@ namespace VirtualControl.Debugging.WebLogger
                 {
                     try
                     {
-                        ErrorLog.Error("EXTRACT!{0} | {1}", Directory.GetApplicationRootDirectory(), Assembly.GetExecutingAssembly());
 
                         if(!File.Exists(Path.Combine(Directory.GetApplicationRootDirectory(), "html/logger/index.html")))
                         {
-                            EmbeddedResources.ExtractEmbeddedResource(Assembly.GetExecutingAssembly(), "VirtualControl.Debugging.WebLogger.HTML", new List<string>() { "index.html", "sw.js", "webmanifest.json" }, Path.Combine(Directory.GetApplicationRootDirectory(), "Html/logger"));
-                            EmbeddedResources.ExtractEmbeddedResource(Assembly.GetExecutingAssembly(), "VirtualControl.Debugging.WebLogger.HTML.images", Path.Combine(Directory.GetApplicationRootDirectory(), "Html/logger/images"));
-                            EmbeddedResources.ExtractEmbeddedResource(Assembly.GetExecutingAssembly(), "VirtualControl.Debugging.WebLogger.HTML.src", Path.Combine(Directory.GetApplicationRootDirectory(), "Html/logger/src"));
+                            EmbeddedResources.ExtractEmbeddedResource(Assembly.GetExecutingAssembly(), "VirtualControl.Debugging.WebLogger.HTML", new List<string>() { "index.html", "sw.js", "webmanifest.json" }, Path.Combine(Directory.GetApplicationRootDirectory(), "html/logger"));
+                            EmbeddedResources.ExtractEmbeddedResource(Assembly.GetExecutingAssembly(), "VirtualControl.Debugging.WebLogger.HTML.images", Path.Combine(Directory.GetApplicationRootDirectory(), "html/logger/images"));
+                            EmbeddedResources.ExtractEmbeddedResource(Assembly.GetExecutingAssembly(), "VirtualControl.Debugging.WebLogger.HTML.src", Path.Combine(Directory.GetApplicationRootDirectory(), "html/logger/src"));
                         }
                     }
                     catch (Exception e)

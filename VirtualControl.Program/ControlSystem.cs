@@ -59,7 +59,25 @@ namespace VirtualControl
             try
             {
                 WebLogger logger = new WebLogger(54321, false);
-                logger.Start(); 
+                logger.Start();
+
+                ConsoleCommands.RegisterCommand(new ConsoleCommand() 
+                {
+                    Command = "EXAMPLE", Description = "Simple example of console command", Help = "Parameter: NA", 
+                    CommandAction = (cmd, args) => 
+                    {
+                        logger.WriteLine($"{cmd} Haha");
+                    } 
+                });
+                ConsoleCommands.RegisterCommand(new ConsoleCommand() 
+                { 
+                    Command = "TEST", Description = "this is a Test command", Help = "Parameter: NA",
+                    CommandAction = (cmd, args) =>
+                    {
+                        logger.WriteLine($"{cmd} Haha");
+                    }
+                });
+
             }
             catch (Exception e)
             {
