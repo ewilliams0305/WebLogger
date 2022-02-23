@@ -13,7 +13,7 @@ namespace VirtualControl.Debugging.WebLogger
         /// <summary>
         /// Stored commands
         /// </summary>
-        private static Dictionary<string, ConsoleCommand> _consoleCmds = new Dictionary<string, ConsoleCommand>();
+        private static readonly Dictionary<string, ConsoleCommand> _consoleCmds = new Dictionary<string, ConsoleCommand>();
 
         /// <summary>
         /// Adds a new console command and stores a pointer to your callback method
@@ -48,11 +48,7 @@ namespace VirtualControl.Debugging.WebLogger
             if (_consoleCmds.ContainsKey(key))
             {
                 var consoleCommand = _consoleCmds[key];
-
-                var action = consoleCommand.CommandAction;
-
-                if (action != null)
-                    action(consoleCommand.Command, args);
+                consoleCommand.CommandAction?.Invoke(command, args);
 
                 return true;
             }
