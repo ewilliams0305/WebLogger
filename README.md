@@ -5,7 +5,7 @@
 1. [VS Solution](#Visual-Studio-Solution)
 2. [Example Program](#WebLogger-Example-Program)
 3. [Web Logger](#Create-a-WebLogger)
-4. [HTML Example](#html)
+4. [Console Commands](#Register-Console-Commands)
 
 ## Visual Studio Solution
 
@@ -19,11 +19,39 @@ The included solution includes two projects.  `WebLoggerExample` and `VirtualCon
 
 Create a new instance of the `WebLoger` class included in the `VirtualControl.Debugging.WebLogger` namespace
 
-```using VirtualControl.Debugging.WebLogger;```
+```csharp
+using VirtualControl.Debugging.WebLogger;
+```
 
 Create a new instance and start the server
 
 ```csharp
 WebLogger logger = new WebLogger(54321, false);
 logger.Start();
+```
+
+#### Register Console Commands
+
+Custom console commands be created at any point in the life cycle of the `WebLogger`.  To add a custom command create a new instance of the `ConsoleCommand` class.
+
+###### Default Constructor
+
+Using the default constuctor and setting all properties with the object initialization syntax
+
+```csharp
+new ConsoleCommand()
+{
+    Command = "EXAMPLE",
+    Description = "Simple example of console command",
+    Help = "Parameter: NA",
+    CommandAction = (cmd, args) =>
+    {
+        logger.WriteLine($"{cmd} Haha");
+    }
+};
+```
+
+Using the optional constuctor to set all properties at instantiation
+```csharp
+new ConsoleCommand("EXAMPLE", "Simple example of console command", "Parameter: NA", Handler);
 ```

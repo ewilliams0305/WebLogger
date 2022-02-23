@@ -34,5 +34,28 @@ namespace VirtualControl.Debugging.WebLogger
         /// Callback Action when Conosle Receives this Command
         /// </summary>
         public ConsoleCommandCallback CommandAction { get; set; }
+
+        /// <summary>
+        /// Default constructor
+        /// Creates an instance with undefined properties
+        /// </summary>
+        public ConsoleCommand()
+        {
+
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="description"></param>
+        /// <param name="help"></param>
+        /// <param name="handler"></param>
+        public ConsoleCommand(string command, string description, string help, ConsoleCommandCallback handler)
+        {
+            Command = command;  
+            Description = description;  
+            Help = help;
+            CommandAction = handler;   
+        }
     }
 }
