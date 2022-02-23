@@ -6,6 +6,7 @@
 2. [Example Program](#WebLogger-Example-Program)
 3. [Web Logger](#Create-a-WebLogger)
 4. [Console Commands](#Register-Console-Commands)
+4. [Embedded HTML](#Embedded-HTML)
 
 ## Visual Studio Solution
 
@@ -17,7 +18,11 @@ The included solution includes two projects.  `WebLoggerExample` and `VirtualCon
 
 #### Create a WebLogger
 
-Create a new instance of the `WebLoger` class included in the `VirtualControl.Debugging.WebLogger` namespace
+Create a new instance of the `WebLoger` class included in the `VirtualControl.Debugging.WebLogger` namespace.  Creating a new instace will:
+
+1. Create a Websocket Server at the specified port
+2. Copy all embedded resource HTML files to the VC4 server
+3. Create a few default console commands
 
 ```csharp
 using VirtualControl.Debugging.WebLogger;
@@ -67,7 +72,7 @@ Console command callback signature
 public delegate void ConsoleCommandCallback(string command, List<string> arguments);
 ```
 
-Putting it all together the example program illustrates a lambda expression with two custom commands
+Putting it all together the example program illustrates a lambda expression with two custom commands.  The command `List<string> arguments` are created by content passed from the console seperated by spaces.  Each argument will be passed to the delegate as a seperate string.
 
 ```csharp
 new ConsoleCommand()
@@ -82,3 +87,12 @@ new ConsoleCommand()
 };
 
 ```
+
+## Embedded HTML
+
+Located in the `VirtualControl.Debugging` project is a folder titled `WebLogger.HTML`.  All HTML source files have been added to the project and configured as an embedded resource.  These files will be automatically extracted and written to the HTML directory of the VC4 instance.  **Be aware, the program will check if the files are already created and ONLY write them if they are not found.  This means the HTML files will need to be deleted off the server if changees to the HTML are made**
+
+After loading the code to your VC4, create a new room and associate it with the program.  Once the room has been started browse to `/opt/crestron/virtualcontrol/RunningPrograms/[ROOM ID]/html/logger` to review the files on the server.  Files will be served up using the index/html file found at http://server/VirtualControl/Rooms/EXAMPLE/Html/logger/index.html
+
+
+
