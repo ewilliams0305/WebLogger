@@ -19,11 +19,11 @@ The included solution includes two projects.  `WebLoggerExample` and `VirtualCon
 
 Create a new instance of the `WebLoger` class included in the `VirtualControl.Debugging.WebLogger` namespace
 
-``using VirtualControl.Debugging.WebLogger;``
+```using VirtualControl.Debugging.WebLogger;```
 
 Create a new instance and start the server
 
-```
+```csharp
 WebLogger logger = new WebLogger(54321, false);
 logger.Start();
 ```
