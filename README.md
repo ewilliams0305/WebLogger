@@ -23,5 +23,6 @@ Create a new instance of the `WebLoger` class included in the `VirtualControl.De
 
 Create a new instance and start the server
 
+## Code Examples
 `WebLogger logger = new WebLogger(54321, false);
-                logger.Start();`
+logger.Start();`
