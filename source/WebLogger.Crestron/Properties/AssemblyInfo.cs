@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("WebLogger.Crestron")]
 [assembly: AssemblyDescription("Implementation of the WebLogger for the Crestron SDK")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Cenero, LLC")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("WebLogger.Crestron")]
-[assembly: AssemblyCopyright("Copyright © Cenero, LLC 2023")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

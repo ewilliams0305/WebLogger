@@ -1,9 +1,7 @@
 ﻿using System;
-using Serilog.Core;
 using System.Collections.Generic;
 using WebSocketSharp;
 using WebSocketSharp.Server;
-using Serilog;
 
 namespace WebLogger
 {
@@ -12,6 +10,7 @@ namespace WebLogger
     /// </summary>
     internal class WebLoggerBehavior : WebSocketBehavior
     {
+        private IWebLoggerCommander _logger;
         private bool _connected;
         private readonly List<string> _backlog = new List<string>();
 
@@ -21,6 +20,14 @@ namespace WebLogger
         public WebLoggerBehavior()
         {
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public void InitializeBehavior(IWebLoggerCommander logger)
+        {
+            _logger = logger;
+        }
 
         protected override void OnOpen()
         {
@@ -28,7 +35,7 @@ namespace WebLogger
 
             _connected = true;
 
-            SendSerial("\rVC4> CONNECTED TO CONSOLE");
+            SendSerial("\rWEB LOGGER> CONNECTED TO CONSOLE");
 
             if (_backlog.Count > 0)
             {
@@ -59,13 +66,18 @@ namespace WebLogger
 
         protected override void OnMessage(MessageEventArgs e)
         {
-            if (e.IsText)
-            {
-                if(e.Data.EndsWith("?"))
-                    Send("\rVC4> " + ConsoleCommands.GetHelpInfo(e.Data));
+            if (!e.IsText) 
+                return;
 
-                if (!ConsoleCommands.CallCommand(e.Data))
-                    Send("\rVC4> UNKNOWN COMMAND");
+            if (e.Data.EndsWith("?"))
+            {
+                Send("\rWEB LOGGER> " + _logger.GetHelpInfo(e.Data));
+                return;
+            }
+
+            if (!_logger.ExecuteCommand(e.Data))
+            {
+                Send("\rWEB LOGGER> UNKNOWN COMMAND");
             }
         }
 
@@ -79,7 +91,6 @@ namespace WebLogger
             {
                 Serilog.Log.Error(e, "Exception Sending Data: {0}", e.Message);
             }
-            
         }
 
         public void WriteLine(string msg, params object[] args)

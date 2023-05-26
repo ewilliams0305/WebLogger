@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Serilog.Core;
 using Serilog.Events;
 
@@ -23,10 +24,14 @@ namespace WebLogger
         /// </summary>
         /// <param name="formatProvider">The format provider.</param>
         /// <param name="logger">The logger.</param>
-        public WebloggerSink(IFormatProvider formatProvider, IWebLogger logger)
+        /// <param name="commands"></param>
+        public WebloggerSink(IFormatProvider formatProvider, IWebLogger logger, IEnumerable<IWebLoggerCommand> commands = null)
         {
             _formatProvider = formatProvider;
             _logger = logger;
+
+            RegisterCommands(commands);
+            _logger.Start();
         }
 
         /// <summary>
@@ -37,13 +42,17 @@ namespace WebLogger
         /// <param name="port"></param>
         /// <param name="secured"></param>
         /// <param name="applicationDirectory"></param>
-        public WebloggerSink(IFormatProvider formatProvider, int port, bool secured, string applicationDirectory)
+        /// <param name="commands"></param>
+        public WebloggerSink(IFormatProvider formatProvider, int port, bool secured, string applicationDirectory, IEnumerable<IWebLoggerCommand> commands = null)
         {
             _logger = new WebLogger(port,  secured, applicationDirectory);
-            _logger.Start();
-
             _formatProvider = formatProvider;
+
+            RegisterCommands(commands);
+            _logger.Start();
         }
+
+        
 
         /// <summary>
         /// Emit the provided log event to the sink.
@@ -79,6 +88,20 @@ namespace WebLogger
                     throw new ArgumentOutOfRangeException();
             }
         }
+
+        private void RegisterCommands(IEnumerable<IWebLoggerCommand> commands)
+        {
+            if (commands == null)
+            {
+                return;
+            }
+
+            foreach (var webLoggerCommand in commands)
+            {
+                _logger.RegisterCommand(webLoggerCommand);
+            }
+        }
+
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources.
         /// </summary>

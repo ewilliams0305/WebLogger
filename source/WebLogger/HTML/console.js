@@ -255,7 +255,7 @@ function init()
 		websocket.send(message); 
 	}  
 	
-	function socketclose()
+	function socketclose(evt)
 	{
 		websocket.close();
 	}

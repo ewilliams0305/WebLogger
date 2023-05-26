@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using WebLogger.Handlers;
+using WebLogger.Utilities;
 using WebSocketSharp.Server;
 
 namespace WebLogger
@@ -12,7 +13,7 @@ namespace WebLogger
     public sealed class WebLogger : IWebLogger
     {
         #region Static
-        public static bool IsInitialized { get; private set; }
+
         private static object _lock = new object();
 
         #endregion
@@ -25,8 +26,14 @@ namespace WebLogger
         private WebSocketServer _server;
         private WebLoggerBehavior _logger;
 
+        private readonly WebLoggerCommands _commands;
+
         #endregion
 
+        /// <summary>
+        /// True when the web logger has been configured and is in a valid state
+        /// </summary>
+        public bool IsInitialized { get; private set; }
 
         /// <summary>
         /// Creates a new instance of the weblogger.
@@ -40,6 +47,8 @@ namespace WebLogger
         {
             _port = port;
             _secured = secured;
+            _commands = new WebLoggerCommands();
+
             _destinationWebpageDirectory = destinationWebpageDirectory;
         }
 
@@ -93,50 +102,69 @@ namespace WebLogger
         /// <param name="args">Optional Arguments</param>
         public void WriteLine(string msg, params object[] args)
         {
-            if (_logger == null)
-                return;
-
-            _logger.WriteLine(msg, args);
+            _logger?.WriteLine(msg, args);
         }
-
+        /// <inheritdoc />
         public void WriteLine<T>(string msg, T property)
         {
-            if (_logger == null)
-                return;
-
-            _logger.WriteLine(msg, property);
+            _logger?.WriteLine(msg, property);
         }
-
+        /// <inheritdoc />
         public void WriteLine<T1, T2>(string msg, T1 property1, T2 property2 = default)
         {
-            if (_logger == null)
-                return;
-
-            _logger.WriteLine(msg, property1, property2);
+            _logger?.WriteLine(msg, property1, property2);
         }
-
+        /// <inheritdoc />
         public void WriteLine<T1, T2, T3>(string msg, T1 property1, T2 property2, T3 property3 = default)
         {
-            if (_logger == null)
-                return;
+            _logger?.WriteLine(msg, property1, property2, property3);
+        }
 
-            _logger.WriteLine(msg, property1, property2, property3);
+        /// <inheritdoc />
+        public bool RegisterCommand(IWebLoggerCommand command)
+        {
+            return _commands.RegisterCommand(command);
+        }
+
+        /// <inheritdoc />
+        public bool RemoveCommand(IWebLoggerCommand command)
+        {
+            return _commands.RemoveCommand(command);
+        }
+
+        /// <inheritdoc />
+        public bool RemoveCommand(string name)
+        {
+            return _commands.RemoveCommand(name);
         }
 
         /// <summary>
         /// Help Console command Handler
         /// Prints all Registered commands to the console
         /// </summary>
-        /// <param name="command">Command String</param>
-        /// <param name="args">Arguments</param>
-        public void GetAllCommands(string command, List<string> args)
+        public void ListCommands()
         {
-            _logger?.WriteLine("\rVC4> DISPLAYING ALL REGISTERED CONSOLE COMMANDS");
+            var header = $@"<br><span style="" color:#FF00FF; "">{"COMMAND".PadRight(22, '.')} | {"HELP".PadRight(60, '.')}  </>";
+            _logger?.WriteLine(header);
 
-            foreach (var cmd in ConsoleCommands.GetAllCommands())
+            foreach (var cmd in _commands.GetAllCommands())
             {
-                _logger?.WriteLine("\r" + cmd);
+                var result = $@"<span style="" color:#dddd11; "">>&nbsp;{ cmd.Command.ToUpper().PadRight(20, '.')} | </><span style=""color:#FFF;"">{cmd.Description.ToUpper().PadRight(40, '.')} | </><span style=""color:#FFF;"">{cmd.Help} | </>";
+                
+                _logger?.WriteLine(result);
             }
+            _logger?.WriteLine("<br>");
+        }
+
+        /// <inheritdoc />
+        public string GetHelpInfo(string command)
+        {
+            return _commands.GetHelpInfo(command);
+        }
+
+        public bool ExecuteCommand(string command)
+        {
+            return _commands.ExecuteCommand(command);
         }
 
         #endregion
@@ -151,11 +179,13 @@ namespace WebLogger
                 {
                     ReuseAddress = true
                 };
-                _server.AddWebSocketService<WebLoggerBehavior>("/", behavior => { _logger = behavior; });
+                _server.AddWebSocketService<WebLoggerBehavior>("/", behavior =>
+                {
+                    _logger = behavior;
+                    _logger.InitializeBehavior(this);
+                });
 
-                ConsoleCommands.RegisterCommand(new ConsoleCommand("HELP",
-                    "Returns all registered WebLogger console commands",
-                    "Parameter: NA", GetAllCommands));
+                _commands.RegisterCommand(new HelpCommandHandler(this));
             }
             catch (Exception e)
             {
@@ -163,7 +193,7 @@ namespace WebLogger
             }
         }
 
-        private static void ConvertEmbeddedResources(string destinationWebpageDirectory)
+        private void ConvertEmbeddedResources(string destinationWebpageDirectory)
         {
             lock (_lock)
             {
@@ -210,6 +240,8 @@ namespace WebLogger
             _server.Stop();
             _server = null;
             _logger = null;
+
+            _commands.Dispose();
         }
 
         public void Dispose()

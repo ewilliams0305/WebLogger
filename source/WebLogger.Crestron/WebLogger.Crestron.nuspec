@@ -12,5 +12,11 @@
     <releaseNotes>Adds an unsecured http service that will run on the Crestron Platform</releaseNotes>
     <copyright>$copyright$</copyright>
     <tags>Logging Serilog Crestron</tags>
+    <icon>log.png</icon>
+    <readme>README.md</readme>
   </metadata>
+  <files>
+      <file src="..\..\log.png" target="" />
+      <file src="..\..\README.md" target="" />
+  </files>
 </package>

@@ -1,14 +1,12 @@
-using System;
 using Crestron.SimplSharp;
-using Crestron.SimplSharp.CrestronIO; // For Basic SIMPL# Classes
-using Crestron.SimplSharpPro;                       	// For Basic SIMPL#Pro classes
-using Crestron.SimplSharpPro.CrestronThread;        	// For Threading
-using Crestron.SimplSharpPro.Diagnostics;		    	// For System Monitor Access
-using Crestron.SimplSharpPro.DeviceSupport;
+using Crestron.SimplSharp.CrestronIO; 
+using Crestron.SimplSharpPro;                       
+using Crestron.SimplSharpPro.CrestronThread;        
 using Serilog;
-using WebLogger.Crestron; // For Generic Device Support
+using System;
+using WebLogger.Crestron;
 
-namespace WebLogger.CrestronApplication
+namespace WebLogger.CrestronApp
 {
     public class ControlSystem : CrestronControlSystem
     {
@@ -33,9 +31,9 @@ namespace WebLogger.CrestronApplication
                 Thread.MaxNumberOfUserThreads = 20;
 
                 //Subscribe to the controller events (System, Program, and Ethernet)
-                CrestronEnvironment.SystemEventHandler += new SystemEventHandler(_ControllerSystemEventHandler);
-                CrestronEnvironment.ProgramStatusEventHandler += new ProgramStatusEventHandler(_ControllerProgramEventHandler);
-                CrestronEnvironment.EthernetEventHandler += new EthernetEventHandler(_ControllerEthernetEventHandler);
+                CrestronEnvironment.SystemEventHandler += new SystemEventHandler(ControllerSystemEventHandler);
+                CrestronEnvironment.ProgramStatusEventHandler += new ProgramStatusEventHandler(ControllerProgramEventHandler);
+                CrestronEnvironment.EthernetEventHandler += new EthernetEventHandler(ControllerEthernetEventHandler);
             }
             catch (Exception e)
             {
@@ -69,23 +67,24 @@ namespace WebLogger.CrestronApplication
                     port: 8081,
                     directory: Path.Combine(Directory.GetApplicationRootDirectory(), "html/logger/"));
 
-                ConsoleCommands.RegisterCommand(new ConsoleCommand(
-                    "EXAMPLE",
-                    "Simple example of console command",
-                    "Parameter: NA",
-                    (cmd, args) =>
-                    {
-                        Log.Logger.Information("{command} Received", cmd);
-                    }));
+                //ConsoleCommands.RegisterCommand(new WebLoggerCommand(
+                //    (cmd, args) =>
+                //    {
+                //        Log.Logger.Information("{command} Received", cmd);
+                //    },
+                //    "EXAMPLE",
+                //    "Simple example of console command",
+                //    "Parameter: NA"
+                //    ));
 
-                ConsoleCommands.RegisterCommand(new ConsoleCommand(
-                    "TEST",
-                    "Simple example of console command",
-                    "Parameter: NA",
-                    (cmd, args) =>
-                    {
-                        Log.Logger.Information("{command} Received", cmd);
-                    }));
+                //ConsoleCommands.RegisterCommand(new WebLoggerCommand(
+                //    (cmd, args) =>
+                //    {
+                //        Log.Logger.Information("{command} Received", cmd);
+                //    },
+                //    "TEST",
+                //    "Simple example of console command",
+                //    "Parameter: NA"));
 
                 Thread x = new Thread((obj) =>
                 {
@@ -116,9 +115,9 @@ namespace WebLogger.CrestronApplication
         /// </summary>
         /// <param name="ethernetEventArgs">This parameter holds the values 
         /// such as whether it's a Link Up or Link Down event. It will also indicate 
-        /// wich Ethernet adapter this event belongs to.
+        /// which Ethernet adapter this event belongs to.
         /// </param>
-        void _ControllerEthernetEventHandler(EthernetEventArgs ethernetEventArgs)
+        void ControllerEthernetEventHandler(EthernetEventArgs ethernetEventArgs)
         {
             switch (ethernetEventArgs.EthernetEventType)
             {//Determine the event type Link Up or Link Down
@@ -146,7 +145,7 @@ namespace WebLogger.CrestronApplication
         /// for other programs stopping
         /// </summary>
         /// <param name="programStatusEventType"></param>
-        void _ControllerProgramEventHandler(eProgramStatusEventType programStatusEventType)
+        void ControllerProgramEventHandler(eProgramStatusEventType programStatusEventType)
         {
             switch (programStatusEventType)
             {
@@ -161,6 +160,8 @@ namespace WebLogger.CrestronApplication
                     Log.CloseAndFlush();
                     
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(programStatusEventType), programStatusEventType, null);
             }
 
         }
@@ -171,7 +172,7 @@ namespace WebLogger.CrestronApplication
         /// removable media is ejected / re-inserted.
         /// </summary>
         /// <param name="systemEventType"></param>
-        void _ControllerSystemEventHandler(eSystemEventType systemEventType)
+        void ControllerSystemEventHandler(eSystemEventType systemEventType)
         {
             switch (systemEventType)
             {

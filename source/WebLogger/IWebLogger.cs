@@ -2,8 +2,16 @@
 
 namespace WebLogger
 {
-    public interface IWebLogger : IDisposable
+    /// <summary>
+    /// Provides the public API contract of the web logger console.
+    /// </summary>
+    public interface IWebLogger : IWebLoggerCommander, IDisposable
     {
+        /// <summary>
+        /// True when the web logger has been configured and is in a valid state
+        /// </summary>
+        bool IsInitialized { get; }
+        
         /// <summary>
         /// Starts the server
         /// </summary>
@@ -53,7 +61,5 @@ namespace WebLogger
         /// <param name="property2">Property 2</param>
         /// <param name="property3">Property 3</param>
         void WriteLine<T1, T2, T3>(string msg, T1 property1, T2 property2, T3 property3 = default);
-
-
     }
 }

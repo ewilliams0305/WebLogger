@@ -1,4 +1,4 @@
-﻿namespace WebLogger
+﻿namespace WebLogger.Utilities
 {
     internal interface IAssemblyMarker
     {

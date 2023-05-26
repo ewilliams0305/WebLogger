@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
-namespace WebLogger
+namespace WebLogger.Utilities
 {
     /// <summary>
     /// Extensions to Work with Embedded Resource Files
     /// </summary>
-    public sealed class EmbeddedResources
+    internal sealed class EmbeddedResources
     {
 
         /// <summary>
