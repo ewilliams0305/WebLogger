@@ -1,0 +1,59 @@
+﻿using System;
+
+namespace WebLogger
+{
+    public interface IWebLogger : IDisposable
+    {
+        /// <summary>
+        /// Starts the server
+        /// </summary>
+        void Start();
+
+        /// <summary>
+        /// Stops the server
+        /// </summary>
+        void Stop();
+
+        /// <summary>
+        /// Writes a message to the output with optional parameters array
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="args"></param>
+        void WriteLine(string msg, params object[] args);
+
+        /// <summary>
+        /// Writes a message to the output with optional parameters
+        /// <remarks>Prevents boxing and unboxing and is preferable to the object array</remarks>
+        /// </summary>
+        /// <typeparam name="T">Argument property Type</typeparam>
+        /// <param name="msg"></param>
+        /// <param name="property">Property</param>
+        void WriteLine<T>(string msg, T property);
+
+        /// <summary>
+        /// Writes a message to the output with optional parameters
+        /// <remarks>Prevents boxing and unboxing and is preferable to the object array</remarks>
+        /// </summary>
+        /// <typeparam name="T1">1st Argument property Type</typeparam>
+        /// <typeparam name="T2">1st Argument property Type</typeparam>
+        /// <param name="msg"></param>
+        /// <param name="property1">Property 1</param>
+        /// <param name="property2">Property 2</param>
+        void WriteLine<T1, T2>(string msg, T1 property1, T2 property2 = default);
+
+        /// <summary>
+        /// Writes a message to the output with optional parameters
+        /// <remarks>Prevents boxing and unboxing and is preferable to the object array</remarks>
+        /// </summary>
+        /// <typeparam name="T1">1st Argument property Type</typeparam>
+        /// <typeparam name="T2">1st Argument property Type</typeparam>
+        /// <typeparam name="T3">1st Argument property Type</typeparam>
+        /// <param name="msg"></param>
+        /// <param name="property1">Property 1</param>
+        /// <param name="property2">Property 2</param>
+        /// <param name="property3">Property 3</param>
+        void WriteLine<T1, T2, T3>(string msg, T1 property1, T2 property2, T3 property3 = default);
+
+
+    }
+}
