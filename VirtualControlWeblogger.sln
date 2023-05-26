@@ -3,12 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebLoggerExample", "VirtualControl.Program\WebLoggerExample.csproj", "{8EA0453F-A901-4E67-BF3A-876689CCCA37}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebLogger.CrestronApp", "VirtualControl.Program\WebLogger.CrestronApp.csproj", "{8EA0453F-A901-4E67-BF3A-876689CCCA37}"
 	ProjectSection(ProjectDependencies) = postProject
 		{6262D8DB-BE1D-4064-93C0-B1BCB9AA255A} = {6262D8DB-BE1D-4064-93C0-B1BCB9AA255A}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualControl.Debugging", "VirtualControl.Debugging\VirtualControl.Debugging.csproj", "{6262D8DB-BE1D-4064-93C0-B1BCB9AA255A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebLogger.VirtualControl", "VirtualControl.Debugging\WebLogger.VirtualControl.csproj", "{6262D8DB-BE1D-4064-93C0-B1BCB9AA255A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebLogger", "VirtualControl.WebLogger\WebLogger.csproj", "{F825A404-49E1-4A66-9205-DC4D86D67467}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebLogger.ConsoleApp", "WebLoggerConsoleApp\WebLogger.ConsoleApp.csproj", "{A5AF2888-13CC-4FF6-AD77-D1EC115F5E0C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +28,14 @@ Global
 		{6262D8DB-BE1D-4064-93C0-B1BCB9AA255A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6262D8DB-BE1D-4064-93C0-B1BCB9AA255A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6262D8DB-BE1D-4064-93C0-B1BCB9AA255A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F825A404-49E1-4A66-9205-DC4D86D67467}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F825A404-49E1-4A66-9205-DC4D86D67467}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F825A404-49E1-4A66-9205-DC4D86D67467}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F825A404-49E1-4A66-9205-DC4D86D67467}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5AF2888-13CC-4FF6-AD77-D1EC115F5E0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5AF2888-13CC-4FF6-AD77-D1EC115F5E0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5AF2888-13CC-4FF6-AD77-D1EC115F5E0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5AF2888-13CC-4FF6-AD77-D1EC115F5E0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,18 +1,15 @@
-﻿
-using Crestron.SimplSharp;
-using Crestron.SimplSharp.CrestronIO;
-using Crestron.SimplSharp.Reflection;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Text;
 
-namespace VirtualControl.Debugging
+namespace WebLogger
 {
     /// <summary>
     /// Extensions to Work with Embedded Resource Files
     /// </summary>
-    public class EmbeddedResources
+    public sealed class EmbeddedResources
     {
 
         /// <summary>
