@@ -4,7 +4,10 @@ using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.CrestronThread;        
 using Serilog;
 using System;
+using System.Collections.Generic;
 using WebLogger.Crestron;
+
+//using WebLogger.Crestron;
 
 namespace WebLogger.CrestronApp
 {
@@ -58,33 +61,41 @@ namespace WebLogger.CrestronApp
         {
             try
             {
+                var webLogger = new WebLogger(54321, false, Directory.GetApplicationRootDirectory());
+
+                var commands = new List<IWebLoggerCommand>()
+                {
+                    new WebLoggerCommand(
+                        (cmd, args) =>
+                        {
+                            Log.Logger.Information("{command} Received", cmd);
+                        },
+                        "EXAMPLE",
+                        "Simple example of console command",
+                        "Parameter: NA"),
+
+                    new WebLoggerCommand(
+                        (cmd, args) =>
+                        {
+                            Log.Logger.Information("{command} Received", cmd);
+                        },
+                        "TEST",
+                        "Simple example of console command",
+                        "Parameter: NA"),
+
+                    new IpConfigCommand(webLogger)
+
+                };
+
                 Log.Logger = new LoggerConfiguration()
                     .MinimumLevel.Verbose()
-                    .WriteTo.WebloggerSink(54321, false, Directory.GetApplicationRootDirectory())
+                    .WriteTo.WebloggerSink(webLogger, commands)
                     .CreateLogger();
 
                 var webPageServer = new WebLoggerHttpServer(
                     port: 8081,
                     directory: Path.Combine(Directory.GetApplicationRootDirectory(), "html/logger/"));
 
-                //ConsoleCommands.RegisterCommand(new WebLoggerCommand(
-                //    (cmd, args) =>
-                //    {
-                //        Log.Logger.Information("{command} Received", cmd);
-                //    },
-                //    "EXAMPLE",
-                //    "Simple example of console command",
-                //    "Parameter: NA"
-                //    ));
-
-                //ConsoleCommands.RegisterCommand(new WebLoggerCommand(
-                //    (cmd, args) =>
-                //    {
-                //        Log.Logger.Information("{command} Received", cmd);
-                //    },
-                //    "TEST",
-                //    "Simple example of console command",
-                //    "Parameter: NA"));
 
                 Thread x = new Thread((obj) =>
                 {
