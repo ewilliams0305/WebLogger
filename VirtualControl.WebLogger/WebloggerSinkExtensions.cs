@@ -2,7 +2,7 @@
 using Serilog;
 using Serilog.Configuration;
 
-namespace WebLogger
+namespace VirtualControl.WebLogger
 {
     /// <summary>
     /// Creates a new Serilog Sink

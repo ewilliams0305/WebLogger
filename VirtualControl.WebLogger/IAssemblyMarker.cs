@@ -1,4 +1,4 @@
-﻿namespace WebLogger
+﻿namespace VirtualControl.WebLogger
 {
     internal interface IAssemblyMarker
     {

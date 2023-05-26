@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WebLogger
+namespace VirtualControl.WebLogger
 {
     /// <summary>
     /// A Console Command Object

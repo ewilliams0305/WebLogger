@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text;
 
-namespace WebLogger
+namespace VirtualControl.WebLogger
 {
     /// <summary>
     /// Extensions to Work with Embedded Resource Files
@@ -45,7 +44,7 @@ namespace WebLogger
             }
             catch (Exception e)
             {
-                ErrorLog.Exception("Failed to Convert Embedded Resource to Files: {0}", e);
+                Serilog.Log.Error(e,"Failed to Convert Embedded Resource to Files: {0}", e);
             }
         }
 
@@ -62,35 +61,43 @@ namespace WebLogger
         /// </example>
         public static void ExtractEmbeddedResource(Assembly assembly, string resourceDirectory, string outputDir)
         {
-            try
-            {
-                var files = assembly.GetManifestResourceNames();
+            
+            var files = assembly.GetManifestResourceNames();
 
-                foreach (string file in files)
+            foreach (var file in files)
+            {
+                try
                 {
                     var fileName = file.Remove(0, resourceDirectory.Length + 1);
 
-                    if (!file.StartsWith(resourceDirectory)) continue;
+                    if (!file.StartsWith(resourceDirectory))
+                        continue;
 
                     using (var stream = assembly.GetManifestResourceStream(file))
                     {
                         if (stream == null)
                             throw new IOException("File Not Found");
 
-                        using (var fileStream = new FileStream(Path.Combine(outputDir, fileName), FileMode.Create))
+                        if(!Directory.Exists(outputDir))
+                            Directory.CreateDirectory(outputDir);
+
+                        var path = Path.Combine(outputDir, fileName);
+
+                        using (var fileStream = new FileStream(path, FileMode.Create))
                         {
                             for (int i = 0; i < stream.Length; i++)
                             {
                                 fileStream.WriteByte((byte)stream.ReadByte());
                             }
+
                             fileStream.Close();
                         }
                     }
                 }
-            }
-            catch (Exception e)
-            {
-                ErrorLog.Exception("Failed to Convert Embedded Resources to Files: {0}", e);
+                catch (Exception e)
+                {
+                    Serilog.Log.Error(e, "Failed to Convert Embedded Resource {file} to Files: {message}", file, e);
+                }
             }
         }
 
@@ -130,35 +137,7 @@ namespace WebLogger
             }
             catch (Exception e)
             {
-                ErrorLog.Exception("Failed to Convert Embedded Resources to Files: {0}", e);
-            }
-        }
-        /// <summary>
-        /// Loads embedded resources from DLL and converts the String Contents to an Object
-        /// </summary>
-        /// <typeparam name="T">The Expected Returned Object</typeparam>
-        /// <param name="assembly">The assembly to load object from</param>
-        /// <param name="file">Embedded Resource File Name</param>
-        /// <returns>Deserialized JSON Object</returns>
-        public static T ConvertJson<T>(Assembly assembly, string file) where T : class, new()
-        {
-            try
-            {
-                using (var stream = assembly.GetManifestResourceStream(file))
-                {
-                    if (stream == null)
-                        throw new IOException("File Not Found");
-
-                    using (var reader = new StreamReader(stream, Encoding.UTF8))
-                    {
-                        return JsonConvert.DeserializeObject<T>(reader.ReadToEnd());
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                ErrorLog.Exception("Failed to Convert Embedded Resource to Object: {0}", e);
-                return null;
+                Serilog.Log.Error(e, "Failed to Convert Embedded Resources to Files: {0}", e);
             }
         }
     }

@@ -2,7 +2,7 @@
 using Serilog.Core;
 using Serilog.Events;
 
-namespace WebLogger
+namespace VirtualControl.WebLogger
 {
     /// <summary>
     /// Weblogger sink that prints to the weblogger output
@@ -43,7 +43,6 @@ namespace WebLogger
             _logger.Start();
 
             _formatProvider = formatProvider;
-            _logger = logger;
         }
 
         /// <summary>
@@ -52,7 +51,7 @@ namespace WebLogger
         /// <param name="logEvent">The log event to write.</param>
         public void Emit(LogEvent logEvent)
         {
-            var message = logEvent.RenderMessage(_formatProvider);
+
             var data = $"{logEvent.Timestamp} [{logEvent.Level.ToString().ToUpper()}] {logEvent.RenderMessage(_formatProvider)}";
 
             switch (logEvent.Level)

@@ -4,7 +4,7 @@ using System.IO;
 using System.Reflection;
 using WebSocketSharp.Server;
 
-namespace WebLogger
+namespace VirtualControl.WebLogger
 {
 
     /// <summary>
@@ -25,14 +25,14 @@ namespace WebLogger
         /// </summary>
         /// <param name="port">Any web socket port (default 54321)</param>
         /// <param name="secured">?</param>
-        /// <param name="applicationRootDirectory">Defines where the application is running and determines where the web pages should be extracted too</param>
-        public WebLogger(int port, bool secured, string applicationRootDirectory)
+        /// <param name="destinationWebpageDirectory">Defines the directory the web page will be extracted to on the running server.</param>
+        public WebLogger(int port, bool secured, string destinationWebpageDirectory)
         {
             AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
 
             if (!IsInitialized)
             {
-                ConvertEmbeddedResources(applicationRootDirectory);
+                ConvertEmbeddedResources(destinationWebpageDirectory);
             }
             try
             {
@@ -49,43 +49,28 @@ namespace WebLogger
                  
             }
             catch (Exception e)
-
             {
-                ErrorLog.Error("Exception in WebLogger constructor: {0}", e.Message);
+                Serilog.Log.Error(e,"Exception in WebLogger constructor: {0}", e.Message);
             }
         }
 
-        private static void ConvertEmbeddedResources(string applicationRootDirectory)
+        private static void ConvertEmbeddedResources(string destinationWebpageDirectory)
         {
             lock (_lock)
             {
                 try
                 {
-                    if (File.Exists(Path.Combine(applicationRootDirectory, "html/logger/index.html"))) 
+                    if (File.Exists(Path.Combine(destinationWebpageDirectory, "html/logger/index.html")))
                         return;
 
                     EmbeddedResources.ExtractEmbeddedResource(
                         Assembly.GetAssembly(typeof(IAssemblyMarker)),
                         ConstantValues.HtmlRoot,
-                        new List<string>() { "index.html", "sw.js", "webmanifest.json" },
-                        Path.Combine(applicationRootDirectory,
-                            "html/logger"));
-
-                    EmbeddedResources.ExtractEmbeddedResource(
-                        Assembly.GetAssembly(typeof(IAssemblyMarker)),
-                        ConstantValues.HtmlImages,
-                        Path.Combine(applicationRootDirectory,
-                            "html/logger/images"));
-
-                    EmbeddedResources.ExtractEmbeddedResource(
-                        Assembly.GetAssembly(typeof(IAssemblyMarker)),
-                        ConstantValues.HtmlSource,
-                        Path.Combine(applicationRootDirectory,
-                            "html/logger/src"));
+                        Path.Combine(destinationWebpageDirectory, "html/logger"));
                 }
                 catch (Exception e)
                 {
-                    ErrorLog.Exception("Failed to Convert Resource to HTML", e);
+                    Serilog.Log.Error(e, "Failed to Convert Resource to HTML", e);
                 }
                 finally
                 {
@@ -130,7 +115,7 @@ namespace WebLogger
             }
             catch (Exception e)
             {
-                ErrorLog.Error("Exception in WriteLine: {0}", e.Message);
+                Serilog.Log.Error(e,"Exception in WriteLine: {0}", e.Message);
             }
         }
         /// <summary>

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace WebLogger
+namespace VirtualControl.WebLogger
 {
     /// <summary>
     /// Stores custom console commands that will trigger custom methods.

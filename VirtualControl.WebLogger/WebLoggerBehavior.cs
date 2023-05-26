@@ -2,7 +2,7 @@
 using WebSocketSharp;
 using WebSocketSharp.Server;
 
-namespace WebLogger
+namespace VirtualControl.WebLogger
 {
     /// <summary>
     /// 
@@ -10,7 +10,7 @@ namespace WebLogger
     internal class WebLoggerBehavior : WebSocketBehavior
     {
         private bool _connected;
-        private readonly List<string> _backlog = new List<string>();;
+        private readonly List<string> _backlog = new List<string>();
 
         /// <summary>
         /// 
@@ -44,15 +44,14 @@ namespace WebLogger
 
             foreach (var msg in e.Reason)
             {
-                ErrorLog.Error("WEBSOCKET ONCLOSE: {0}", msg);
+                Serilog.Log.Logger.Error("Websocket closed, Reason: {message}", msg);
             }
         }
 
         protected override void OnError(ErrorEventArgs e)
         {
             base.OnError(e);
-
-            ErrorLog.Error("WEBSOCKET ONERROR: {0}", e.Message);
+            Serilog.Log.Logger.Error("Websocket Error, Reason: {error}", e.Message);
         }
 
         protected override void OnMessage(MessageEventArgs e)
@@ -63,7 +62,7 @@ namespace WebLogger
                     Send("\rVC4> " + ConsoleCommands.GetHelpInfo(e.Data));
 
                 if (!ConsoleCommands.CallCommand(e.Data))
-                    Send("\rVC4> UNKNOW COMMAND");
+                    Send("\rVC4> UNKNOWN COMMAND");
             }
         }
 
