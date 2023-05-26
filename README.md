@@ -170,6 +170,10 @@ ConsoleCommands.RegisterCommand(new ConsoleCommand(
 
 ```
 
+The above code will result in a url http://ip:8081/index.html 
+While the files will be stored in the application directory /html/logger/
+
+
 
 
 
