@@ -1,5 +1,7 @@
 # Weblogger
- Websocket server designed to provide an accessible console application to a Crestron VC4 program instance
+Websocket server designed to provide an accessible console application to a Crestron VC4 program instance
+Note: a migration to netstandard now allows this project to be used on any platform. see the console application demo program
+the crestron SDK is only refernced by the Crestron implementations. 
 
  ## Table of Contents
 1. [VS Solution](#Visual-Studio-Solution)
