@@ -13,6 +13,7 @@ This was originally created for use on Crestron VC4 but has since been migrated 
     <PackageTags>Logging;Crestron;VirtualControl;Websocket</PackageTags>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
