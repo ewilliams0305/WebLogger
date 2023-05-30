@@ -26,6 +26,6 @@ namespace WebLogger
         /// <summary>
         /// The callback function invoked when the console command is received. 
         /// </summary>
-        Action<string, List<string>> CommandHandler { get; }
+        Func<string, List<string>, string> CommandHandler { get; }
     }
 }

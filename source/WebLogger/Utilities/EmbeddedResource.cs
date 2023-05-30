@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
@@ -20,31 +19,36 @@ namespace WebLogger.Utilities
         /// <param name="outputDir">File Directory on Processor to Place Reconstructed File</param>
         /// <example>
         /// <code>
-        /// EmbeddedResources.ExtractEmbeddedResource(Assembly.GetExecutingAssembly(), "Cenero.Hardware.Cameras.Factory.HTML", "index.html", "HTML\\CeneroApk\\Cameras\\htmlfile");
+        /// EmbeddedResources.ExtractEmbeddedResource(Assembly.GetExecutingAssembly(), "WebLogger.HTML", "index.html");
         /// </code>
         /// </example>
         public static void ExtractEmbeddedResource(Assembly assembly, string resourceDirectory, string fileName, string outputDir)
         {
             try
-            {  
+            {
                 using (var stream = assembly.GetManifestResourceStream(resourceDirectory + @"." + fileName))
                 {
                     using (var fileStream = new FileStream(Path.Combine(outputDir, fileName), FileMode.Create))
                     {
                         if (stream == null)
-                            throw new IOException("File Not Found");
+                            throw new FileNotFoundException("File Not Found", fileName);
 
                         for (var i = 0; i < stream.Length; i++)
                         {
                             fileStream.WriteByte((byte)stream.ReadByte());
                         }
+
                         fileStream.Close();
                     }
                 }
             }
-            catch (Exception e)
+            catch (FileLoadException)
             {
-                Serilog.Log.Error(e,"Failed to Convert Embedded Resource to Files: {0}", e);
+                throw;
+            }
+            catch (IOException)
+            {
+                throw;
             }
         }
 
@@ -76,16 +80,16 @@ namespace WebLogger.Utilities
                     using (var stream = assembly.GetManifestResourceStream(file))
                     {
                         if (stream == null)
-                            throw new IOException("File Not Found");
+                            throw new FileNotFoundException("File Not Found", fileName);
 
-                        if(!Directory.Exists(outputDir))
+                        if (!Directory.Exists(outputDir))
                             Directory.CreateDirectory(outputDir);
 
                         var path = Path.Combine(outputDir, fileName);
 
                         using (var fileStream = new FileStream(path, FileMode.Create))
                         {
-                            for (int i = 0; i < stream.Length; i++)
+                            for (var i = 0; i < stream.Length; i++)
                             {
                                 fileStream.WriteByte((byte)stream.ReadByte());
                             }
@@ -94,9 +98,13 @@ namespace WebLogger.Utilities
                         }
                     }
                 }
-                catch (Exception e)
+                catch (FileLoadException fileException)
                 {
-                    Serilog.Log.Error(e, "Failed to Convert Embedded Resource {file} to Files: {message}", file, e);
+                    throw;
+                }
+                catch (IOException innerException)
+                {
+                    throw;
                 }
             }
         }
@@ -122,7 +130,7 @@ namespace WebLogger.Utilities
                     using (var stream = assembly.GetManifestResourceStream(resourceDirectory + @"." + file))
                     {
                         if (stream == null)
-                            throw new IOException("File Not Found");
+                            throw new DirectoryNotFoundException($"Resource {resourceDirectory} Not Found");
 
                         using (var fileStream = new FileStream(Path.Combine(outputDir, file), FileMode.Create))
                         {
@@ -135,9 +143,13 @@ namespace WebLogger.Utilities
                     }
                 }
             }
-            catch (Exception e)
+            catch (FileLoadException)
             {
-                Serilog.Log.Error(e, "Failed to Convert Embedded Resources to Files: {0}", e);
+                throw;
+            }
+            catch (IOException)
+            {
+                throw;
             }
         }
     }

@@ -24,7 +24,7 @@ namespace WebLogger
         /// <summary>
         /// Callback Action when Console Receives this Command
         /// </summary>
-        public Action<string, List<string>> CommandHandler { get; private set; }
+        public Func<string, List<string>, string> CommandHandler { get; private set; }
 
         /// <summary>
         /// 
@@ -33,7 +33,7 @@ namespace WebLogger
         /// <param name="command"></param>
         /// <param name="description"></param>
         /// <param name="help"></param>
-        public WebLoggerCommand(Action<string, List<string>> handler, string command, string description = default, string help = default)
+        public WebLoggerCommand(Func<string, List<string>, string> handler, string command, string description = default, string help = default)
         {
             Command = command;  
             Description = description;  

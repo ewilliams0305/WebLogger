@@ -1,0 +1,22 @@
+﻿namespace WebLogger
+{
+    /// <summary>
+    /// Provides the IWebLogger factory configured optional parameters.
+    /// </summary>
+    public sealed class WebLoggerOptions
+    {
+        /// <summary>
+        /// Web socket tcp port used to transport traffic between the client and server
+        /// </summary>
+        public int WebSocketTcpPort { get; set; } = 54321;
+        /// <summary>
+        /// Whether or not the server is secured web sockets or not
+        /// <remarks>Secured WebSockets are not yest fully implemented</remarks>
+        /// </summary>
+        public bool Secured { get; set; } = false;
+        /// <summary>
+        /// Location of the HTML files to be extracted to and served.
+        /// </summary>
+        public string DestinationWebpageDirectory { get; set; } = "C://Temp/Html/Logger";
+    }
+}

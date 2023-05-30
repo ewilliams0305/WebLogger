@@ -1,7 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Serilog.Core;
+﻿using Serilog.Core;
 using Serilog.Events;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using WebLogger.Utilities;
 
 namespace WebLogger
 {
@@ -45,14 +48,17 @@ namespace WebLogger
         /// <param name="commands"></param>
         public WebloggerSink(IFormatProvider formatProvider, int port, bool secured, string applicationDirectory, IEnumerable<IWebLoggerCommand> commands = null)
         {
-            _logger = new WebLogger(port,  secured, applicationDirectory);
+            _logger = WebLoggerFactory.CreateWebLogger(options =>
+            {
+                options.WebSocketTcpPort = port;
+                options.Secured = secured;
+                options.DestinationWebpageDirectory = applicationDirectory;
+            });
             _formatProvider = formatProvider;
 
             RegisterCommands(commands);
             _logger.Start();
         }
-
-        
 
         /// <summary>
         /// Emit the provided log event to the sink.
@@ -87,6 +93,11 @@ namespace WebLogger
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        public void DiscoverAssemblyCommands(Assembly assembly)
+        {
+            _logger.DiscoverCommands(assembly);
         }
 
         private void RegisterCommands(IEnumerable<IWebLoggerCommand> commands)

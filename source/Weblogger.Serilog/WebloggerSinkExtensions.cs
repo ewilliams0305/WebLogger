@@ -1,10 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Serilog;
 using Serilog.Configuration;
 
 namespace WebLogger
 {
+    public static class WebLoggerSinkExtensions 
+    {
+        public static WebloggerSink DiscoverCommands(this WebloggerSink sink, Assembly assembly)
+        {
+            sink.DiscoverAssemblyCommands(assembly);
+            return sink;
+        }
+    }
+
     /// <summary>
     /// Creates a new Serilog Sink
     /// </summary>
@@ -38,14 +48,15 @@ namespace WebLogger
         /// <param name="secured">Is Secured?</param>
         /// <returns>A Weblogger SINK</returns>
         public static LoggerConfiguration WebloggerSink(
-            this LoggerSinkConfiguration loggerConfiguration, 
-            int port, 
-            bool secured, 
+            this LoggerSinkConfiguration loggerConfiguration,
+            int port,
+            bool secured,
             string applicationDirectory,
             IEnumerable<IWebLoggerCommand> commands = default,
             IFormatProvider formatProvider = null)
         {
-            return loggerConfiguration.Sink(new WebloggerSink(formatProvider, port, secured, applicationDirectory, commands));
+            var webLoggerSink = new WebloggerSink(formatProvider, port, secured, applicationDirectory, commands);
+            return loggerConfiguration.Sink(webLoggerSink);
         }
     }
 }

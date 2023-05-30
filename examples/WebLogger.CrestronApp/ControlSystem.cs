@@ -61,14 +61,21 @@ namespace WebLogger.CrestronApp
         {
             try
             {
-                var webLogger = new WebLogger(54321, false, Directory.GetApplicationRootDirectory());
+                var webLogger = WebLoggerFactory.CreateWebLogger(options =>
+                {
+                    options.WebSocketTcpPort = 54321;
+                    options.Secured = false;
+                    options.DestinationWebpageDirectory = Directory.GetApplicationRootDirectory();
+                });
+                
+                webLogger.ServeWebLoggerHtml(8081);
 
                 var commands = new List<IWebLoggerCommand>()
                 {
                     new WebLoggerCommand(
                         (cmd, args) =>
                         {
-                            Log.Logger.Information("{command} Received", cmd);
+                            return $"{cmd} Received";
                         },
                         "EXAMPLE",
                         "Simple example of console command",
@@ -77,7 +84,7 @@ namespace WebLogger.CrestronApp
                     new WebLoggerCommand(
                         (cmd, args) =>
                         {
-                            Log.Logger.Information("{command} Received", cmd);
+                            return $"{cmd} Received";
                         },
                         "TEST",
                         "Simple example of console command",
@@ -91,11 +98,6 @@ namespace WebLogger.CrestronApp
                     .MinimumLevel.Verbose()
                     .WriteTo.WebloggerSink(webLogger, commands)
                     .CreateLogger();
-
-                var webPageServer = new WebLoggerHttpServer(
-                    port: 8081,
-                    directory: Path.Combine(Directory.GetApplicationRootDirectory(), "html/logger/"));
-
 
                 Thread x = new Thread((obj) =>
                 {

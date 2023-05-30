@@ -1,14 +1,19 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System.Reflection;
 using Serilog;
 using WebLogger;
+using WebLogger.Utilities;
 
+
+// You can create some adhoc commands using Lambdas and the default WebLoggerCommand object.
 var commands = new List<IWebLoggerCommand>()
 {
     new WebLoggerCommand(
         (cmd, args) =>
         {
-            Log.Logger.Information("{command} Received", cmd);
+            //Command code executes here when the command is parsed by the weblogger service.
+            return $"{cmd} Received";
         }, 
         "EXAMPLE",
         "Simple example of console command", 
@@ -17,30 +22,37 @@ var commands = new List<IWebLoggerCommand>()
     new WebLoggerCommand(
         (cmd, args) =>
         {
-            Log.Logger.Information("{command} Received", cmd);
-        }, 
+            return $"{cmd} Received";
+        },
         "TEST",
         "Simple example of console command", 
         "Parameter: NA")
 };
 
 
-// Option 1: Let the sink extension Create the instance.  When logger is closed and flushed the web logger will be disposed and stopped.
-Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Verbose()
-    .WriteTo.WebloggerSink(54321, false, "C:/Temp/", commands)
-    .WriteTo.Console()
-    .CreateLogger();
-
-// Option 2: Create a logger and pass it into the Sink Extension
-//var logger = new WebLogger.WebLogger(54321, false, "C:/Temp/");
-//logger.Start();
-
+//// Option 1: Let the sink extension Create the instance.  When logger is closed and flushed the web logger will be disposed and stopped.
 //Log.Logger = new LoggerConfiguration()
 //    .MinimumLevel.Verbose()
-//    .WriteTo.WebloggerSink(logger, commands)
+//    .WriteTo.WebloggerSink(54321, false, "C:/Temp/", commands)
 //    .WriteTo.Console()
 //    .CreateLogger();
+
+//Option 2: Create a logger and pass it into the Sink Extension
+var logger = WebLoggerFactory.CreateWebLogger(options =>
+{
+    options.Secured = false;
+    options.WebSocketTcpPort = 54321;
+    options.DestinationWebpageDirectory = "C:/Temp/";
+});
+
+logger.DiscoverCommands(Assembly.GetAssembly(typeof(Program)));
+logger.Start();
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Verbose()
+    .WriteTo.WebloggerSink(logger, commands)
+    .WriteTo.Console()
+    .CreateLogger();
 
 
 CancellationTokenSource cts = new();

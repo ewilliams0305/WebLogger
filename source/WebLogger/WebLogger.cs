@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using WebLogger.Handlers;
+using WebLogger.Commands;
 using WebLogger.Utilities;
 using WebSocketSharp.Server;
 
@@ -10,11 +10,11 @@ namespace WebLogger
     /// <summary>
     /// Websocket server designed to provide an accessible console application
     /// </summary>
-    public sealed class WebLogger : IWebLogger
+    internal sealed class WebLogger : IWebLogger
     {
         #region Static
 
-        private static object _lock = new object();
+        private object _lock = new object();
 
         #endregion
 
@@ -22,10 +22,8 @@ namespace WebLogger
 
         private readonly int _port;
         private readonly bool _secured;
-        private readonly string _destinationWebpageDirectory;
         private WebSocketServer _server;
         private WebLoggerBehavior _logger;
-
         private readonly WebLoggerCommands _commands;
 
         #endregion
@@ -34,6 +32,11 @@ namespace WebLogger
         /// True when the web logger has been configured and is in a valid state
         /// </summary>
         public bool IsInitialized { get; private set; }
+
+        /// <summary>
+        /// Returns the path of the HTML directory storing the HTML files.
+        /// </summary>
+        public string HtmlDirectory { get; }
 
         /// <summary>
         /// Creates a new instance of the weblogger.
@@ -49,23 +52,23 @@ namespace WebLogger
             _secured = secured;
             _commands = new WebLoggerCommands();
 
-            _destinationWebpageDirectory = destinationWebpageDirectory;
+            HtmlDirectory = destinationWebpageDirectory;
         }
 
         private void InitializeWeblogger()
         {
-            lock (_lock)
-            {
+            //lock (_lock)
+            //{
                 if (IsInitialized) 
                     return;
 
                 AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
 
-                ConvertEmbeddedResources(_destinationWebpageDirectory);
+                ConvertEmbeddedResources(HtmlDirectory);
                 CreateServer();
 
                 IsInitialized = true;
-            }
+            //}
         }
 
 
@@ -162,15 +165,20 @@ namespace WebLogger
             return _commands.GetHelpInfo(command);
         }
 
-        public bool ExecuteCommand(string command)
+        /// <inheritdoc />
+        public bool ExecuteCommand(string command, out string response)
         {
-            return _commands.ExecuteCommand(command);
+            return _commands.ExecuteCommand(command, out response);
         }
 
         #endregion
 
         #region Private Methods
 
+        /// <summary>
+        /// Creates the web socket server.
+        /// <exception cref="ArgumentException">Throws an argument exception when the port, or path are invalid</exception>
+        /// </summary>
         private void CreateServer()
         {
             try
@@ -187,9 +195,17 @@ namespace WebLogger
 
                 _commands.RegisterCommand(new HelpCommandHandler(this));
             }
-            catch (Exception e)
+            catch (ArgumentOutOfRangeException)
             {
-                Serilog.Log.Error(e, "Exception in WebLogger constructor: {0}", e.Message);
+                throw;
+            }
+            catch (ArgumentNullException)
+            {
+                throw;
+            }
+            catch (ArgumentException)
+            {
+                throw;
             }
         }
 
@@ -199,17 +215,25 @@ namespace WebLogger
             {
                 try
                 {
-                    if (File.Exists(Path.Combine(destinationWebpageDirectory, "html/logger/index.html")))
+                    if (File.Exists(Path.Combine(destinationWebpageDirectory, ConstantValues.HtmlIndex)))
                         return;
 
                     EmbeddedResources.ExtractEmbeddedResource(
                         Assembly.GetAssembly(typeof(IAssemblyMarker)),
                         ConstantValues.HtmlRoot,
-                        Path.Combine(destinationWebpageDirectory, "html/logger"));
+                        Path.Combine(destinationWebpageDirectory, ConstantValues.HtmlDirectory));
                 }
-                catch (Exception e)
+                catch (FileLoadException)
                 {
-                    Serilog.Log.Error(e, "Failed to Convert Resource to HTML", e);
+                    throw;
+                }
+                catch (FileNotFoundException)
+                {
+                    throw;
+                }
+                catch (IOException)
+                {
+                    throw;
                 }
                 finally
                 {
@@ -223,7 +247,6 @@ namespace WebLogger
         {
             Dispose();
         }
-
 
         #endregion
 
@@ -244,6 +267,7 @@ namespace WebLogger
             _commands.Dispose();
         }
 
+        /// <inheritdoc />
         public void Dispose()
         {
             AppDomain.CurrentDomain.ProcessExit -= CurrentDomain_ProcessExit;

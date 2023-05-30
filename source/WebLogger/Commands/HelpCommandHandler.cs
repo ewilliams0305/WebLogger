@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WebLogger.Handlers
+namespace WebLogger.Commands
 {
     /// <summary>
     /// The help command handler displays all the commands stored by an instance of the web logger
     /// </summary>
-    internal sealed class HelpCommandHandler : IWebLoggerCommand, IWebLoggerHandler
+    internal sealed class HelpCommandHandler : IWebLoggerCommand
     {
         private readonly IWebLoggerCommander _logger;
 
@@ -28,7 +28,7 @@ namespace WebLogger.Handlers
         /// <summary>
         /// The callback function invoked when the console command is received. 
         /// </summary>
-        public Action<string, List<string>> CommandHandler => HandleCommand;
+        public Func<string, List<string>, string> CommandHandler => HandleCommand;
 
         /// <summary>
         /// Creates a help command handler.
@@ -45,9 +45,10 @@ namespace WebLogger.Handlers
         /// </summary>
         /// <param name="command">Name of the command being handled.</param>
         /// <param name="args">Collected args received from the command.</param>
-        public void HandleCommand(string command, List<string> args)
+        public string HandleCommand(string command, List<string> args)
         {
             _logger.ListCommands();
+            return "";
         }
     }
 }

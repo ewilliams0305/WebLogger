@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 namespace WebLogger
 {
@@ -11,6 +12,11 @@ namespace WebLogger
         /// True when the web logger has been configured and is in a valid state
         /// </summary>
         bool IsInitialized { get; }
+
+        /// <summary>
+        /// Returns the path of the HTML directory storing the HTML files.
+        /// </summary>
+        string HtmlDirectory { get; }
         
         /// <summary>
         /// Starts the server

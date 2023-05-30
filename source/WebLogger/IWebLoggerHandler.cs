@@ -12,6 +12,7 @@ namespace WebLogger
         /// </summary>
         /// <param name="command">Name of the command being handled.</param>
         /// <param name="args">Collected args received from the command.</param>
-        void HandleCommand(string  command, List<string> args);
+        /// <returns>A response to the weblogger cli</returns>
+        string HandleCommand(string  command, List<string> args);
     }
 }

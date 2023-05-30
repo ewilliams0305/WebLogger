@@ -51,22 +51,25 @@ namespace WebLogger
         /// </summary>
         /// <param name="command">Fully formatted Command</param>
         /// <returns></returns>
-        internal bool ExecuteCommand(string command)
+        internal bool ExecuteCommand(string command, out string response)
         {
             var parts = command.Split(' ');
             var key = parts[0].ToUpper();
-            
+
+            if (!_commandStore.ContainsKey(key))
+            {
+                response = string.Empty;
+                return false;
+            }
+
             var args = new List<string>();
 
             if (parts.Length > 1)
                 for(var i = 1; i < parts.Length; i++)
                     args.Add(parts[i]);
 
-            if (!_commandStore.ContainsKey(key)) 
-                return false;
-
             var consoleCommand = _commandStore[key];
-            consoleCommand.CommandHandler?.Invoke(command, args);
+            response = consoleCommand.CommandHandler?.Invoke(command, args);
 
             return true;
         }

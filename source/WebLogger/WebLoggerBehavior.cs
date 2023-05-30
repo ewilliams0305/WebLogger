@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using WebLogger.Exceptions;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 
 namespace WebLogger
 {
     /// <summary>
-    /// 
+    /// The web socket behavior of the weblogger client.
     /// </summary>
     internal class WebLoggerBehavior : WebSocketBehavior
     {
@@ -14,19 +15,27 @@ namespace WebLogger
         private bool _connected;
         private readonly List<string> _backlog = new List<string>();
 
+        private Action<CloseEventArgs> _connectionClosedHandler;
+        private Action<ErrorEventArgs> _connectionErrorArgs;
+
         /// <summary>
         /// 
         /// </summary>
         public WebLoggerBehavior()
         {
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
-        public void InitializeBehavior(IWebLoggerCommander logger)
+        public void InitializeBehavior(
+            IWebLoggerCommander logger, 
+            Action<CloseEventArgs> connectionClosedHandler = null, 
+            Action<ErrorEventArgs> connectionErrorArgs = null)
         {
             _logger = logger;
+            _connectionClosedHandler = connectionClosedHandler;
+            _connectionErrorArgs = connectionErrorArgs;
         }
 
         protected override void OnOpen()
@@ -49,19 +58,14 @@ namespace WebLogger
         protected override void OnClose(CloseEventArgs e)
         {
             base.OnClose(e);
-
             _connected = false;
-
-            foreach (var msg in e.Reason)
-            {
-                Serilog.Log.Logger.Error("Websocket closed, Reason: {message}", msg);
-            }
+            _connectionClosedHandler?.Invoke(e);
         }
 
         protected override void OnError(ErrorEventArgs e)
         {
             base.OnError(e);
-            Serilog.Log.Logger.Error("Websocket Error, Reason: {error}", e.Message);
+            _connectionErrorArgs?.Invoke(e);
         }
 
         protected override void OnMessage(MessageEventArgs e)
@@ -75,10 +79,13 @@ namespace WebLogger
                 return;
             }
 
-            if (!_logger.ExecuteCommand(e.Data))
+            if (_logger.ExecuteCommand(e.Data, out var response))
             {
-                Send("\rWEB LOGGER> UNKNOWN COMMAND");
+                Send(response);
+                return;
             }
+
+            Send("\rWEB LOGGER> UNKNOWN COMMAND");
         }
 
         protected void SendSerial(string text)
@@ -89,7 +96,7 @@ namespace WebLogger
             }
             catch (Exception e)
             {
-                Serilog.Log.Error(e, "Exception Sending Data: {0}", e.Message);
+                throw new WebLoggerCommandException(text, e);
             }
         }
 

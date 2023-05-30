@@ -95,7 +95,7 @@ namespace WebLogger.Crestron
                     args.Response.Code = 404;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 args.Response.Code = 400;
                 args.Response.ContentString = string.Format("invalid request");
@@ -107,8 +107,6 @@ namespace WebLogger.Crestron
             if (programEventType == eProgramStatusEventType.Stopping)
                 Dispose();
         }
-
-
 
         private void Dispose(bool disposing)
         {

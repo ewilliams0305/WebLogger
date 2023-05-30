@@ -15,8 +15,8 @@ This was originally created for use on Crestron VC4 but has since been migrated 
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <Company />
-    <Version>1.0.1</Version>
-    <FileVersion>1.0.1</FileVersion>
+    <Version>1.1.0</Version>
+    <FileVersion>1.1.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -53,7 +53,6 @@ This was originally created for use on Crestron VC4 but has since been migrated 
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Serilog" Version="2.12.0" />
     <PackageReference Include="WebSocketSharp-netstandard" Version="1.0.1" />
   </ItemGroup>
 
