@@ -5,7 +5,7 @@ internal class OtherWorkCommand : IWebLoggerCommand
     public string Command => "OTHER";
     public string Description => "Does work";
     public string Help => "Does lots of stuff";
-    public Func<string, List<string>, string> CommandHandler => DoTheWork;
+    public Func<string, List<string>, string> CommandHandler => DoOtherWork;
 
     public OtherWorkCommand()
     {
