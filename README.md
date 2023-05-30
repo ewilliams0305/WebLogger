@@ -20,6 +20,7 @@ Weblogger.Serilog now provides logger configuration extensions and SerilogSink f
 3. [Web Logger](#Create-a-WebLogger)
 4. [Console Commands](#Register-Console-Commands)
 4. [Embedded HTML](#Embedded-HTML)
+5. [Command Discovery](#Discovery-Commands)
 
 ## Visual Studio Solution
 
@@ -56,8 +57,17 @@ using Serilog;
 using WebLogger;
 ```
 
-Create a new instance and start the server
+Create a new instance and start the server using the WebLoggerFactory
 
+```csharp
+var logger = WebLoggerFactory.CreateWebLogger(options =>
+{
+    options.Secured = false;
+    options.WebSocketTcpPort = 54321;
+    options.DestinationWebpageDirectory = "C:/Temp/";
+});
+
+```
 
 ```csharp
 // Option 1: Let the sink extension Create the instance.  
@@ -77,7 +87,13 @@ Option 2: Create the logger and pass it into the sink.
 // Option 2: Create a logger and pass it into the Sink Extension
 // When logger is closed and flushed the web logger will be disposed and stopped.
 
-var logger = new WebLogger(54321, false, "C:/Temp/");
+var logger = WebLoggerFactory.CreateWebLogger(options =>
+{
+    options.Secured = false;
+    options.WebSocketTcpPort = 54321;
+    options.DestinationWebpageDirectory = "C:/Temp/";
+});
+
 logger.Start();
 
 Log.Logger = new LoggerConfiguration()
@@ -100,22 +116,22 @@ Using the default constuctor and setting all properties with the object initiali
 ```csharp
 
 ConsoleCommands.RegisterCommand(new ConsoleCommand(
-        "EXAMPLE",
-        "Simple example of console command",
-        "Parameter: NA",
-        (cmd, args) =>
-        {
-            Log.Logger.Information("{command} Received", cmd);
-        }));
+    "EXAMPLE",
+    "Simple example of console command",
+    "Parameter: NA",
+    (cmd, args) =>
+    {
+        Log.Logger.Information("{command} Received", cmd);
+    }));
 
-    ConsoleCommands.RegisterCommand(new ConsoleCommand(
-        "TEST",
-        "Simple example of console command",
-        "Parameter: NA",
-        (cmd, args) =>
-        {
-            Log.Logger.Information("{command} Received", cmd);
-        }));
+ConsoleCommands.RegisterCommand(new ConsoleCommand(
+    "TEST",
+    "Simple example of console command",
+    "Parameter: NA",
+    (cmd, args) =>
+    {
+        Log.Logger.Information("{command} Received", cmd);
+    }));
 
 ```
 
@@ -139,12 +155,12 @@ These files will be automatically extracted and written to the provided `applica
 
 ```csharp 
 public WebloggerSink(IFormatProvider formatProvider, int port, bool secured, string applicationDirectory)
-        {
-            _logger = new WebLogger(port,  secured, applicationDirectory);
-            _logger.Start();
+    {
+        _logger = new WebLogger(port,  secured, applicationDirectory);
+        _logger.Start();
 
-            _formatProvider = formatProvider;
-        }
+        _formatProvider = formatProvider;
+    }
 ```
 **Be aware, the program will check if the files are already created and ONLY write them if they are not found.  This means the HTML files will need to be deleted off the server if changees to the HTML are made**
 After loading the code to your VC4, create a new room and associate it with the program.  Once the room has been started browse to `/opt/crestron/virtualcontrol/RunningPrograms/[ROOM ID]/html/logger` to review the files on the server.  
@@ -187,6 +203,45 @@ The above code will result in a url http://ip:8081/index.html
 While the files will be stored in the application directory /html/logger/
 
 
+## Discovery Commands
 
+Console commands can now be discovered adn instnatiated via System.Reflection
+To begin create a custom class implmennting the ```IWebLoggerCommand```
+
+```casharp
+
+public sealed class DoWorkCommand : IWebLoggerCommand
+{
+    public string Command => "DO";
+    public string Description => "Does work";
+    public string Help => "Does lots of stuff";
+    public Func<string, List<string>, string> CommandHandler => DoTheWork;
+
+    public DoWorkCommand()
+    {
+            
+    }
+
+    public string DoTheWork(string command, List<string> args)
+    {
+        // HANDLE THE COMMAND HERE
+        return "The work was done";
+    }
+}
+
+```
+
+Using the IWebLogger extension method ```DiscoverCommands(Assembly)``` discovery all commands with a default constructor.
+The dscovery methods will create an instance of your commands located in the provided assemblies.
+
+```csharp
+
+logger.DiscoverCommands(Assembly.GetAssembly(typeof(Program)))
+    .DiscoverCommands(Assembly.GetExecutingAssembly())
+    .DiscoverCommands(Assembly.GetAssembly(tyeof(SomeOtherAssemblyMarker)));
+
+logger.Start();
+
+```
 
 
