@@ -65,7 +65,7 @@ namespace WebLogger.CrestronApp
                 {
                     options.WebSocketTcpPort = 54321;
                     options.Secured = false;
-                    options.DestinationWebpageDirectory = Directory.GetApplicationRootDirectory();
+                    options.DestinationWebpageDirectory = Path.Combine(Directory.GetApplicationRootDirectory(), "html/logger");
                 });
                 
                 webLogger.ServeWebLoggerHtml(8081);

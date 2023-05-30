@@ -14,7 +14,7 @@ namespace WebLogger
     {
         #region Static
 
-        private object _lock = new object();
+        private static object _lock = new object();
 
         #endregion
 
@@ -57,8 +57,8 @@ namespace WebLogger
 
         private void InitializeWeblogger()
         {
-            //lock (_lock)
-            //{
+            lock (_lock)
+            {
                 if (IsInitialized) 
                     return;
 
@@ -68,7 +68,7 @@ namespace WebLogger
                 CreateServer();
 
                 IsInitialized = true;
-            //}
+            }
         }
 
 
@@ -221,7 +221,7 @@ namespace WebLogger
                     EmbeddedResources.ExtractEmbeddedResource(
                         Assembly.GetAssembly(typeof(IAssemblyMarker)),
                         ConstantValues.HtmlRoot,
-                        Path.Combine(destinationWebpageDirectory, ConstantValues.HtmlDirectory));
+                        destinationWebpageDirectory);
                 }
                 catch (FileLoadException)
                 {

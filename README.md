@@ -3,7 +3,18 @@ Websocket server designed to provide an accessible console application to a Cres
 Note: a migration to netstandard now allows this project to be used on any platform. see the console application demo program
 the crestron SDK is only refernced by the Crestron implementations. 
 
- ## Table of Contents
+## Release Notes
+
+#### Version 1.1.0
+- Changed command handler from ```Action<string, List<string>``` to ```Func<string, List<string>, string``` 
+to provide a command response.  Returned string will now be Writen to the webLogger output.
+
+- Created ```WebLogger.Serilog``` Project and Nuget Package.  This allowed the web logger to remove the dependancy on Serilog.
+Weblogger.Serilog now provides logger configuration extensions and SerilogSink for the weblogger server.
+
+- Created extension methods to discovery all defined commands in a provided assembly.  
+
+## Table of Contents
 1. [VS Solution](#Visual-Studio-Solution)
 2. [Example Program](#WebLogger-Example-Program)
 3. [Web Logger](#Create-a-WebLogger)
