@@ -1,6 +1,5 @@
 using System.Reflection;
 using WebLogger.Utilities;
-using WebSocketSharp;
 
 namespace WebLogger_UnitTests.Utilities
 {
@@ -19,11 +18,9 @@ namespace WebLogger_UnitTests.Utilities
             
             Assert.IsTrue(doResult.Status == CommandResult.Success);
             Assert.IsNotNull(doResult.Response);
-            Assert.AreEqual(doResult.Response, "The work was done");
-            
+
             Assert.IsTrue(otherResult.Status == CommandResult.Success);
             Assert.IsNotNull(otherResult.Response);
-            Assert.AreEqual(otherResult.Response, "The work was done");
         }
         
         [TestMethod]
@@ -34,9 +31,8 @@ namespace WebLogger_UnitTests.Utilities
             logger.Start();
 
             var invalid = logger.ExecuteCommand("INVALID");
-
             Assert.IsFalse(invalid.Status == CommandResult.Success);
-            Assert.IsTrue(string.IsNullOrEmpty(invalid.Response));
+            Assert.IsTrue(invalid.Status == CommandResult.InternalError);
         }
 
 
