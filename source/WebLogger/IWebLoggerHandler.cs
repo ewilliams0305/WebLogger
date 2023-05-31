@@ -13,6 +13,6 @@ namespace WebLogger
         /// <param name="command">Name of the command being handled.</param>
         /// <param name="args">Collected args received from the command.</param>
         /// <returns>A response to the weblogger cli</returns>
-        string HandleCommand(string  command, List<string> args);
+        ICommandResponse HandleCommand(string  command, List<string> args);
     }
 }

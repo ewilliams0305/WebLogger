@@ -49,17 +49,17 @@ namespace WebLogger
         /// <summary>
         /// Searches for the string received and executes the if found
         /// </summary>
+        /// <remarks>If the execute command methods returns valid data and was successful the method will return true and out results</remarks>
         /// <param name="command">Fully formatted Command</param>
         /// <returns></returns>
-        internal bool ExecuteCommand(string command, out string response)
+        internal ICommandResponse ExecuteCommand(string command)
         {
             var parts = command.Split(' ');
             var key = parts[0].ToUpper();
 
             if (!_commandStore.ContainsKey(key))
             {
-                response = string.Empty;
-                return false;
+                return CommandResponse.Error(command, "Not Registered");
             }
 
             var args = new List<string>();
@@ -69,9 +69,7 @@ namespace WebLogger
                     args.Add(parts[i]);
 
             var consoleCommand = _commandStore[key];
-            response = consoleCommand.CommandHandler?.Invoke(command, args);
-
-            return true;
+            return consoleCommand.CommandHandler.Invoke(command, args);
         }
         /// <summary>
         /// Searches for the Desired command and returns the Help Information
@@ -96,8 +94,6 @@ namespace WebLogger
         internal IEnumerable<IWebLoggerCommand> GetAllCommands()
         {
             return _commandStore.Values;
-                //.Select(cmd => cmd.Command + "|" + cmd.Description)
-                //.ToList();
         }
 
 

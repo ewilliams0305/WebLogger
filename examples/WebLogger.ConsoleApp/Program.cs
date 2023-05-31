@@ -6,26 +6,19 @@ using WebLogger;
 using WebLogger.Utilities;
 
 
-// You can create some adhoc commands using Lambdas and the default WebLoggerCommand object.
+// Optionally create a collection of commands using the provided WebLoggerCommand class
 var commands = new List<IWebLoggerCommand>()
 {
     new WebLoggerCommand(
-        (cmd, args) =>
-        {
-            //Command code executes here when the command is parsed by the weblogger service.
-            return $"{cmd} Received";
-        }, 
+        (cmd, args) => CommandResponse.Success("EXAMPLE", $"{cmd} Received"),
         "EXAMPLE",
-        "Simple example of console command", 
+        "Simple example of console command",
         "Parameter: NA"),
 
     new WebLoggerCommand(
-        (cmd, args) =>
-        {
-            return $"{cmd} Received";
-        },
+        (cmd, args) => CommandResponse.Success("TEST", $"{cmd} Received"),
         "TEST",
-        "Simple example of console command", 
+        "Simple example of console command",
         "Parameter: NA")
 };
 
@@ -46,7 +39,6 @@ var logger = WebLoggerFactory.CreateWebLogger(options =>
 });
 
 logger.DiscoverCommands(Assembly.GetAssembly(typeof(Program)));
-logger.Start();
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Verbose()

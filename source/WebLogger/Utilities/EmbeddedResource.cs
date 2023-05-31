@@ -98,11 +98,11 @@ namespace WebLogger.Utilities
                         }
                     }
                 }
-                catch (FileLoadException fileException)
+                catch (FileLoadException)
                 {
                     throw;
                 }
-                catch (IOException innerException)
+                catch (IOException)
                 {
                     throw;
                 }

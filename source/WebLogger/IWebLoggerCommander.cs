@@ -44,8 +44,7 @@
         /// 
         /// </summary>
         /// <param name="command"></param>
-        /// <param name="response"></param>
         /// <returns></returns>
-        bool ExecuteCommand(string command, out string response);
+        ICommandResponse ExecuteCommand(string command);
     }
 }

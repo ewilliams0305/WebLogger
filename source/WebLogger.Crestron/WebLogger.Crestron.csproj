@@ -107,6 +107,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IAssemblyMarker.cs" />
     <Compile Include="IpConfigCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebLoggerExtensions.cs" />

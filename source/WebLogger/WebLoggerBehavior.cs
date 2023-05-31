@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using WebLogger.Exceptions;
 using WebSocketSharp;
 using WebSocketSharp.Server;
@@ -79,13 +80,51 @@ namespace WebLogger
                 return;
             }
 
-            if (_logger.ExecuteCommand(e.Data, out var response))
-            {
-                Send(response);
-                return;
-            }
+            var response = _logger.ExecuteCommand(e.Data);
+            ProcessResponse(response);
+        }
 
-            Send("\rWEB LOGGER> UNKNOWN COMMAND");
+        private void ProcessResponse(ICommandResponse response)
+        {
+            switch (response.Status)
+            {
+                case CommandResult.Success:
+                    Send(FormatSuccessMessage(response.Command, response.Response));
+                    break;
+                case CommandResult.Failure:
+                    Send(FormatFailureMessage(response.Command, response.Response));
+                    break;
+                case CommandResult.InternalError:
+                    Send(FormatFailureMessage(response.Command, response.Response));
+                    break;
+                default:
+                    Send(FormatFailureMessage("WEB LOGGER", "UNKNOWN COMMAND"));
+                    break;
+            }
+        }
+
+        private string FormatSuccessMessage(string command, string message)
+        {
+            var builder = new StringBuilder($@"<br><span style="" color:#FF00FF; "">")
+                .Append(command.ToUpper())
+                .Append(">")
+                .Append(@"</><span style=""color:#FFF;"">")
+                .Append(message)
+                .Append("</>");
+
+            return builder.ToString();
+        }
+        private string FormatFailureMessage(string command, string message)
+        {
+            var header = $@"<br><span style="" color:#FF00FF; "">{"COMMAND".PadRight(22, '.')} | {"HELP".PadRight(60, '.')}  </>";
+            var builder = new StringBuilder($@"<br><span style="" color:rgb(242, 91, 91); "">")
+                .Append(command.ToUpper())
+                .Append(">")
+                .Append(@"</><span style=""color:#FFF;"">")
+                .Append(message)
+                .Append("</>");
+
+            return builder.ToString();
         }
 
         protected void SendSerial(string text)

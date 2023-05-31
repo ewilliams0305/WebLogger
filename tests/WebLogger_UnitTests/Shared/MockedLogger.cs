@@ -36,9 +36,9 @@
             return _commands.GetHelpInfo(command);
         }
 
-        public bool ExecuteCommand(string command, out string response)
+        public ICommandResponse ExecuteCommand(string command)
         {
-            return _commands.ExecuteCommand(command, out response);
+            return _commands.ExecuteCommand(command);
         }
 
         public void Dispose()

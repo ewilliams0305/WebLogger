@@ -17,6 +17,14 @@ This was originally created for use on Crestron VC4 but has since been migrated 
     <Company />
     <Version>1.1.0</Version>
     <FileVersion>1.1.0</FileVersion>
+    <PackageReleaseNotes>#### Version 1.1.0
+- Changed command handler from ```Action&lt;string, List&lt;string&gt;``` to ```Func&lt;string, List&lt;string&gt;, string``` 
+to provide a command response.  Returned string will now be Writen to the webLogger output.
+
+- Created ```WebLogger.Serilog``` Project and Nuget Package.  This allowed the web logger to remove the dependancy on Serilog.
+Weblogger.Serilog now provides logger configuration extensions and SerilogSink for the weblogger server.
+
+- Created extension methods to discovery all defined commands in a provided assembly. </PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

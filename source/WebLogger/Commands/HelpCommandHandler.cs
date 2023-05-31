@@ -28,7 +28,7 @@ namespace WebLogger.Commands
         /// <summary>
         /// The callback function invoked when the console command is received. 
         /// </summary>
-        public Func<string, List<string>, string> CommandHandler => HandleCommand;
+        public Func<string, List<string>, ICommandResponse> CommandHandler => HandleCommand;
 
         /// <summary>
         /// Creates a help command handler.
@@ -45,10 +45,10 @@ namespace WebLogger.Commands
         /// </summary>
         /// <param name="command">Name of the command being handled.</param>
         /// <param name="args">Collected args received from the command.</param>
-        public string HandleCommand(string command, List<string> args)
+        public ICommandResponse HandleCommand(string command, List<string> args)
         {
             _logger.ListCommands();
-            return "";
+            return CommandResponse.Success(this, "Help End");
         }
     }
 }

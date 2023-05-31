@@ -1,5 +1,6 @@
 using System.Reflection;
 using WebLogger.Utilities;
+using WebSocketSharp;
 
 namespace WebLogger_UnitTests.Utilities
 {
@@ -13,16 +14,16 @@ namespace WebLogger_UnitTests.Utilities
             logger.DiscoverCommands(Assembly.GetExecutingAssembly());
             logger.Start();
 
-            var doResult = logger.ExecuteCommand("DO", out var doResponse);
-            var otherResult = logger.ExecuteCommand("DO", out var otherResponse);
+            var doResult = logger.ExecuteCommand("DO");
+            var otherResult = logger.ExecuteCommand("DO");
             
-            Assert.IsTrue(doResult);
-            Assert.IsNotNull(doResponse);
-            Assert.AreEqual(doResponse, "The work was done");
-
-            Assert.IsTrue(otherResult);
-            Assert.IsNotNull(otherResponse);
-            Assert.AreEqual(otherResponse, "The work was done");
+            Assert.IsTrue(doResult.Status == CommandResult.Success);
+            Assert.IsNotNull(doResult.Response);
+            Assert.AreEqual(doResult.Response, "The work was done");
+            
+            Assert.IsTrue(otherResult.Status == CommandResult.Success);
+            Assert.IsNotNull(otherResult.Response);
+            Assert.AreEqual(otherResult.Response, "The work was done");
         }
         
         [TestMethod]
@@ -32,10 +33,10 @@ namespace WebLogger_UnitTests.Utilities
             logger.DiscoverCommands(Assembly.GetExecutingAssembly());
             logger.Start();
 
-            var invalid = logger.ExecuteCommand("INVALID", out var invalidResult);
+            var invalid = logger.ExecuteCommand("INVALID");
 
-            Assert.IsFalse(invalid);
-            Assert.IsTrue(string.IsNullOrEmpty(invalidResult));
+            Assert.IsFalse(invalid.Status == CommandResult.Success);
+            Assert.IsTrue(string.IsNullOrEmpty(invalid.Response));
         }
 
 

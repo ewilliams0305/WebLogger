@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using WebLogger.Commands;
 using WebLogger.Utilities;
 using WebSocketSharp.Server;
@@ -14,7 +15,7 @@ namespace WebLogger
     {
         #region Static
 
-        private static object _lock = new object();
+        private static Mutex _mutex = new Mutex(false);
 
         #endregion
 
@@ -57,18 +58,20 @@ namespace WebLogger
 
         private void InitializeWeblogger()
         {
-            lock (_lock)
+            _mutex.WaitOne();
+
+            if (IsInitialized)
             {
-                if (IsInitialized) 
-                    return;
-
-                AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
-
-                ConvertEmbeddedResources(HtmlDirectory);
-                CreateServer();
-
-                IsInitialized = true;
+                _mutex.ReleaseMutex();
+                return;
             }
+
+            AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
+            ConvertEmbeddedResources(HtmlDirectory);
+            CreateServer();
+            IsInitialized = true;
+
+            _mutex.ReleaseMutex();
         }
 
 
@@ -166,9 +169,9 @@ namespace WebLogger
         }
 
         /// <inheritdoc />
-        public bool ExecuteCommand(string command, out string response)
+        public ICommandResponse ExecuteCommand(string command)
         {
-            return _commands.ExecuteCommand(command, out response);
+            return _commands.ExecuteCommand(command);
         }
 
         #endregion
@@ -211,35 +214,27 @@ namespace WebLogger
 
         private void ConvertEmbeddedResources(string destinationWebpageDirectory)
         {
-            lock (_lock)
+            try
             {
-                try
-                {
-                    if (File.Exists(Path.Combine(destinationWebpageDirectory, ConstantValues.HtmlIndex)))
-                        return;
+                if (File.Exists(Path.Combine(destinationWebpageDirectory, ConstantValues.HtmlIndex)))
+                    return;
 
-                    EmbeddedResources.ExtractEmbeddedResource(
-                        Assembly.GetAssembly(typeof(IAssemblyMarker)),
-                        ConstantValues.HtmlRoot,
-                        destinationWebpageDirectory);
-                }
-                catch (FileLoadException)
-                {
-                    throw;
-                }
-                catch (FileNotFoundException)
-                {
-                    throw;
-                }
-                catch (IOException)
-                {
-                    throw;
-                }
-                finally
-                {
-                    _lock = null;
-                    IsInitialized = true;
-                }
+                EmbeddedResources.ExtractEmbeddedResource(
+                    Assembly.GetAssembly(typeof(IAssemblyMarker)),
+                    ConstantValues.HtmlRoot,
+                    destinationWebpageDirectory);
+            }
+            catch (FileLoadException)
+            {
+                throw;
+            }
+            catch (FileNotFoundException)
+            {
+                throw;
+            }
+            catch (IOException)
+            {
+                throw;
             }
         }
 

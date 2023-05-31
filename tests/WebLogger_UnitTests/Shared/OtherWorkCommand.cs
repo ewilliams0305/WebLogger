@@ -5,15 +5,15 @@ internal class OtherWorkCommand : IWebLoggerCommand
     public string Command => "OTHER";
     public string Description => "Does work";
     public string Help => "Does lots of stuff";
-    public Func<string, List<string>, string> CommandHandler => DoOtherWork;
+    public Func<string, List<string>, ICommandResponse> CommandHandler => DoOtherWork;
 
     public OtherWorkCommand()
     {
             
     }
 
-    public string DoOtherWork(string command, List<string> args)
+    public ICommandResponse DoOtherWork(string command, List<string> args)
     {
-        return "The work was done";
+        return CommandResponse.Success(this, "Done the Work");
     }
 }

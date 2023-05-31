@@ -1,13 +1,11 @@
 using Crestron.SimplSharp;
-using Crestron.SimplSharp.CrestronIO; 
-using Crestron.SimplSharpPro;                       
-using Crestron.SimplSharpPro.CrestronThread;        
+using Crestron.SimplSharp.CrestronIO;
+using Crestron.SimplSharpPro;
+using Crestron.SimplSharpPro.CrestronThread;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using WebLogger.Crestron;
-
-//using WebLogger.Crestron;
 
 namespace WebLogger.CrestronApp
 {
@@ -61,45 +59,43 @@ namespace WebLogger.CrestronApp
         {
             try
             {
+                // Using the weblogger factory create a new instance of the weblogger server.
                 var webLogger = WebLoggerFactory.CreateWebLogger(options =>
                 {
+                    //Override the default values in the web logger options in the Action<Options> lambda
                     options.WebSocketTcpPort = 54321;
                     options.Secured = false;
                     options.DestinationWebpageDirectory = Path.Combine(Directory.GetApplicationRootDirectory(), "html/logger");
                 });
                 
-                webLogger.ServeWebLoggerHtml(8081);
+                // Create an HTTP file server and discover all the commands created in the crestron library.
+                webLogger
+                    .ServeWebLoggerHtml(8081)
+                    .DiscoverCrestronCommands();
 
+                // Optionally create a collection of commands using the provided WebLoggerCommand class
                 var commands = new List<IWebLoggerCommand>()
                 {
                     new WebLoggerCommand(
-                        (cmd, args) =>
-                        {
-                            return $"{cmd} Received";
-                        },
+                        (cmd, args) => CommandResponse.Success("EXAMPLE", $"{cmd} Received"),
                         "EXAMPLE",
                         "Simple example of console command",
                         "Parameter: NA"),
 
                     new WebLoggerCommand(
-                        (cmd, args) =>
-                        {
-                            return $"{cmd} Received";
-                        },
+                        (cmd, args) => CommandResponse.Success("TEST", $"{cmd} Received"),
                         "TEST",
                         "Simple example of console command",
-                        "Parameter: NA"),
-
-                    new IpConfigCommand(webLogger)
-
+                        "Parameter: NA")
                 };
 
+                // Configure the serilog Sink and pass the commands into the sink configuration method.
                 Log.Logger = new LoggerConfiguration()
                     .MinimumLevel.Verbose()
                     .WriteTo.WebloggerSink(webLogger, commands)
                     .CreateLogger();
 
-                Thread x = new Thread((obj) =>
+                var x = new Thread((obj) =>
                 {
                     while (true)
                     {
@@ -109,9 +105,6 @@ namespace WebLogger.CrestronApp
                         Log.Logger.Information("This is an information log : {Object}", "object");
                         Log.Logger.Error("This is an Error log : {Object}", "object");
                     }
-                    
-
-                    return null;
 
                 }, null);
 
@@ -170,6 +163,7 @@ namespace WebLogger.CrestronApp
                     break;
                 case (eProgramStatusEventType.Stopping):
                     
+                    // closing and flushing the logger will dispose of the web logger server and shutdown the ports.
                     Log.CloseAndFlush();
                     
                     break;
