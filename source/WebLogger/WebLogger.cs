@@ -15,7 +15,7 @@ namespace WebLogger
     {
         #region Static
 
-        private static Mutex _mutex = new Mutex(false);
+        private static readonly Mutex Mutex = new Mutex(false);
 
         #endregion
 
@@ -40,6 +40,21 @@ namespace WebLogger
         public string HtmlDirectory { get; }
 
         /// <summary>
+        /// True when the server is secured
+        /// </summary>
+        public bool IsSecured => _server?.IsSecure ?? _secured;
+
+        /// <summary>
+        /// True when the server was successfully started
+        /// </summary>
+        public bool IsRunning => _server?.IsListening ?? false;
+
+        /// <summary>
+        /// Web Socket Server TCP Port
+        /// </summary>
+        public int Port => _server?.Port ?? _port;
+
+        /// <summary>
         /// Creates a new instance of the weblogger.
         /// The first instance created will convert the embedded html resources to files located in the servers HTML/Logger directory
         /// Instantiating this object is all you need to do in order to load the PWA app to the Server
@@ -58,11 +73,11 @@ namespace WebLogger
 
         private void InitializeWeblogger()
         {
-            _mutex.WaitOne();
+            Mutex.WaitOne();
 
             if (IsInitialized)
             {
-                _mutex.ReleaseMutex();
+                Mutex.ReleaseMutex();
                 return;
             }
 
@@ -71,7 +86,7 @@ namespace WebLogger
             CreateServer();
             IsInitialized = true;
 
-            _mutex.ReleaseMutex();
+            Mutex.ReleaseMutex();
         }
 
 
@@ -196,7 +211,7 @@ namespace WebLogger
                     _logger.InitializeBehavior(this);
                 });
 
-                _commands.RegisterCommand(new HelpCommandHandler(this));
+                _commands.RegisterCommand(new HelpCommandCommand(this));
             }
             catch (ArgumentOutOfRangeException)
             {

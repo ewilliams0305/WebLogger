@@ -6,7 +6,7 @@ namespace WebLogger.Commands
     /// <summary>
     /// The help command handler displays all the commands stored by an instance of the web logger
     /// </summary>
-    internal sealed class HelpCommandHandler : IWebLoggerCommand
+    internal sealed class HelpCommandCommand : IWebLoggerCommand
     {
         private readonly IWebLoggerCommander _logger;
 
@@ -34,7 +34,7 @@ namespace WebLogger.Commands
         /// Creates a help command handler.
         /// </summary>
         /// <param name="logger"></param>
-        public HelpCommandHandler(IWebLoggerCommander logger)
+        public HelpCommandCommand(IWebLoggerCommander logger)
         {
             _logger = logger;
         }

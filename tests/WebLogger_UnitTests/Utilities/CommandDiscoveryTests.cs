@@ -4,7 +4,7 @@ using WebLogger.Utilities;
 namespace WebLogger_UnitTests.Utilities
 {
     [TestClass]
-    public class CommandDiscoveryTests
+    public class FactoryTests
     {
         [TestMethod]
         public void CommandDiscovery_FindsAllCommands_InAssembly()

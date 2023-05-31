@@ -17,6 +17,6 @@
         /// <summary>
         /// Location of the HTML files to be extracted to and served.
         /// </summary>
-        public string DestinationWebpageDirectory { get; set; } = "C://Temp/Html/Logger";
+        public string DestinationWebpageDirectory { get; set; } = ConstantValues.DefaultHtmlDirectory;
     }
 }

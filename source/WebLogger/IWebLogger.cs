@@ -17,6 +17,21 @@ namespace WebLogger
         /// Returns the path of the HTML directory storing the HTML files.
         /// </summary>
         string HtmlDirectory { get; }
+
+        /// <summary>
+        /// True when the server is secured
+        /// </summary>
+        bool IsSecured { get; }
+
+        /// <summary>
+        /// True when the server was successfully started
+        /// </summary>
+        bool IsRunning { get; }
+
+        /// <summary>
+        /// Web Socket Server TCP Port
+        /// </summary>
+        int Port { get; }
         
         /// <summary>
         /// Starts the server

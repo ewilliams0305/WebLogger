@@ -24,5 +24,24 @@ namespace WebLogger.Utilities
 
             return logger;
         }
+        
+        /// <summary>
+        /// Discovers all the provided commands that have been created in the WebLogger library
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <returns></returns>
+        public static IWebLogger DiscoverProvidedCommands(this IWebLogger logger)
+        {
+            var commands = CommandDiscovery
+                .DiscoveryAssemblyCommands(
+                    Assembly.GetAssembly(typeof(IAssemblyMarker)));
+
+            foreach (var webLoggerCommand in commands)
+            {
+                logger.RegisterCommand(webLoggerCommand);
+            }
+
+            return logger;
+        }
     }
 }

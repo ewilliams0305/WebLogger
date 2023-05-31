@@ -38,7 +38,9 @@ var logger = WebLoggerFactory.CreateWebLogger(options =>
     options.DestinationWebpageDirectory = "C:/Temp/";
 });
 
-logger.DiscoverCommands(Assembly.GetAssembly(typeof(Program)));
+logger
+    .DiscoverCommands(Assembly.GetAssembly(typeof(Program)))
+    .DiscoverProvidedCommands();
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Verbose()

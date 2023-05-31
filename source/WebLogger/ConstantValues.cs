@@ -13,5 +13,9 @@
         /// The file path for the index.html file after its been extracted.
         /// </summary>
         internal const string HtmlIndex = "index.html";
+        /// <summary>
+        /// Default director to extract the embedded html directory
+        /// </summary>
+        internal const string DefaultHtmlDirectory = "C://Temp/Html/Logger";
     }
 }

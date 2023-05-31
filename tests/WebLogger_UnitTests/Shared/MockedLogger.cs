@@ -5,11 +5,21 @@
     {
         private WebLoggerCommands _commands = new WebLoggerCommands();
 
-        public Action<string> CommandWriteLine { get; set; }
+        public Action<string>? CommandWriteLine { get; set; }
 
         public MockedLogger()
         {
             IsInitialized = true;
+            Port = 54321;
+            IsSecured = true;
+            HtmlDirectory = ConstantValues.DefaultHtmlDirectory;
+        }
+        public MockedLogger(int port, bool secured)
+        {
+            IsInitialized = true;
+            Port = port;
+            IsSecured = secured;
+            HtmlDirectory = ConstantValues.DefaultHtmlDirectory;
         }
         public bool RegisterCommand(IWebLoggerCommand command)
         {
@@ -43,21 +53,25 @@
 
         public void Dispose()
         {
-            
+            IsRunning = false;
+            IsInitialized = false;
         }
 
-        public bool IsInitialized { get; }
+        public bool IsInitialized { get; private set; }
 
         public string HtmlDirectory { get; }
+        public bool IsSecured { get; }
+        public bool IsRunning { get; private set; }
+        public int Port { get; }
 
         public void Start()
         {
-            
+            IsRunning = true;
         }
 
         public void Stop()
         {
-            
+            IsRunning = false;
         }
 
         public void WriteLine(string msg, params object[] args)
