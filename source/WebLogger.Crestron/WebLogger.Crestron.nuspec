@@ -2,18 +2,22 @@
 <package >
   <metadata>
     <id>$id$</id>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
     <title>$title$</title>
-    <authors>$author$</authors>
+    <authors>Eric Williams</authors>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <license type="expression">MIT</license>
-    <projectUrl>https://github.com/ewilliams0305/VirtualControlWeblogger</projectUrl>
+    <projectUrl>https://github.com/ewilliams0305/Weblogger</projectUrl>
+    <repository type="git" url="https://github.com/ewilliams0305/Weblogger" branch="Master"/>
     <description>Crestron SDK Implementation of the WebLogger Console</description>
     <releaseNotes>Adds an unsecured http service that will run on the Crestron Platform</releaseNotes>
-    <copyright>$copyright$</copyright>
+    <copyright></copyright>
     <tags>Logging Serilog Crestron</tags>
     <icon>log.png</icon>
     <readme>README.md</readme>
+    <dependencies>
+      <dependency id="WebLogger" version="1.1.0" />
+    </dependencies>
   </metadata>
   <files>
       <file src="..\..\log.png" target="" />

@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("WebLogger.Crestron")]
 [assembly: AssemblyDescription("Implementation of the WebLogger for the Crestron SDK")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("ewilliams0305")]
 [assembly: AssemblyProduct("WebLogger.Crestron")]
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
