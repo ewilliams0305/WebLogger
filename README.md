@@ -3,6 +3,8 @@
 ![GitHub all releases](https://img.shields.io/github/downloads/ewilliams0305/WebLogger/total) 
 ![Nuget](https://img.shields.io/nuget/dt/WebLogger)
 ![GitHub issues](https://img.shields.io/github/issues/ewilliams0305/WebLogger)
+![GitHub Repo stars](https://img.shields.io/github/stars/ewilliams0305/WebLogger?style=social)
+![GitHub forks](https://img.shields.io/github/forks/ewilliams0305/WebLogger?style=social)
 
 WebLogger is a websocket server designed to provide an accessible console application served to an html user interface.
 The WebLogger library tagets .netstandard 2.0 and can be used in any .net framework 4.7 and .net Core application.
@@ -92,6 +94,7 @@ var logger = WebLoggerFactory.CreateWebLogger(options =>
     options.Secured = false;  
     options.WebSocketTcpPort = 54321;                  //allows you to provide a TCP port used by the web socket server
     options.DestinationWebpageDirectory = "C:/Temp/";  //allows you to provide a file directory to extract the embedded html files.
+    options.Commands = commands;                       //provide a collection of custom commands that will be registered with the console.
 });
 
 ```
@@ -102,9 +105,80 @@ Call the start method to extract the embedded resources and start the web socket
 logger.Start();
 ```
 
-
-
 ## Console Commands
+Custom console commands can be created and registered with the logger, after all this is the whole point of CLI.
+To get started using custom commands create a class that implements the ```IWebLoggerCommand``` interface or
+using the provided ```WebLoggerCommand``` concrete class.  
+This class has been provided for your convienve and can be used to create ADHOC commands.
+
+### Create a Command
+Define a name for the console command.  This string will be used as the command key and is what the user would enter into the webpage user interface.
+A friendly description and help should be provided and shuld be descriptive informing the user as to the funtion of the command.
+When the WebLogger input receives a matching command key the ```CommandHandler``` will be executed.
+The command handler method will provide your class the `Command` and a list of `args`.  Args will include a collection of strings that were entered into the CLI command line after the command string.
+
+Example: enter "DO A Arg With Another Arg" would provide the handler a new `List<string>{A, Arg, With, Another, Arg}` including all values.
+
+```csharp
+internal class DoWorkCommand : IWebLoggerCommand
+{
+    public string Command => "DO";
+    public string Description => "Does work";
+    public string Help => "Does lots of stuff";
+    public Func<string, List<string>, ICommandResponse> CommandHandler => DoTheWork;
+
+    public DoWorkCommand()
+    {
+            
+    }
+
+    public ICommandResponse DoTheWork(string command, List<string> args)
+    {
+        return CommandResponse.Success(this, "Done the Work");
+    }
+}
+
+```
+
+All command handlers must reponse to the WebLogger with a Success, Failure, or Error.
+The ```ICommandResponse``` type can be implmented and custom reponses can be provided to the WebLogger.
+A default implmentation is provided in the library with serveral factory methods.
+
+```csharp
+public ICommandResponse HandleCommand(string command, List<string> args)
+{
+    if (args == null || args.Count == 0)
+    {
+        return CommandResponse.Failure(this, "Missing File Path Parameter");
+    }
+    try
+    {
+        EmbeddedResources.ExtractEmbeddedResource(
+            Assembly.GetAssembly(typeof(IAssemblyMarker)),
+            ConstantValues.HtmlRoot,
+            args[0]);
+
+        return CommandResponse.Success(this, $"{args[0]}/index.html");
+    }
+    catch (FileLoadException fileLoadException)
+    {
+        CommandResponse.Error(this, fileLoadException);
+    }
+    catch (FileNotFoundException fileNotFoundException)
+    {
+        CommandResponse.Error(this, fileNotFoundException);
+    }
+    catch (IOException ioException)
+    {
+        CommandResponse.Error(this, ioException);
+    }
+
+    return CommandResponse.Error(this, new Exception("Code Unreachable"));
+}
+
+```
+Responses are formatted and prsented back to the WebLogger webpage with color formatted strings.
+
 
 ### Register Console Commands
 
