@@ -58,25 +58,12 @@ namespace WebLogger.CrestronApp
                         },
                         logger =>
                         {
-                            logger
-                                .ServeWebLoggerHtml(8081)
+                            logger.ServeWebLoggerHtml(8081)
+                                .DiscoverProvidedCommands()
                                 .DiscoverCrestronCommands();
 
                         })
                     .CreateLogger();
-
-                var x = new Thread((obj) =>
-                {
-                    while (true)
-                    {
-                        Thread.Sleep(1000);
-
-                        Log.Logger.Verbose("This is a verbose log : {Object}", "object");
-                        Log.Logger.Information("This is an information log : {Object}", "object");
-                        Log.Logger.Error("This is an Error log : {Object}", "object");
-                    }
-
-                }, null);
 
             }
             catch (Exception e)

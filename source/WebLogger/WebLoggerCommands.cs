@@ -57,7 +57,10 @@ namespace WebLogger
             var parts = command.Split(' ');
             var key = parts[0].ToUpper();
 
-            if (!_commandStore.ContainsKey(key))
+            var commandValue = _commandStore.Values
+                .FirstOrDefault(c => c.Command.StartsWith(key));
+
+            if (commandValue == null)
             {
                 return CommandResponse.Error(command, "Not Registered");
             }
@@ -68,8 +71,8 @@ namespace WebLogger
                 for(var i = 1; i < parts.Length; i++)
                     args.Add(parts[i]);
 
-            var consoleCommand = _commandStore[key];
-            return consoleCommand.CommandHandler.Invoke(command, args);
+            // var consoleCommand = _commandStore[key];
+            return commandValue.CommandHandler.Invoke(command, args);
         }
         /// <summary>
         /// Searches for the Desired command and returns the Help Information

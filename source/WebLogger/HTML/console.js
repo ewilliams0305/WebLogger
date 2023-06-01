@@ -1,6 +1,6 @@
 
 var defaultPort = "54321"
-var defaultIP = `${window.location.hostname}:${defaultPort}`;
+var defaultIP = `127.0.0.1`;
 var connection = null;  
 var lastCommands = [];
 
@@ -23,11 +23,16 @@ function init()
 		});
 	}
 
-	if (window.location == undefined)
-		defaultIP = `127.0.0.1:${defaultPort}`
+	let location = "";
+
+	if (window.location == null || window.location.hostname == null)
+		location = `${defaultIP}:${defaultPort}`
+
+	else
+		location = `${window.location.hostname}:${defaultPort}`
 
 	if (inputBox != null)
-		inputBox.value = defaultIP;
+		inputBox.value = location;
 
 	startWebsocket();
 

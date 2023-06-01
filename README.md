@@ -274,6 +274,24 @@ After starting the WebLogger, a directory will be created at the specifed locati
 - console.js
 - style.css
 
+To help with writing webpage updates a custom command is provided by the ```IWebLogger.DiscoverProvidedCommands();```
+extension method.  Execute this command and your weblogger will be provided with an `Update` command.  All files will be extracted from the embedded resources and writen to the specified file directory.
+
+```
+
+COMMAND............... | HELP........................................................  
+> UPDATE.............. | FORCES THE WEBPAGE UPDATE AND OVERWRITES THE EXISTING WEBPAGE | Parameter: Destination File Path | 
+> HELP................ | RETURNS ALL REGISTERED WEBLOGGER CONSOLE COMMANDS | Parameter: NA | 
+> IPCONFIG............ | DISPLAYS THE IP CONFIGURATION........... | Not parameters | 
+
+HELP>Help End
+
+update /opt/crestron/virtualcontrol/RunningPrograms/TEST/Html/logger/
+
+UPDATE>/opt/crestron/virtualcontrol/RunningPrograms/TEST/Html/logger//index.html
+
+```
+
 When using the WebLogger.Crestron library you can create a custom http file server and distibute the HTML page via an unsecured webserver
 
 ```csharp

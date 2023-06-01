@@ -8,7 +8,7 @@ namespace WebLogger.Crestron
     /// <summary>
     /// Displays IP information back to the console
     /// </summary>
-    public sealed class IpConfigCommand : IWebLoggerCommand
+    public sealed class CrestronIpConfigCommand : IWebLoggerCommand
     {
         /// <inheritdoc />
         public string Command => "IPCONFIG";
@@ -22,7 +22,7 @@ namespace WebLogger.Crestron
         /// <summary>
         /// Creates a new default instance of the Ip Config command handler.
         /// </summary>
-        public IpConfigCommand()
+        public CrestronIpConfigCommand()
         {
          
         }
@@ -43,7 +43,7 @@ namespace WebLogger.Crestron
 
                 for (short i = 0; i < adapters; i++)
                 {
-                    builder.Append($"VC4> Ethernet Adaptor <span style=\"color:#DDDD11;\">[{i + 1}]</>:\r");
+                    builder.Append($"\r<span style=\"color:#FFF;\">Ethernet Adaptor </><span style=\"color:#DDDD11;\">[{i + 1}]</>:\r");
                     builder.Append($"        DHCP ........... : <span style=\"color:#FF00FF;\">{CrestronEthernetHelper.GetEthernetParameter(CrestronEthernetHelper.ETHERNET_PARAMETER_TO_GET.GET_CURRENT_DHCP_STATE, i)}</>\r");
                     builder.Append($"        MAC ADDRESS .... : <span style=\"color:#FF00FF;\">{CrestronEthernetHelper.GetEthernetParameter(CrestronEthernetHelper.ETHERNET_PARAMETER_TO_GET.GET_MAC_ADDRESS, i)}</>\r");
                     builder.Append($"        IP ADDRESS ..... : <span style=\"color:#FF00FF;\">{CrestronEthernetHelper.GetEthernetParameter(CrestronEthernetHelper.ETHERNET_PARAMETER_TO_GET.GET_CURRENT_IP_ADDRESS, i)}</>\r");
@@ -52,7 +52,7 @@ namespace WebLogger.Crestron
                     builder.Append("");
 
                     foreach (var dns in CrestronEthernetHelper.GetEthernetParameter(CrestronEthernetHelper.ETHERNET_PARAMETER_TO_GET.GET_DNS_SERVER, i).Split(','))
-                        builder.Append($"        DNS SERVERS .... : <span style=\"color:#FF00FF;\">{dns}</>");
+                        builder.Append($"        DNS SERVERS .... : <span style=\"color:#FF00FF;\">{dns}</>\r");
 
                     builder.Append("");
                 }
