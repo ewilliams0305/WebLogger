@@ -39,7 +39,7 @@ A unit test project is also included and located in the tests directory
 
 ### WebLogger.csproj
 
-This is lowest level library including all WebLogger types and logic.  This library has one dependancy on WebSocketSharp
+This is lowest level library including all WebLogger types and logic.  This library has one dependency on WebSocketSharp
 
 [WebSocketSharp](https://github.com/PingmanTools/websocket-sharp/)
 
@@ -54,7 +54,7 @@ Included in this project are the WebLogger Sink and Extension methods to streaml
 ### WebLogger.Crestron.csproj
 Adds a reference to the Crestron SDK.  This project provides some helpful Crestron commands to use with the console.
 Since browsers will block ws when the html page is served via https this server solves (albeit unsecured) this issue by providing 
-an unsecured http server to distrubute the HTML files.
+an unsecured http server to distribute the HTML files
 
 ### WebLogger.ConsoleApp Example Program
 The Weblogger example is a simple console application showing SerilogSink usage.
@@ -107,11 +107,11 @@ logger.Start();
 ## Console Commands
 Custom console commands can be created and registered with the logger, after all this is the whole point of CLI.
 To get started using custom commands create a class that implements the ```IWebLoggerCommand``` interface or
-using the provided ```WebLoggerCommand``` concrete class. This class has been provided for your convienve and can be used to create ADHOC commands.
+using the provided ```WebLoggerCommand``` concrete class. This class has been provided for your convenience and can be used to create ADHOC commands.
 
 ### Create a Command
-Define a name for the console command.  This string will be used as the command key and is what the user would enter into the webpage user interface.
-A friendly description and help should be provided and shuld be descriptive informing the user as to the funtion of the command.
+Define a name for the console command.  This string will be used as the command key and is what the user would enter the webpage user interface.
+A friendly description and help should be provided and should be descriptive informing the user as to the function of the command.
 When the WebLogger input receives a matching command key the ```CommandHandler``` will be executed.
 The command handler method will provide your class the `Command` and a list of `args`.  Args will include a collection of strings that were entered into the CLI command line after the command string.
 
@@ -124,11 +124,6 @@ internal class DoWorkCommand : IWebLoggerCommand
     public string Description => "Does work";
     public string Help => "Does lots of stuff";
     public Func<string, List<string>, ICommandResponse> CommandHandler => DoTheWork;
-
-    public DoWorkCommand()
-    {
-            
-    }
 
     public ICommandResponse DoTheWork(string command, List<string> args)
     {
@@ -157,9 +152,9 @@ var command = new ConsoleCommand(
     IWebLoggerCommandHandler);
 ```
 
-All command handlers must reponse to the WebLogger with a Success, Failure, or Error.
-The ```ICommandResponse``` type can be implmented and custom reponses can be provided to the WebLogger.
-A default implmentation is provided in the library with serveral factory methods.
+All command handlers must response to the WebLogger with a Success, Failure, or Error.
+The ```ICommandResponse``` type can be implemented and custom responses can be provided to the WebLogger.
+A default implementation is provided in the library with several factory methods.
 
 ```csharp
 public ICommandResponse HandleCommand(string command, List<string> args)
@@ -195,11 +190,11 @@ public ICommandResponse HandleCommand(string command, List<string> args)
 
 ```
 Responses are formatted and presented back to the WebLogger webpage with color formatted strings.
-Commands with prompts will be implmented in a future release https://github.com/ewilliams0305/WebLogger/issues/8
+Commands with prompts will be implemented in a future release https://github.com/ewilliams0305/WebLogger/issues/8
 
 ### Register Console Commands
 
-After creating commands they will need to be registered with the WebLogger instance.  Programs can contain multiple WebLogger servers with different commands registered with each server.
+After creating commands, they will need to be registered with the WebLogger instance.  Programs can contain multiple WebLogger servers with different commands registered with each server.
 At the simplest form execute the `IWebLogger.RegisterCommand(IWebLoggerCommand)` method.
 
 ```csharp
@@ -227,11 +222,11 @@ An extension method to discover all the commands created inside the WebLogger li
 ```csharp
 logger.DiscoverProvidedCommands();
 ```
-There is even an extension method in the Crestron implmentation to discover the provided Crestron commands
+There is even an extension method in the Crestron implementation to discover the provided Crestron commands
 ```csharp
 logger.DiscoverCrestronCommands();
 ```
-An extension method to register a collection of commands has also been provided
+An extension method to register a collection of commands has also been provided.
 ```csharp
 
 var logger = WebLoggerFactory.CreateWebLogger();
@@ -266,8 +261,8 @@ var logger = WebLoggerFactory.CreateWebLogger(options =>
 });
 ```
 Be aware, the program will check if the files are already created and **ONLY write them if they are not found**. 
-This decision was made to reduce disc writes and ensure files are recreated everytime the application is restarted
-This means the HTML files will need to be deleted off the server if changees to the HTML are made
+This decision was made to reduce disc writes and ensure files are recreated every time the application is restarted
+This means the HTML files will need to be deleted off the server if changes to the HTML are made.
 After starting the WebLogger, a directory will be created at the specifed location with the following file tree
 
 - index.html
@@ -275,7 +270,7 @@ After starting the WebLogger, a directory will be created at the specifed locati
 - style.css
 
 To help with writing webpage updates a custom command is provided by the ```IWebLogger.DiscoverProvidedCommands();```
-extension method.  Execute this command and your weblogger will be provided with an `Update` command.  All files will be extracted from the embedded resources and writen to the specified file directory.
+extension method.  Execute this command and your weblogger will be provided with an `Update` command.  All files will be extracted from the embedded resources and written to the specified file directory.
 
 ```
 
@@ -322,7 +317,7 @@ While the files will be stored in the application directory /html/logger/
 
 ## Serilog Sink
 The WebLogger.Serilog library provides a Serilog Sink used to write structured logs to the WebLogger websocket output.
-Generally speaking this is really intended for verbose information as the WebLogger does not store data.  Logs should be writen to additional Sinks for permenet storage.
+Generally speaking, this is really intended for verbose information as the WebLogger does not store data.  Logs should be writen to additional Sinks for permanent storage.
 Start by creating a `LoggerConfiguration` and `WriteTo` the `WebLoggerSink`.
 
 ```csharp
@@ -331,8 +326,8 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.WebloggerSink()
     .CreateLogger();
 ```
-Calling the `WriteTo.WebLoggerSink()` method will create a weblogger server and start the services with default `WebLoggerOptions`.
-To further customize you configuration implment the `Action<WebLoggerOptions>` lambda and update the properties to meet your configuration needs.
+Invoking the `WriteTo.WebLoggerSink()` method will create a weblogger server and start the services with default `WebLoggerOptions`.
+To further customize you configuration implement the `Action<WebLoggerOptions>` lambda and update the properties to meet your configuration needs.
 
 ```csharp
 
@@ -391,11 +386,13 @@ webLogger
 
 #### Version 1.1.0
 - Changed command handler from ```Action<string, List<string>``` to ```Func<string, List<string>, CommandResponse``` 
-to provide a command response.  Returned string will now be Writen to the webLogger output.
+to provide a command response.  Returned string will now be Written to the webLogger output.
 
-- Created ```WebLogger.Serilog``` Project and Nuget Package.  This allowed the web logger to remove the dependancy on Serilog.
+- Created ```WebLogger.Serilog``` Project and Nuget Package.  This allowed the web logger to remove the dependency on Serilog.
 Weblogger.Serilog now provides logger configuration extensions and SerilogSink for the weblogger server.
 
 - Provided `Action<IWebLogger>` to the WebLoggerFactory
 
-- Created extension methods to discovery all defined commands in a provided assembly.  
+- Created extension methods to discovery all defined commands in a provided assembly. 
+
+- Commands are now partially matched and will execute the first found command. i.e. type `up` to execute `update` 
