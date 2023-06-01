@@ -1,42 +1,59 @@
 # Weblogger
-Websocket server designed to provide an accessible console application to a Crestron VC4 program instance
-Note: a migration to netstandard now allows this project to be used on any platform. see the console application demo program
-the crestron SDK is only refernced by the Crestron implementations. 
+![GitHub](https://img.shields.io/github/license/ewilliams0305/WebLogger) 
+![GitHub all releases](https://img.shields.io/github/downloads/ewilliams0305/WebLogger/total) 
+![Nuget](https://img.shields.io/nuget/dt/WebLogger)
+![GitHub issues](https://img.shields.io/github/issues/ewilliams0305/WebLogger)
 
-## Release Notes
+WebLogger is a websocket server designed to provide an accessible console application served to an html user interface.
+The WebLogger library tagets .netstandard 2.0 and can be used in any .net framework 4.7 and .net Core application.
+WebLogger will manage the server and provide an easy way to create a custom CLI using commands and prompts.  
+This library also includes an HTML front end using vanilla JS to handle the socket connection.  
+The webpage is embedded into the DLL and will be extracted when executed to a destination of your choosing.
 
-#### Version 1.1.0
-- Changed command handler from ```Action<string, List<string>``` to ```Func<string, List<string>, string``` 
-to provide a command response.  Returned string will now be Writen to the webLogger output.
-
-- Created ```WebLogger.Serilog``` Project and Nuget Package.  This allowed the web logger to remove the dependancy on Serilog.
-Weblogger.Serilog now provides logger configuration extensions and SerilogSink for the weblogger server.
-
-- Created extension methods to discovery all defined commands in a provided assembly.  
+![WebLogger Console](console.PNG)
 
 ## Table of Contents
 1. [VS Solution](#Visual-Studio-Solution)
 2. [Example Program](#WebLogger-Example-Program)
-3. [Web Logger](#Create-a-WebLogger)
-4. [Console Commands](#Register-Console-Commands)
-4. [Embedded HTML](#Embedded-HTML)
-5. [Command Discovery](#Discovery-Commands)
+3. [WebLogger](#Create-a-WebLogger)
+4. [Commands](#Console-Commands)
+5. [Embedded HTML](#Embedded-HTML)
+6. [Command Discovery](#Discovery-Commands)
+7. [Serilog Sink](#Serilog-Sink)
+8. [Release Notes](#Release-Notes)
 
 ## Visual Studio Solution
 
-The included solution includes four projects including two examples and 2 libraries. 
-- /source/`WebLogger`
-- /source/`WebLogger.Crestron`
-- /example/`WebLogger.ConsoleApp`
-- /example/`WebLogger.CrestronApp`
+The included solution includes five projects including two example projects and 3 libraries. 
+
+- /source/`WebLogger.csproj`
+- /source/`WebLogger.Serilog.csproj`
+- /source/`WebLogger.Crestron.csproj`
+- /example/`WebLogger.ConsoleApp.csproj`
+- /example/`WebLogger.CrestronApp.csproj`
+
+A unit test project is also included and located in the tests directory
+
+- /tests/`WebLogger_UnitTests`
+
+### WebLogger.csproj
+
+This is lowest level library including all WebLogger types and logic.  This library has one dependancy on WebSocketSharp
+
+[WebSocketSharp](https://github.com/PingmanTools/websocket-sharp/)
+
+### WebLogger.Serilog.csproj
+
+The WebLogger.Serilog project provides a serilog sink used to write structured logging outputs to the WebLogger console.
+Included in this project are the WebLogger Sink and Extension methods to streamline the configuration and implmentation.
+
+[Serilog](https://github.com/serilog/serilog)
 
 
-### WebLogger Library
-This is lowest level library including all WebLogger types and logic.  This library has two dependancies; Serilog, and WebSocketSharp
-
-### WebLogger.Crestron Library
-Adds a reference to the Crestron SDK.  This library simply adds an unsecured http server to distrubute the HTML files.
-Since browsers will block ws when the html page is served via https this server solves issues using unsecured webservers.
+### WebLogger.Crestron.csproj
+Adds a reference to the Crestron SDK.  This project provides some helpful Crestron commands to use with the console.
+Since browsers will block ws when the html page is served via https this server solves (albeit unsecured) this issue by providing 
+an unsecured http server to distrubute the HTML files.
 
 ### WebLogger.ConsoleApp Example Program
 The Weblogger example is a simple console application showing SerilogSink usage.
@@ -44,67 +61,52 @@ The Weblogger example is a simple console application showing SerilogSink usage.
 ### WebLogger.CrestronApp Example Program
 The Weblogger example is a Crestron SDK SimpleSharp program that demonstrates how to instantiate the `WebLogger` class and add console commands with callbacks.
 
-#### Create a WebLogger
+## Create a WebLogger
 
-Create a new instance of the `WebLoger` class included in the `using WebLogger` namespace.  Creating a new instace will:
+To Create a new instance of the `WebLoger` class included in the `using WebLogger` namespace.  
+Creating a new instace will:
 
 1. Create a Websocket Server at the specified port
 2. Copy all embedded resource HTML files to your local file system at the specified directory
 3. Create a few default console commands
 
 ```csharp
-using Serilog;
 using WebLogger;
 ```
 
-Create a new instance and start the server using the WebLoggerFactory
+Create a new instance and start the server using the ```WebLoggerFactory```.  The default factory method will 
+return an ```IWebLogger``` interface using the default ```WebLogger``` concrete implmentation.
+
+```csharp
+var logger = WebLoggerFactory.CreateWebLogger();
+
+```
+
+Optionally use the Lambda ```Action<WebLoggerOptions``` to override the default parameters.
+Note: Currently secured web sockets are not fully supported, options to provide a valid certificate will be provided in the next release.
+https://github.com/ewilliams0305/WebLogger/issues/7
 
 ```csharp
 var logger = WebLoggerFactory.CreateWebLogger(options =>
 {
-    options.Secured = false;
-    options.WebSocketTcpPort = 54321;
-    options.DestinationWebpageDirectory = "C:/Temp/";
+    options.Secured = false;  
+    options.WebSocketTcpPort = 54321;                  //allows you to provide a TCP port used by the web socket server
+    options.DestinationWebpageDirectory = "C:/Temp/";  //allows you to provide a file directory to extract the embedded html files.
 });
 
 ```
 
-```csharp
-// Option 1: Let the sink extension Create the instance.  
-// When logger is closed and flushed the web logger will be disposed and stopped.
-
-Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Verbose()
-    .WriteTo.WebloggerSink(54321, false, "C:/Temp/")
-    .WriteTo.Console()
-    .CreateLogger();
-
-```
-Option 2: Create the logger and pass it into the sink.
+Call the start method to extract the embedded resources and start the web socket server at the specified port.
 
 ```csharp
-
-// Option 2: Create a logger and pass it into the Sink Extension
-// When logger is closed and flushed the web logger will be disposed and stopped.
-
-var logger = WebLoggerFactory.CreateWebLogger(options =>
-{
-    options.Secured = false;
-    options.WebSocketTcpPort = 54321;
-    options.DestinationWebpageDirectory = "C:/Temp/";
-});
-
 logger.Start();
-
-Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Verbose()
-    .WriteTo.WebloggerSink(logger)
-    .WriteTo.Console()
-    .CreateLogger();
-
 ```
 
-#### Register Console Commands
+
+
+## Console Commands
+
+### Register Console Commands
 
 Custom console commands be created at any point in the life cycle of the `WebLogger`.  
 To add a custom command create a new instance of the `ConsoleCommand` class.  Each console command will be added to a dictionary using the `Command` property as the key.  Each console command should have a pointer to callback method.  When a string matching the `Command` name is received from the `WebLogger` server, the callback will be invoked. 
@@ -244,4 +246,53 @@ logger.Start();
 
 ```
 
+## Serilog Sink
 
+```csharp
+// Option 1: Let the sink extension Create the instance.  
+// When logger is closed and flushed the web logger will be disposed and stopped.
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Verbose()
+    .WriteTo.WebloggerSink(54321, false, "C:/Temp/")
+    .WriteTo.Console()
+    .CreateLogger();
+
+```
+Option 2: Create the logger and pass it into the sink.
+
+```csharp
+
+// Option 2: Create a logger and pass it into the Sink Extension
+// When logger is closed and flushed the web logger will be disposed and stopped.
+
+var logger = WebLoggerFactory.CreateWebLogger(options =>
+{
+    options.Secured = false;
+    options.WebSocketTcpPort = 54321;
+    options.DestinationWebpageDirectory = "C:/Temp/";
+});
+
+logger.Start();
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Verbose()
+    .WriteTo.WebloggerSink(logger)
+    .WriteTo.Console()
+    .CreateLogger();
+
+```
+
+## Release Notes
+
+#### Version 1.0.1
+- Initial Release
+
+#### Version 1.1.0
+- Changed command handler from ```Action<string, List<string>``` to ```Func<string, List<string>, CommandResponse``` 
+to provide a command response.  Returned string will now be Writen to the webLogger output.
+
+- Created ```WebLogger.Serilog``` Project and Nuget Package.  This allowed the web logger to remove the dependancy on Serilog.
+Weblogger.Serilog now provides logger configuration extensions and SerilogSink for the weblogger server.
+
+- Created extension methods to discovery all defined commands in a provided assembly.  

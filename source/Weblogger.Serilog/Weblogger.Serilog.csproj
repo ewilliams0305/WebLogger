@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -9,10 +9,10 @@
     <Title>WebLogger Serilog Sink</Title>
     <Description>A serilog Sink implementation of the weblogger providing a web socket servers used to send/receive console communications from an embedded HTML user interface to a application.
 </Description>
-    <PackageProjectUrl>https://github.com/ewilliams0305/VirtualControlWeblogger</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/ewilliams0305/WebLogger</PackageProjectUrl>
     <PackageIcon>log.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/ewilliams0305/VirtualControlWeblogger</RepositoryUrl>
+    <RepositoryUrl>https://github.com/ewilliams0305/WebLogger</RepositoryUrl>
     <PackageTags>Logging;Crestron;VirtualControl;Websocket;Serilog</PackageTags>
     <PackageReleaseNotes>#### Version 1.1.0
 - Changed command handler from ```Action&lt;string, List&lt;string&gt;``` to ```Func&lt;string, List&lt;string&gt;, string``` 

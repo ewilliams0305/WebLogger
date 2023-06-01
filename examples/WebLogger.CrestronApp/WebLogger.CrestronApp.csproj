@@ -150,9 +150,9 @@
       <Project>{30686f8e-cb48-4b5f-b6d1-f36aca553930}</Project>
       <Name>WebLogger.Crestron</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\source\Weblogger.Serilog\Weblogger.Serilog.csproj">
-      <Project>{ac4d9ebf-5ecf-4c36-9128-907996c46196}</Project>
-      <Name>Weblogger.Serilog</Name>
+    <ProjectReference Include="..\..\source\WebLogger.Serilog\WebLogger.Serilog.csproj">
+      <Project>{8719ca40-5de3-40d7-94dd-cdc452056850}</Project>
+      <Name>WebLogger.Serilog</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\source\WebLogger\WebLogger.csproj">
       <Project>{c55c9870-5c71-4928-87d9-56a476b339b7}</Project>

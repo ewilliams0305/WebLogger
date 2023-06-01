@@ -6,14 +6,6 @@ using Serilog.Configuration;
 
 namespace WebLogger
 {
-    public static class WebLoggerSinkExtensions 
-    {
-        public static WebloggerSink DiscoverCommands(this WebloggerSink sink, Assembly assembly)
-        {
-            sink.DiscoverAssemblyCommands(assembly);
-            return sink;
-        }
-    }
 
     /// <summary>
     /// Creates a new Serilog Sink
@@ -23,40 +15,19 @@ namespace WebLogger
         /// <summary>
         /// Provides an extension method to register the sink with the serilog configuration.
         /// </summary>
-        /// <param name="loggerConfiguration">The logger configuration.</param>
-        /// <param name="logger">The logger.</param>
-        /// <param name="commands"></param>
+        /// <param name="loggerConfiguration">This logger configuration.</param>
+        /// <param name="options">WebLogger factory options configures the weblogger</param>
+        /// <param name="logger">Provides access to the logger after the sink has constructed the logger</param>
         /// <param name="formatProvider">The format provider.</param>
-        /// <returns>A Weblogger SINK</returns>
+        /// <returns></returns>
         public static LoggerConfiguration WebloggerSink(
             this LoggerSinkConfiguration loggerConfiguration,
-            IWebLogger logger,
-            IEnumerable<IWebLoggerCommand> commands = default,
+            Action<WebLoggerOptions> options,
+            Action<IWebLogger> logger,
             IFormatProvider formatProvider = null)
         {
-            return loggerConfiguration.Sink(new WebloggerSink(formatProvider, logger, commands));
-        }
-
-        /// <summary>
-        /// Provides an extension method to register the sink with the serilog configuration.
-        /// </summary>
-        /// <param name="loggerConfiguration">The logger configuration.</param>
-        /// <param name="applicationDirectory">The executing application directory</param>
-        /// <param name="commands"></param>
-        /// <param name="formatProvider">The format provider.</param>
-        /// <param name="port">Socket Port</param>
-        /// <param name="secured">Is Secured?</param>
-        /// <returns>A Weblogger SINK</returns>
-        public static LoggerConfiguration WebloggerSink(
-            this LoggerSinkConfiguration loggerConfiguration,
-            int port,
-            bool secured,
-            string applicationDirectory,
-            IEnumerable<IWebLoggerCommand> commands = default,
-            IFormatProvider formatProvider = null)
-        {
-            var webLoggerSink = new WebloggerSink(formatProvider, port, secured, applicationDirectory, commands);
-            return loggerConfiguration.Sink(webLoggerSink);
+            var sink = new WebLoggerSink(options, logger, formatProvider);
+            return loggerConfiguration.Sink(sink);
         }
     }
 }

@@ -16,6 +16,7 @@ namespace WebLogger.Utilities
         /// <param name="assembly">Assembly to Scan</param>
         /// <returns>All valid commands in the assembly</returns>
         /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="TypeLoadException"></exception>
         public static IEnumerable<IWebLoggerCommand> DiscoveryAssemblyCommands(Assembly assembly)
         {
             if (assembly == null)

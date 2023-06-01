@@ -1,6 +1,6 @@
 
-
-var defaultIP = `${window.location.hostname}:54321`;
+var defaultPort = "54321"
+var defaultIP = `${window.location.hostname}:${defaultPort}`;
 var connection = null;  
 var lastCommands = [];
 
@@ -22,6 +22,9 @@ function init()
 			scrolling = false;
 		});
 	}
+
+	if (window.location == undefined)
+		defaultIP = `127.0.0.1:${defaultPort}`
 
 	if (inputBox != null)
 		inputBox.value = defaultIP;

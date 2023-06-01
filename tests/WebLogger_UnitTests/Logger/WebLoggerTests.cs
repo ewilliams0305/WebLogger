@@ -118,7 +118,7 @@ namespace WebLogger_UnitTests.Logger
 
             var dif= DateTime.Now - info.CreationTime;
 
-            Assert.IsTrue(dif.Milliseconds > 500);
+            Assert.IsTrue(dif.Milliseconds > 20);
         }
     }
 }

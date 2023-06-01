@@ -2,6 +2,7 @@
 
 using System.Reflection;
 using Serilog;
+using Serilog.Data;
 using WebLogger;
 using WebLogger.Utilities;
 
@@ -31,20 +32,32 @@ var commands = new List<IWebLoggerCommand>()
 //    .CreateLogger();
 
 //Option 2: Create a logger and pass it into the Sink Extension
-var logger = WebLoggerFactory.CreateWebLogger(options =>
-{
-    options.Secured = false;
-    options.WebSocketTcpPort = 54321;
-    options.DestinationWebpageDirectory = "C:/Temp/";
-});
+//var logger = WebLoggerFactory.CreateWebLogger(options =>
+//{
+//    options.Secured = false;
+//    options.WebSocketTcpPort = 54321;
+//    options.DestinationWebpageDirectory = "C:/Temp/";
+//});
 
-logger
-    .DiscoverCommands(Assembly.GetAssembly(typeof(Program)))
-    .DiscoverProvidedCommands();
+//logger
+//    .DiscoverCommands(Assembly.GetAssembly(typeof(Program)))
+//    .DiscoverProvidedCommands();
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Verbose()
-    .WriteTo.WebloggerSink(logger, commands)
+    .WriteTo.WebloggerSink(
+        options =>
+        {
+            options.Commands = commands;
+            options.Secured = false;
+            options.DestinationWebpageDirectory = "C:/Temp/WebLogger/Logger";
+            options.WebSocketTcpPort = 54321;
+        },
+        logger =>
+        {
+            logger.DiscoverCommands(Assembly.GetAssembly(typeof(Program)))
+                .DiscoverProvidedCommands();
+        })
     .WriteTo.Console()
     .CreateLogger();
 

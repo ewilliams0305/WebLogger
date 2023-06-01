@@ -1,4 +1,6 @@
-﻿namespace WebLogger
+﻿using System.Collections.Generic;
+
+namespace WebLogger
 {
     /// <summary>
     /// Provides the IWebLogger factory configured optional parameters.
@@ -18,5 +20,9 @@
         /// Location of the HTML files to be extracted to and served.
         /// </summary>
         public string DestinationWebpageDirectory { get; set; } = ConstantValues.DefaultHtmlDirectory;
+        /// <summary>
+        /// Provides an initial collection of commands to register with the logger.
+        /// </summary>
+        public IEnumerable<IWebLoggerCommand> Commands { get; set; }
     }
 }

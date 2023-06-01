@@ -1,11 +1,13 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
+using WebSocketSharp;
 
 namespace WebLogger.Utilities
 {
     /// <summary>
     /// Extensions designed to enhance the web logger developer experience
     /// </summary>
-    public static class IWebLoggerExtensions
+    public static class WebLoggerExtensions
     {
         /// <summary>
         /// Discovers all the IWebLoggerCommands in an assembly.  Commands must be defined with a parameter-less constructor.
@@ -35,6 +37,27 @@ namespace WebLogger.Utilities
             var commands = CommandDiscovery
                 .DiscoveryAssemblyCommands(
                     Assembly.GetAssembly(typeof(IAssemblyMarker)));
+
+            foreach (var webLoggerCommand in commands)
+            {
+                logger.RegisterCommand(webLoggerCommand);
+            }
+
+            return logger;
+        }
+
+        /// <summary>
+        /// Registers a collection of commands with the weblogger
+        /// </summary>
+        /// <param name="logger">The logger to register commands with</param>
+        /// <param name="commands">The collection of commands</param>
+        /// <returns></returns>
+        public static IWebLogger RegisterCommands(this IWebLogger logger, IEnumerable<IWebLoggerCommand> commands)
+        {
+            if (commands == null)
+            {
+                return logger;
+            }
 
             foreach (var webLoggerCommand in commands)
             {

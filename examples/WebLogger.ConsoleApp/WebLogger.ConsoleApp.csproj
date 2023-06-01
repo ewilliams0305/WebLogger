@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\source\Weblogger.Serilog\Weblogger.Serilog.csproj" />
+    <ProjectReference Include="..\..\source\WebLogger.Serilog\WebLogger.Serilog.csproj" />
     <ProjectReference Include="..\..\source\WebLogger\WebLogger.csproj" />
   </ItemGroup>
 

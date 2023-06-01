@@ -1,4 +1,5 @@
 ﻿using System;
+using WebLogger.Utilities;
 
 namespace WebLogger
 {
@@ -17,10 +18,14 @@ namespace WebLogger
             var configuration = new WebLoggerOptions();
             options?.Invoke(configuration);
 
-            return new WebLogger(
-                configuration.WebSocketTcpPort, 
-                configuration.Secured, 
+            var logger = new WebLogger(
+                configuration.WebSocketTcpPort,
+                configuration.Secured,
                 configuration.DestinationWebpageDirectory);
+
+            logger.RegisterCommands(configuration.Commands);
+
+            return logger;
         }
     }
 }

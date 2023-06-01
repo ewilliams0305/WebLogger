@@ -5,36 +5,21 @@ using Crestron.SimplSharpPro.CrestronThread;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using WebLogger.Crestron;
+using WebLogger.Utilities;
 
 namespace WebLogger.CrestronApp
 {
     public class ControlSystem : CrestronControlSystem
     {
-        /// <summary>
-        /// ControlSystem Constructor. Starting point for the SIMPL#Pro program.
-        /// Use the constructor to:
-        /// * Initialize the maximum number of threads (max = 400)
-        /// * Register devices
-        /// * Register event handlers
-        /// * Add Console Commands
-        /// 
-        /// Please be aware that the constructor needs to exit quickly; if it doesn't
-        /// exit in time, the SIMPL#Pro program will exit.
-        /// 
-        /// You cannot send / receive data in the constructor
-        /// </summary>
         public ControlSystem()
             : base()
         {
             try
             {
                 Thread.MaxNumberOfUserThreads = 20;
-
-                //Subscribe to the controller events (System, Program, and Ethernet)
-                CrestronEnvironment.SystemEventHandler += new SystemEventHandler(ControllerSystemEventHandler);
                 CrestronEnvironment.ProgramStatusEventHandler += new ProgramStatusEventHandler(ControllerProgramEventHandler);
-                CrestronEnvironment.EthernetEventHandler += new EthernetEventHandler(ControllerEthernetEventHandler);
             }
             catch (Exception e)
             {
@@ -42,36 +27,23 @@ namespace WebLogger.CrestronApp
             }
         }
 
-        /// <summary>
-        /// InitializeSystem - this method gets called after the constructor 
-        /// has finished. 
-        /// 
-        /// Use InitializeSystem to:
-        /// * Start threads
-        /// * Configure ports, such as serial and verisports
-        /// * Start and initialize socket connections
-        /// Send initial device configurations
-        /// 
-        /// Please be aware that InitializeSystem needs to exit quickly also; 
-        /// if it doesn't exit in time, the SIMPL#Pro program will exit.
-        /// </summary>
         public override void InitializeSystem()
         {
             try
             {
-                // Using the weblogger factory create a new instance of the weblogger server.
-                var webLogger = WebLoggerFactory.CreateWebLogger(options =>
-                {
-                    //Override the default values in the web logger options in the Action<Options> lambda
-                    options.WebSocketTcpPort = 54321;
-                    options.Secured = false;
-                    options.DestinationWebpageDirectory = Path.Combine(Directory.GetApplicationRootDirectory(), "html/logger");
-                });
+                //// Using the weblogger factory create a new instance of the weblogger server.
+                //var webLogger = WebLoggerFactory.CreateWebLogger(options =>
+                //{
+                //    //Override the default values in the web logger options in the Action<Options> lambda
+                //    options.WebSocketTcpPort = 54321;
+                //    options.Secured = false;
+                //    options.DestinationWebpageDirectory = Path.Combine(Directory.GetApplicationRootDirectory(), "html/logger");
+                //});
                 
-                // Create an HTTP file server and discover all the commands created in the crestron library.
-                webLogger
-                    .ServeWebLoggerHtml(8081)
-                    .DiscoverCrestronCommands();
+                //// Create an HTTP file server and discover all the commands created in the crestron library.
+                //webLogger
+                //    .ServeWebLoggerHtml(8081)
+                //    .DiscoverCrestronCommands();
 
                 // Optionally create a collection of commands using the provided WebLoggerCommand class
                 var commands = new List<IWebLoggerCommand>()
@@ -92,7 +64,21 @@ namespace WebLogger.CrestronApp
                 // Configure the serilog Sink and pass the commands into the sink configuration method.
                 Log.Logger = new LoggerConfiguration()
                     .MinimumLevel.Verbose()
-                    .WriteTo.WebloggerSink(webLogger, commands)
+                    .WriteTo.WebloggerSink(
+                        options =>
+                        {
+                            options.Commands = commands;
+                            options.Secured = false;
+                            options.DestinationWebpageDirectory = "C:/Temp/WebLogger/Logger";
+                            options.WebSocketTcpPort = 54321;
+                        },
+                        logger =>
+                        {
+                            logger
+                                .ServeWebLoggerHtml(8081)
+                                .DiscoverCrestronCommands();
+
+                        })
                     .CreateLogger();
 
                 var x = new Thread((obj) =>
@@ -116,35 +102,6 @@ namespace WebLogger.CrestronApp
         }
 
         /// <summary>
-        /// Event Handler for Ethernet events: Link Up and Link Down. 
-        /// Use these events to close / re-open sockets, etc. 
-        /// </summary>
-        /// <param name="ethernetEventArgs">This parameter holds the values 
-        /// such as whether it's a Link Up or Link Down event. It will also indicate 
-        /// which Ethernet adapter this event belongs to.
-        /// </param>
-        void ControllerEthernetEventHandler(EthernetEventArgs ethernetEventArgs)
-        {
-            switch (ethernetEventArgs.EthernetEventType)
-            {//Determine the event type Link Up or Link Down
-                case (eEthernetEventType.LinkDown):
-                    //Next need to determine which adapter the event is for. 
-                    //LAN is the adapter is the port connected to external networks.
-                    if (ethernetEventArgs.EthernetAdapter == EthernetAdapterType.EthernetLANAdapter)
-                    {
-                        //
-                    }
-                    break;
-                case (eEthernetEventType.LinkUp):
-                    if (ethernetEventArgs.EthernetAdapter == EthernetAdapterType.EthernetLANAdapter)
-                    {
-
-                    }
-                    break;
-            }
-        }
-
-        /// <summary>
         /// Event Handler for Programmatic events: Stop, Pause, Resume.
         /// Use this event to clean up when a program is stopping, pausing, and resuming.
         /// This event only applies to this SIMPL#Pro program, it doesn't receive events
@@ -156,43 +113,15 @@ namespace WebLogger.CrestronApp
             switch (programStatusEventType)
             {
                 case (eProgramStatusEventType.Paused):
-                    //The program has been paused.  Pause all user threads/timers as needed.
                     break;
                 case (eProgramStatusEventType.Resumed):
-                    //The program has been resumed. Resume all the user threads/timers as needed.
                     break;
                 case (eProgramStatusEventType.Stopping):
-                    
-                    // closing and flushing the logger will dispose of the web logger server and shutdown the ports.
                     Log.CloseAndFlush();
                     
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(programStatusEventType), programStatusEventType, null);
-            }
-
-        }
-
-        /// <summary>
-        /// Event Handler for system events, Disk Inserted/Ejected, and Reboot
-        /// Use this event to clean up when someone types in reboot, or when your SD /USB
-        /// removable media is ejected / re-inserted.
-        /// </summary>
-        /// <param name="systemEventType"></param>
-        void ControllerSystemEventHandler(eSystemEventType systemEventType)
-        {
-            switch (systemEventType)
-            {
-                case (eSystemEventType.DiskInserted):
-                    //Removable media was detected on the system
-                    break;
-                case (eSystemEventType.DiskRemoved):
-                    //Removable media was detached from the system
-                    break;
-                case (eSystemEventType.Rebooting):
-                    //The system is rebooting. 
-                    //Very limited time to preform clean up and save any settings to disk.
-                    break;
             }
 
         }
