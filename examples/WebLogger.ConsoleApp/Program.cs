@@ -23,26 +23,6 @@ var commands = new List<IWebLoggerCommand>()
         "Parameter: NA")
 };
 
-
-//// Option 1: Let the sink extension Create the instance.  When logger is closed and flushed the web logger will be disposed and stopped.
-//Log.Logger = new LoggerConfiguration()
-//    .MinimumLevel.Verbose()
-//    .WriteTo.WebloggerSink(54321, false, "C:/Temp/", commands)
-//    .WriteTo.Console()
-//    .CreateLogger();
-
-//Option 2: Create a logger and pass it into the Sink Extension
-//var logger = WebLoggerFactory.CreateWebLogger(options =>
-//{
-//    options.Secured = false;
-//    options.WebSocketTcpPort = 54321;
-//    options.DestinationWebpageDirectory = "C:/Temp/";
-//});
-
-//logger
-//    .DiscoverCommands(Assembly.GetAssembly(typeof(Program)))
-//    .DiscoverProvidedCommands();
-
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Verbose()
     .WriteTo.WebloggerSink(
@@ -60,7 +40,6 @@ Log.Logger = new LoggerConfiguration()
         })
     .WriteTo.Console()
     .CreateLogger();
-
 
 CancellationTokenSource cts = new();
 CancellationToken token = cts.Token;

@@ -10,6 +10,9 @@ WebLogger is a websocket server designed to provide an accessible console applic
 This library also includes an HTML front end using vanilla JS to handle the socket connection.
 The webpage is embedded into the DLL and will be extracted when executed to a destination of your choosing.
 
+Inspiration for this project comes from https://kielthecoder.com/2021/04/16/vc-4-websocket-sharp/.  This was original created to solve the problems described in his blog regarding Crestron's Virtual Control platform.
+However it has since proven usefull in other application so a move to .netstandard was important.
+
 ![WebLogger Console](console.PNG)
 
 ## Table of Contents
@@ -254,136 +257,115 @@ logger.RegisterCommands(commands);
 ## Embedded HTML
 
 Located in the `WebLogger` project is a folder titled `HTML`.  All HTML source files have been added to the project and configured as an embedded resource.  
-These files will be automatically extracted and written to the provided `applicationDirectory` in the weeblogger's default constructor.
+These files will be automatically extracted and written to the provided `applicationDirectory` in the WebLoggerFactory's CreateWebLogger() method.
 
 ```csharp 
-public WebloggerSink(IFormatProvider formatProvider, int port, bool secured, string applicationDirectory)
-    {
-        _logger = new WebLogger(port,  secured, applicationDirectory);
-        _logger.Start();
-
-        _formatProvider = formatProvider;
-    }
+var logger = WebLoggerFactory.CreateWebLogger(options =>
+{
+    options.DestinationWebpageDirectory = "C:/Temp/";
+});
 ```
-**Be aware, the program will check if the files are already created and ONLY write them if they are not found.  This means the HTML files will need to be deleted off the server if changees to the HTML are made**
-After loading the code to your VC4, create a new room and associate it with the program.  Once the room has been started browse to `/opt/crestron/virtualcontrol/RunningPrograms/[ROOM ID]/html/logger` to review the files on the server.  
-Files will be served up using the index/html file found at http://server/VirtualControl/Rooms/EXAMPLE/Html/logger/index.html
+Be aware, the program will check if the files are already created and **ONLY write them if they are not found**. 
+This decision was made to reduce disc writes and ensure files are recreated everytime the application is restarted
+This means the HTML files will need to be deleted off the server if changees to the HTML are made
+After starting the WebLogger, a directory will be created at the specifed location with the following file tree
+
+- index.html
+- console.js
+- style.css
 
 When using the WebLogger.Crestron library you can create a custom http file server and distibute the HTML page via an unsecured webserver
 
 ```csharp
 
- Log.Logger = new LoggerConfiguration()
+Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Verbose()
-    .WriteTo.WebloggerSink(54321, false, Directory.GetApplicationRootDirectory())
+    .WriteTo.WebloggerSink(
+        options =>
+        {
+            options.Commands = commands;
+            options.Secured = false;
+            options.DestinationWebpageDirectory = Path.Combine(Directory.GetApplicationRootDirectory(), "html/logger");
+            options.WebSocketTcpPort = 54321;
+        },
+        logger =>
+        {
+            logger
+                .ServeWebLoggerHtml(8081)
+                .DiscoverCrestronCommands();
+
+        })
     .CreateLogger();
-
-var webPageServer = new WebLoggerHttpServer(
-    port: 8081,
-    directory: Path.Combine(Directory.GetApplicationRootDirectory(), "html/logger/"));
-
-ConsoleCommands.RegisterCommand(new ConsoleCommand(
-    "EXAMPLE",
-    "Simple example of console command",
-    "Parameter: NA",
-    (cmd, args) =>
-    {
-        Log.Logger.Information("{command} Received", cmd);
-    }));
-
-ConsoleCommands.RegisterCommand(new ConsoleCommand(
-    "TEST",
-    "Simple example of console command",
-    "Parameter: NA",
-    (cmd, args) =>
-    {
-        Log.Logger.Information("{command} Received", cmd);
-    }));
 
 ```
 
 The above code will result in a url http://ip:8081/index.html 
 While the files will be stored in the application directory /html/logger/
 
-
-## Discovery Commands
-
-Console commands can now be discovered adn instnatiated via System.Reflection
-To begin create a custom class implmennting the ```IWebLoggerCommand```
-
-```casharp
-
-public sealed class DoWorkCommand : IWebLoggerCommand
-{
-    public string Command => "DO";
-    public string Description => "Does work";
-    public string Help => "Does lots of stuff";
-    public Func<string, List<string>, string> CommandHandler => DoTheWork;
-
-    public DoWorkCommand()
-    {
-            
-    }
-
-    public string DoTheWork(string command, List<string> args)
-    {
-        // HANDLE THE COMMAND HERE
-        return "The work was done";
-    }
-}
-
-```
-
-Using the IWebLogger extension method ```DiscoverCommands(Assembly)``` discovery all commands with a default constructor.
-The dscovery methods will create an instance of your commands located in the provided assemblies.
-
-```csharp
-
-logger.DiscoverCommands(Assembly.GetAssembly(typeof(Program)))
-    .DiscoverCommands(Assembly.GetExecutingAssembly())
-    .DiscoverCommands(Assembly.GetAssembly(tyeof(SomeOtherAssemblyMarker)));
-
-logger.Start();
-
-```
-
 ## Serilog Sink
+The WebLogger.Serilog library provides a Serilog Sink used to write structured logs to the WebLogger websocket output.
+Generally speaking this is really intended for verbose information as the WebLogger does not store data.  Logs should be writen to additional Sinks for permenet storage.
+Start by creating a `LoggerConfiguration` and `WriteTo` the `WebLoggerSink`.
 
 ```csharp
-// Option 1: Let the sink extension Create the instance.  
-// When logger is closed and flushed the web logger will be disposed and stopped.
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Verbose()
+    .WriteTo.WebloggerSink()
+    .CreateLogger();
+```
+Calling the `WriteTo.WebLoggerSink()` method will create a weblogger server and start the services with default `WebLoggerOptions`.
+To further customize you configuration implment the `Action<WebLoggerOptions>` lambda and update the properties to meet your configuration needs.
+
+```csharp
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Verbose()
-    .WriteTo.WebloggerSink(54321, false, "C:/Temp/")
-    .WriteTo.Console()
+    .WriteTo.WebloggerSink(
+        options =>
+        {
+            options.Commands = commands;
+            options.Secured = false;
+            options.DestinationWebpageDirectory = "C:/Temp/WebLogger/Logger";
+            options.WebSocketTcpPort = 54321;
+        }
     .CreateLogger();
 
 ```
-Option 2: Create the logger and pass it into the sink.
+Since the Sink is now resonsible for creation of the WebLogger and your application no longer has a reference to the logger an optional 
+`Action<IWebLogger>` has been provided.  This provides you a reference to the WebLogger and allows for further command registration and management.
 
 ```csharp
-
-// Option 2: Create a logger and pass it into the Sink Extension
-// When logger is closed and flushed the web logger will be disposed and stopped.
-
-var logger = WebLoggerFactory.CreateWebLogger(options =>
-{
-    options.Secured = false;
-    options.WebSocketTcpPort = 54321;
-    options.DestinationWebpageDirectory = "C:/Temp/";
-});
-
-logger.Start();
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Verbose()
+    .WriteTo.WebloggerSink(
+        options =>
+        {
+            options.Commands = commands;
+            options.Secured = false;
+            options.DestinationWebpageDirectory = "C:/Temp/WebLogger/Logger";
+            options.WebSocketTcpPort = 54321;
+        },
+        logger =>
+        {
+            logger.DiscoverCommands(Assembly.GetAssembly(typeof(Program)))
+                .DiscoverProvidedCommands();
+        })
+    .CreateLogger();
+```
+If you need to, store a referance to the logger, but NOTE `Log.CloseAndFlush()` will dispose the `WebLogger` and could create upstream issues with your application depending on the usage.
+```csharp
+IWebLogger webLogger;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Verbose()
-    .WriteTo.WebloggerSink(logger)
-    .WriteTo.Console()
+    .WriteTo.WebloggerSink(logger => webLogger = logger;)
     .CreateLogger();
 
-```
+webLogger
+    .DiscoverCommands(Assembly.GetAssembly(typeof(Program)))
+    .DiscoverProvidedCommands();
 
+```
 ## Release Notes
 
 #### Version 1.0.1
@@ -395,5 +377,7 @@ to provide a command response.  Returned string will now be Writen to the webLog
 
 - Created ```WebLogger.Serilog``` Project and Nuget Package.  This allowed the web logger to remove the dependancy on Serilog.
 Weblogger.Serilog now provides logger configuration extensions and SerilogSink for the weblogger server.
+
+- Provided `Action<IWebLogger>` to the WebLoggerFactory
 
 - Created extension methods to discovery all defined commands in a provided assembly.  

@@ -31,21 +31,6 @@ namespace WebLogger.CrestronApp
         {
             try
             {
-                //// Using the weblogger factory create a new instance of the weblogger server.
-                //var webLogger = WebLoggerFactory.CreateWebLogger(options =>
-                //{
-                //    //Override the default values in the web logger options in the Action<Options> lambda
-                //    options.WebSocketTcpPort = 54321;
-                //    options.Secured = false;
-                //    options.DestinationWebpageDirectory = Path.Combine(Directory.GetApplicationRootDirectory(), "html/logger");
-                //});
-                
-                //// Create an HTTP file server and discover all the commands created in the crestron library.
-                //webLogger
-                //    .ServeWebLoggerHtml(8081)
-                //    .DiscoverCrestronCommands();
-
-                // Optionally create a collection of commands using the provided WebLoggerCommand class
                 var commands = new List<IWebLoggerCommand>()
                 {
                     new WebLoggerCommand(
@@ -61,7 +46,6 @@ namespace WebLogger.CrestronApp
                         "Parameter: NA")
                 };
 
-                // Configure the serilog Sink and pass the commands into the sink configuration method.
                 Log.Logger = new LoggerConfiguration()
                     .MinimumLevel.Verbose()
                     .WriteTo.WebloggerSink(
@@ -69,7 +53,7 @@ namespace WebLogger.CrestronApp
                         {
                             options.Commands = commands;
                             options.Secured = false;
-                            options.DestinationWebpageDirectory = "C:/Temp/WebLogger/Logger";
+                            options.DestinationWebpageDirectory = Path.Combine(Directory.GetApplicationRootDirectory(), "html/logger");
                             options.WebSocketTcpPort = 54321;
                         },
                         logger =>
