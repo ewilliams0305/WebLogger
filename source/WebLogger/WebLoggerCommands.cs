@@ -71,7 +71,6 @@ namespace WebLogger
                 for(var i = 1; i < parts.Length; i++)
                     args.Add(parts[i]);
 
-            // var consoleCommand = _commandStore[key];
             return commandValue.CommandHandler.Invoke(command, args);
         }
         /// <summary>

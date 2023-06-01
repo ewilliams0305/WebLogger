@@ -23,13 +23,17 @@ function init()
 		});
 	}
 
-	let location = "";
+	var location = "";
 
-	if (window.location == null || window.location.hostname == null)
+	if (window.location == null || window.location.hostname == null) {
+		
 		location = `${defaultIP}:${defaultPort}`
-
-	else
+		console.warn(`Using default location ${location}`);
+	} else {
 		location = `${window.location.hostname}:${defaultPort}`
+		console.warn(`Using window location ${location}`);
+	}
+		
 
 	if (inputBox != null)
 		inputBox.value = location;
@@ -114,7 +118,7 @@ function init()
             	wsUri += ip;
 			}
 			else {
-				wsUri += ip + ":8081/";
+				wsUri += ip + ":54321/";
 			}
 			
 			websocket = new WebSocket(wsUri); 

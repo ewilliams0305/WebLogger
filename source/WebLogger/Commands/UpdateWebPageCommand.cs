@@ -58,7 +58,7 @@ namespace WebLogger.Commands
                     ConstantValues.HtmlRoot,
                     args[0]);
 
-                return CommandResponse.Success(this, $"{args[0]}/index.html");
+                return CommandResponse.Success(this, $"{args[0]}index.html");
             }
             catch (FileLoadException fileLoadException)
             {
