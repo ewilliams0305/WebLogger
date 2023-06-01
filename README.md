@@ -6,23 +6,19 @@
 ![GitHub Repo stars](https://img.shields.io/github/stars/ewilliams0305/WebLogger?style=social)
 ![GitHub forks](https://img.shields.io/github/forks/ewilliams0305/WebLogger?style=social)
 
-WebLogger is a websocket server designed to provide an accessible console application served to an html user interface.
-The WebLogger library tagets .netstandard 2.0 and can be used in any .net framework 4.7 and .net Core application.
-WebLogger will manage the server and provide an easy way to create a custom CLI using commands and prompts.  
-This library also includes an HTML front end using vanilla JS to handle the socket connection.  
+WebLogger is a websocket server designed to provide an accessible console application served to an html user interface. The WebLogger library targets .netstandard 2.0 and can be used in any .net framework 4.7 and .net Core application. WebLogger will manage the server and provide an easy way to create a custom CLI using commands and prompts.
+This library also includes an HTML front end using vanilla JS to handle the socket connection.
 The webpage is embedded into the DLL and will be extracted when executed to a destination of your choosing.
 
 ![WebLogger Console](console.PNG)
 
 ## Table of Contents
 1. [VS Solution](#Visual-Studio-Solution)
-2. [Example Program](#WebLogger-Example-Program)
-3. [WebLogger](#Create-a-WebLogger)
-4. [Commands](#Console-Commands)
-5. [Embedded HTML](#Embedded-HTML)
-6. [Command Discovery](#Discovery-Commands)
-7. [Serilog Sink](#Serilog-Sink)
-8. [Release Notes](#Release-Notes)
+2. [WebLogger](#Create-a-WebLogger)
+3. [Commands](#Console-Commands)
+4. [Embedded HTML](#Embedded-HTML)
+5. [Serilog Sink](#Serilog-Sink)
+6. [Release Notes](#Release-Notes)
 
 ## Visual Studio Solution
 
@@ -108,8 +104,7 @@ logger.Start();
 ## Console Commands
 Custom console commands can be created and registered with the logger, after all this is the whole point of CLI.
 To get started using custom commands create a class that implements the ```IWebLoggerCommand``` interface or
-using the provided ```WebLoggerCommand``` concrete class.  
-This class has been provided for your convienve and can be used to create ADHOC commands.
+using the provided ```WebLoggerCommand``` concrete class. This class has been provided for your convienve and can be used to create ADHOC commands.
 
 ### Create a Command
 Define a name for the console command.  This string will be used as the command key and is what the user would enter into the webpage user interface.
@@ -138,6 +133,25 @@ internal class DoWorkCommand : IWebLoggerCommand
     }
 }
 
+```
+Use the provided ```WebLoggerCommand``` class.
+
+```csharp
+
+var command = new ConsoleCommand(
+    "EXAMPLE",
+    "Simple example of console command",
+    "Parameter: NA",
+    (cmd, args) =>
+    {
+        Log.Logger.Information("{command} Received", cmd);
+    });
+
+var command = new ConsoleCommand(
+    "EXAMPLE",
+    "Simple example of console command",
+    "Parameter: NA",
+    IWebLoggerCommandHandler);
 ```
 
 All command handlers must reponse to the WebLogger with a Success, Failure, or Error.
@@ -177,51 +191,64 @@ public ICommandResponse HandleCommand(string command, List<string> args)
 }
 
 ```
-Responses are formatted and prsented back to the WebLogger webpage with color formatted strings.
-
+Responses are formatted and presented back to the WebLogger webpage with color formatted strings.
+Commands with prompts will be implmented in a future release https://github.com/ewilliams0305/WebLogger/issues/8
 
 ### Register Console Commands
 
-Custom console commands be created at any point in the life cycle of the `WebLogger`.  
-To add a custom command create a new instance of the `ConsoleCommand` class.  Each console command will be added to a dictionary using the `Command` property as the key.  Each console command should have a pointer to callback method.  When a string matching the `Command` name is received from the `WebLogger` server, the callback will be invoked. 
-
-###### Default Constructor
-
-Using the default constuctor and setting all properties with the object initialization syntax
+After creating commands they will need to be registered with the WebLogger instance.  Programs can contain multiple WebLogger servers with different commands registered with each server.
+At the simplest form execute the `IWebLogger.RegisterCommand(IWebLoggerCommand)` method.
 
 ```csharp
+var logger = WebLoggerFactory.CreateWebLogger();
 
-ConsoleCommands.RegisterCommand(new ConsoleCommand(
-    "EXAMPLE",
-    "Simple example of console command",
-    "Parameter: NA",
-    (cmd, args) =>
-    {
-        Log.Logger.Information("{command} Received", cmd);
-    }));
-
-ConsoleCommands.RegisterCommand(new ConsoleCommand(
+var command = new WebLoggerCommand(
+    (cmd, args) => CommandResponse.Success("TEST", $"{cmd} Received"),
     "TEST",
     "Simple example of console command",
-    "Parameter: NA",
-    (cmd, args) =>
-    {
-        Log.Logger.Information("{command} Received", cmd);
-    }));
+    "Parameter: NA")
+
+logger.RegisterCommand(logger);
 
 ```
+Commands can also be removed from the CLI at anytime.
+```csharp
+logger.RemoveCommand(logger);
+```
 
-
-Console command callback signature
+Extension methods have been provided to make this easier.  If your custom command has a paramterless constructor you can execute the assembly discovery extension method to find all `IWebLoggerCommands` in the provided assembly.
+```csharp
+logger.DiscoverCommands(Assembly.GetAssembly(typeof(Program)))
+```
+An extension method to discover all the commands created inside the WebLogger library can be used as well
+```csharp
+logger.DiscoverProvidedCommands();
+```
+There is even an extension method in the Crestron implmentation to discover the provided Crestron commands
+```csharp
+logger.DiscoverCrestronCommands();
+```
+An extension method to register a collection of commands has also been provided
 ```csharp
 
-/// <summary>
-/// Console command callback
-/// </summary>
-/// <param name="command">Command that was issued</param>
-/// <param name="arguments">Argument passed into the command seperated by spaces</param>
-public void ConsoleCommandCallback(string command, List<string> arguments);
+var logger = WebLoggerFactory.CreateWebLogger();
 
+var commands = new List<IWebLoggerCommand>()
+{
+    new WebLoggerCommand(
+        (cmd, args) => CommandResponse.Success("EXAMPLE", $"{cmd} Received"),
+        "EXAMPLE",
+        "Simple example of console command",
+        "Parameter: NA"),
+
+    new WebLoggerCommand(
+        (cmd, args) => CommandResponse.Success("TEST", $"{cmd} Received"),
+        "TEST",
+        "Simple example of console command",
+        "Parameter: NA")
+};
+
+logger.RegisterCommands(commands);
 ```
 
 ## Embedded HTML
