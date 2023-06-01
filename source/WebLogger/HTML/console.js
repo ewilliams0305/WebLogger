@@ -4,7 +4,7 @@ var defaultIP = `127.0.0.1`;
 var connection = null;  
 var lastCommands = [];
 
-function init() 
+function init(ip) 
 { 
 	const inputBox = document.getElementById("wsurladdress");
 	const window = document.getElementById("output");
@@ -25,15 +25,15 @@ function init()
 
 	var location = "";
 
-	if (window.location == null || window.location.hostname == null) {
-		
+	if (ip != null && ip.length > 0) {
+
+		location = `${ip}:${defaultPort}`
+		console.warn(`Using window location ${location}`);
+	} else {
+
 		location = `${defaultIP}:${defaultPort}`
 		console.warn(`Using default location ${location}`);
-	} else {
-		location = `${window.location.hostname}:${defaultPort}`
-		console.warn(`Using window location ${location}`);
 	}
-		
 
 	if (inputBox != null)
 		inputBox.value = location;
@@ -370,5 +370,12 @@ function init()
         output.innerHTML = "";
     }
 
-	window.addEventListener("load", init, false);  
+window.addEventListener("load", (event) => {
+	setTimeout(() => {
+
+		console.log(window.location.hostname);
+		init(window.location.hostname);
+	}, 200);
+});
+
 
