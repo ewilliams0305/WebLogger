@@ -1,0 +1,82 @@
+/*******************************************************************************************
+  SIMPL+ Module Information
+  (Fill in comments below)
+*******************************************************************************************/
+/*
+Dealer Name: 
+System Name: WebLogger
+System Number:
+Programmer: Eric Williams
+Comments:
+*/
+
+/*******************************************************************************************
+  Compiler Directives
+  (Uncomment and declare compiler directives as needed)
+*******************************************************************************************/
+#CATEGORY "46" "WebLogger" // Custom
+#DEFAULT_VOLATILE
+#ENABLE_STACK_CHECKING
+#ENABLE_TRACE
+
+/*******************************************************************************************
+  Include Libraries
+  (Uncomment and include additional libraries as needed)
+*******************************************************************************************/
+#INCLUDEPATH "..\bin\Release"
+
+#USER_SIMPLSHARP_LIBRARY "WebLogger.Crestron"
+
+DIGITAL_INPUT
+	_SKIP_,
+	_SKIP_,
+	_SKIP_,
+	_SKIP_,
+	StartServer,
+	StopServer;    
+
+               
+/*******************************************************************************************
+  Parameters
+  (Uncomment and declare parameters as needed)
+*******************************************************************************************/
+INTEGER_PARAMETER Port;
+INTEGER_PARAMETER Secure;
+       
+#BEGIN_PARAMETER_PROPERTIES Port
+propDefaultValue= 54321d;
+#END_PARAMETER_PROPERTIES
+ 
+#BEGIN_PARAMETER_PROPERTIES Secure
+propValidUnits = unitDecimal;
+   	propDefaultUnit = unitDecimal;
+   	propDefaultValue = 0d;
+	propList={ 0d,"FALSE" },{ 1d,"TRUE" };
+#END_PARAMETER_PROPERTIES
+
+   
+SimplWebLogger logger;
+  
+
+PUSH StartServer
+{
+    logger.StartServer();
+}
+
+PUSH StopServer
+{
+	logger.StopServer();
+}
+
+/*******************************************************************************************
+  Main()
+  Uncomment and place one-time startup code here
+  (This code will get called when the system starts up)
+*******************************************************************************************/
+
+Function Main()
+{
+	logger.Initialize(Port, Secure);
+}
+
+
