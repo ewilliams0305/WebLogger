@@ -36,9 +36,9 @@
             return _commands.RemoveCommand(name);
         }
 
-        public void ListCommands()
+        public IEnumerable<IWebLoggerCommand> ListCommands()
         {
-            
+            return _commands.GetAllCommands();
         }
 
         public string GetHelpInfo(string command)

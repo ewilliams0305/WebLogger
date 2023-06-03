@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
+using System.Windows.Input;
 
 namespace WebLogger.Commands
 {
@@ -47,8 +49,21 @@ namespace WebLogger.Commands
         /// <param name="args">Collected args received from the command.</param>
         public ICommandResponse HandleCommand(string command, List<string> args)
         {
-            _logger.ListCommands();
-            return CommandResponse.Success(this, "Help End");
+            var commands = _logger.ListCommands();
+
+            var builder =
+                new StringBuilder(
+                        $@"<br><span style="" color:#FF00FF; "">{"COMMAND".PadRight(22, '.')} | {"HELP".PadRight(60, '.')}  </>")
+                    .Append("<br>");
+            
+            foreach (var cmd in commands)
+            {
+                builder.Append(
+                        $@"<span style="" color:#dddd11; "">>&nbsp;{cmd.Command.ToUpper().PadRight(20, '.')} | </><span style=""color:#FFF;"">{cmd.Description.ToUpper().PadRight(40, '.')} | </><span style=""color:#FFF;"">{cmd.Help} | </>")
+                    .Append("<br>");
+            }
+            builder.Append("<br>");
+            return CommandResponse.Success(this, builder.ToString());
         }
     }
 }

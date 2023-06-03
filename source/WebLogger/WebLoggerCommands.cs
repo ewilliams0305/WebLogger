@@ -54,6 +54,9 @@ namespace WebLogger
         /// <returns></returns>
         internal ICommandResponse ExecuteCommand(string command)
         {
+            if (string.IsNullOrEmpty(command))
+                return CommandResponse.Failure("Unknown", "Please enter a valid command");
+
             var parts = command.Split(' ');
             var key = parts[0].ToUpper();
 

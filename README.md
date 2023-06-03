@@ -21,15 +21,17 @@ However it has since proven usefull in other application so a move to .netstanda
 3. [Commands](#Console-Commands)
 4. [Embedded HTML](#Embedded-HTML)
 5. [Serilog Sink](#Serilog-Sink)
-6. [Release Notes](#Release-Notes)
+6. [Source Generators](#Source-Generators)
+7. [Release Notes](#Release-Notes)
 
 ## Visual Studio Solution
 
-The included solution includes five projects including two example projects and 3 libraries. 
+The included solution includes five projects including two example projects and 4 libraries. 
 
 - /source/`WebLogger.csproj`
 - /source/`WebLogger.Serilog.csproj`
 - /source/`WebLogger.Crestron.csproj`
+- /source/`WebLogger.Generators.csproj`
 - /example/`WebLogger.ConsoleApp.csproj`
 - /example/`WebLogger.CrestronApp.csproj`
 
@@ -50,11 +52,13 @@ Included in this project are the WebLogger Sink and Extension methods to streaml
 
 [Serilog](https://github.com/serilog/serilog)
 
-
 ### WebLogger.Crestron.csproj
 Adds a reference to the Crestron SDK.  This project provides some helpful Crestron commands to use with the console.
 Since browsers will block ws when the html page is served via https this server solves (albeit unsecured) this issue by providing 
 an unsecured http server to distribute the HTML files
+
+### WebLogger.Generators.csproj
+Provides source generators used to create commands and (other cool stuff in the future).
 
 ### WebLogger.ConsoleApp Example Program
 The Weblogger example is a simple console application showing SerilogSink usage.
@@ -379,20 +383,107 @@ webLogger
     .DiscoverProvidedCommands();
 
 ```
+
+## Source Generators
+
+A source generator analyzer project has now been created and is included in the solution.  This is my first shot at these so be kind!
+The project `WebLogger.Generators` includes a source generator used to discover and create `IWebLoggerCommands`.  To get started using
+the source generators add the `WebLogger.Generators.nupkg` to your project.
+
+```xml
+<ProjectReference Include="..\..\source\WebLogger.Generators\WebLogger.Generators.csproj" 
+                      OutputItemType="Analyzer" 
+                      ReferenceOutputAssembly="false" />
+```
+Note when pulled in with Nuget the OutputItemType="Analyzer" is already configured for you.
+Create a new partial class including one method with the `ICommandHandler` method signature. Note that you can apply this attribute
+to any method on your class however once the generator starts expands your class you will get compilation errors informing you the method doesn't match.
+
+```csharp
+
+using WebLogger.Generators;
+
+namespace WebLogger.ConsoleApp.GeneratedCommands
+{
+    public partial class GeneratedCommand
+    {
+
+        [CommandHandler(
+            "Generated Command",
+            "A new class generating a custom command",
+            "This does nothing but prove something cool could happen.")]
+        public ICommandResponse ExecutedMethod(string command, List<string> args)
+        {
+            return CommandResponse.Success(command, "WOW, something cool just happened.");
+        }
+    }
+}
+
+```
+
+The generated code behind the scenes will create partial class implmenting the `IWebLoggerCommand` interface.  All the defined attribute parameters will be 
+automatically married to the interfaces properties.  See generated code:
+
+```csharp
+namespace WebLogger.ConsoleApp.GeneratedCommands
+{
+    public partial class GeneratedCommand : IWebLoggerCommand
+    {
+        public string Command => "GENERATEDCOMMAND";
+        public string Description => "A new class generating a custom command";
+        public string Help => "This does nothing but prove something cool could happen.";
+        public Func<string, List<string>, ICommandResponse> CommandHandler => ExecuteCommand;
+
+        protected ICommandResponse ExecuteCommand(string command, List<string> args)
+        {
+            try
+            {
+                return ExecutedMethod(this.Command, args);
+            }
+            catch (Exception e)
+            {
+                return CommandResponse.Error(this, e);
+            }
+        }
+    }
+}
+```
+
+Your class can now be registered like any other command.  Assuming there is a paremater-less constructor the command will even be automatically discovered with the extension methods listed above.
+If your class is far more complex you can instantiate it and register the instance with a WebLogger
+
+```csharp
+logger.DiscoverCommands(Assembly.GetAssembly(typeof(Program)))
+                .DiscoverProvidedCommands();
+
+// Or create a new instance and register.
+
+logger.RegisterCommand(new GeneratedCommand());
+```
+
+There are still a *few open issues* that could really improve this.  
+- Top level using statements on your class will throw an exception on the `ISyntaxRecevier` in the generators library.
+- Attribute parameters must be string literals, using `nameof(Blah)` for example will throw an exception during generation.
+
+The example console application includes a folder with (4) example generated commands.
+
 ## Release Notes
 
-#### Version 1.0.1
-- Initial Release
+#### Version 1.1.2
+- Created source generator library to automatically create web logger commands
+- Created Crestron SIMPL windows support.  There are now two SPLUS modules used for the server and commands.
+- Commands can now be executed with a partial match and properly reject emty strings
 
 #### Version 1.1.0
 - Changed command handler from ```Action<string, List<string>``` to ```Func<string, List<string>, CommandResponse``` 
 to provide a command response.  Returned string will now be Written to the webLogger output.
-
 - Created ```WebLogger.Serilog``` Project and Nuget Package.  This allowed the web logger to remove the dependency on Serilog.
 Weblogger.Serilog now provides logger configuration extensions and SerilogSink for the weblogger server.
-
 - Provided `Action<IWebLogger>` to the WebLoggerFactory
-
 - Created extension methods to discovery all defined commands in a provided assembly. 
-
 - Commands are now partially matched and will execute the first found command. i.e. type `up` to execute `update` 
+
+#### Version 1.0.1
+- Initial Release
+
+
