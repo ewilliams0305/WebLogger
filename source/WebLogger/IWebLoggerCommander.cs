@@ -1,4 +1,6 @@
-﻿namespace WebLogger
+﻿using System.Collections.Generic;
+
+namespace WebLogger
 {
     /// <summary>
     /// Implements the actions on the registered console commands.
@@ -31,7 +33,7 @@
         /// Help Console command Handler
         /// Prints all Registered commands to the console
         /// </summary>
-        void ListCommands();
+        IEnumerable<IWebLoggerCommand> ListCommands();
 
         /// <summary>
         /// Returns the help information pertaining to the specified command

@@ -1,0 +1,87 @@
+/*******************************************************************************************
+  SIMPL+ Module Information
+  (Fill in comments below)
+*******************************************************************************************/
+/*
+Dealer Name: 
+System Name: WebLogger
+System Number:
+Programmer: Eric Williams
+Comments:
+*/
+
+/*******************************************************************************************
+  Compiler Directives
+  (Uncomment and declare compiler directives as needed)
+*******************************************************************************************/
+#CATEGORY "46" "WebLogger" // Custom
+#DEFAULT_VOLATILE
+#ENABLE_STACK_CHECKING
+#ENABLE_TRACE
+
+/*******************************************************************************************
+  Include Libraries
+  (Uncomment and include additional libraries as needed)
+*******************************************************************************************/
+
+#INCLUDEPATH "..\bin\Release"
+
+#USER_SIMPLSHARP_LIBRARY "WebLogger.Crestron"
+
+STRING_INPUT
+	_SKIP_,
+	_SKIP_,
+	_SKIP_,
+	_SKIP_,
+	_SKIP_,
+	_SKIP_,
+	_SKIP_,
+	Respond[50];
+
+DIGITAL_OUTPUT
+	_SKIP_,
+	_SKIP_,
+	_SKIP_,
+	Action;
+
+STRING_OUTPUT
+	_SKIP_,
+	_SKIP_,
+	_SKIP_,
+	Result;  
+
+               
+/*******************************************************************************************
+  Parameters
+  (Uncomment and declare parameters as needed)
+*******************************************************************************************/
+STRING_PARAMETER Command[20];
+STRING_PARAMETER Description[40];
+       
+SimplCommand cmd;
+
+CHANGE Respond
+{
+	cmd.RespondToConsole(Respond);	
+}
+ 
+EVENTHANDLER CommandEventHandler(SimplCommand sender, SimplCommandArgs e)
+{
+	Result = e.RxData;
+	PULSE(20, Action);
+}
+
+/*******************************************************************************************
+  Main()
+  Uncomment and place one-time startup code here
+  (This code will get called when the system starts up)
+*******************************************************************************************/
+
+Function Main()
+{
+    REGISTEREVENT(cmd, CommandEvent, CommandEventHandler);
+
+	cmd.Initialize(Command, Description, "");
+}
+
+

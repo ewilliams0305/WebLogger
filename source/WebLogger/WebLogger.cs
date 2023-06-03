@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Threading;
@@ -163,18 +164,20 @@ namespace WebLogger
         /// Help Console command Handler
         /// Prints all Registered commands to the console
         /// </summary>
-        public void ListCommands()
+        public IEnumerable<IWebLoggerCommand> ListCommands()
         {
-            var header = $@"<br><span style="" color:#FF00FF; "">{"COMMAND".PadRight(22, '.')} | {"HELP".PadRight(60, '.')}  </>";
-            _logger?.WriteLine(header);
+            //var header = $@"<br><span style="" color:#FF00FF; "">{"COMMAND".PadRight(22, '.')} | {"HELP".PadRight(60, '.')}  </>";
+            //_logger?.WriteLine(header);
 
-            foreach (var cmd in _commands.GetAllCommands())
-            {
-                var result = $@"<span style="" color:#dddd11; "">>&nbsp;{ cmd.Command.ToUpper().PadRight(20, '.')} | </><span style=""color:#FFF;"">{cmd.Description.ToUpper().PadRight(40, '.')} | </><span style=""color:#FFF;"">{cmd.Help} | </>";
+            //foreach (var cmd in _commands.GetAllCommands())
+            //{
+            //    var result = $@"<span style="" color:#dddd11; "">>&nbsp;{ cmd.Command.ToUpper().PadRight(20, '.')} | </><span style=""color:#FFF;"">{cmd.Description.ToUpper().PadRight(40, '.')} | </><span style=""color:#FFF;"">{cmd.Help} | </>";
                 
-                _logger?.WriteLine(result);
-            }
-            _logger?.WriteLine("<br>");
+            //    _logger?.WriteLine(result);
+            //}
+            //_logger?.WriteLine("<br>");
+
+            return _commands.GetAllCommands();
         }
 
         /// <inheritdoc />

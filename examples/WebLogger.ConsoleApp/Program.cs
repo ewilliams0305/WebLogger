@@ -4,7 +4,9 @@ using System.Reflection;
 using Serilog;
 using Serilog.Data;
 using WebLogger;
+using WebLogger.ConsoleApp.Commands;
 using WebLogger.Utilities;
+
 
 
 // Optionally create a collection of commands using the provided WebLoggerCommand class
@@ -37,6 +39,8 @@ Log.Logger = new LoggerConfiguration()
         {
             logger.DiscoverCommands(Assembly.GetAssembly(typeof(Program)))
                 .DiscoverProvidedCommands();
+
+            //logger.RegisterCommand(new GeneratedCommand());
         })
     .WriteTo.Console()
     .CreateLogger();
@@ -46,6 +50,7 @@ CancellationToken token = cts.Token;
 
 try
 {
+    Console.WriteLine($"Proceed to browser and open file: C:/Temp/WebLogger/Logger/index.html");
     await DoWork();
 }
 catch (Exception e)
@@ -63,10 +68,6 @@ async Task DoWork()
     while (!token.IsCancellationRequested)
     {
         await Task.Delay(1000);
-
-        Log.Logger.Verbose("This is a verbose log : {Object}", "object");
-        Log.Logger.Information("This is an information log : {Object}", "object");
-        Log.Logger.Error("This is an Error log : {Object}", "object");
     }
-    
 }
+
