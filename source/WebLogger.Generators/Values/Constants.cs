@@ -4,7 +4,10 @@
     {
         public const string Namespace = "WebLogger";
 
+        public const string CommandInterface = "WebLogger.IWebLoggerCommand";
+
         public const string CommandHandlerAttributeFile = @"CommandHandlerAttribute.g.cs";
+        public const string CommandHandlerAttributeName = @"CommandHandlerAttribute";
 
         public const string CommandHandlerAttributeValue =
 @"
@@ -15,6 +18,7 @@ namespace WebLogger.Generators
     /// <summary>
     /// When applied to a method on a partial class the class will be converted to an IWebLoggerCommand
     /// </summary>
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute(""WebLogger"", ""1.1.3"")]
     [global::System.AttributeUsage(global::System.AttributeTargets.Method, AllowMultiple = false)]
     public class CommandHandlerAttribute : global::System.Attribute
     {

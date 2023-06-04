@@ -1,12 +1,12 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System.Diagnostics;
 using System.Reflection;
 using Serilog;
 using Serilog.Data;
 using WebLogger;
 using WebLogger.ConsoleApp.Commands;
 using WebLogger.Utilities;
-
 
 
 // Optionally create a collection of commands using the provided WebLoggerCommand class

@@ -15,8 +15,8 @@ This was originally created for use on Crestron VC4 but has since been migrated 
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <Company />
-    <Version>1.1.2</Version>
-    <FileVersion>1.1.2</FileVersion>
+    <Version>1.1.3</Version>
+    <FileVersion>1.1.3</FileVersion>
     <PackageReleaseNotes>#### Version 1.1.0
 - Changed command handler from ```Action&lt;string, List&lt;string&gt;``` to ```Func&lt;string, List&lt;string&gt;, string``` 
 to provide a command response.  Returned string will now be Writen to the webLogger output.
