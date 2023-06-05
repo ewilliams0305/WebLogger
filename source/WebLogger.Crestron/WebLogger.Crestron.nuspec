@@ -2,9 +2,9 @@
 <package >
   <metadata>
     <id>$id$</id>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
     <title>$title$</title>
-    <authors>Eric Williams</authors>
+    <authors>ewilliams0305</authors>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/ewilliams0305/Weblogger</projectUrl>
@@ -16,7 +16,7 @@
     <icon>log.png</icon>
     <readme>README.md</readme>
     <dependencies>
-      <dependency id="WebLogger" version="1.1.2" />
+      <dependency id="WebLogger" version="1.1.3" />
     </dependencies>
   </metadata>
   <files>

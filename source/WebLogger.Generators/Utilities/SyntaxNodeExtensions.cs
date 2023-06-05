@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 
 namespace WebLogger.Generators
@@ -24,6 +25,21 @@ namespace WebLogger.Generators
 
                 parent = parent.Parent;
             }
+        }
+        public static IEnumerable<T> GetChildrenOfType<T>(this SyntaxNode node)
+        {
+            var children = node.ChildNodes();
+            var childrenOfType = new List<T>();
+
+            foreach (var syntaxNode in children)
+            {
+                if (syntaxNode is T t)
+                {
+                    childrenOfType.Add(t);
+                }
+            }
+
+            return childrenOfType;
         }
     }
 }

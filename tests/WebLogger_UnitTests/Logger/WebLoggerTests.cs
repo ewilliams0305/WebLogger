@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net.Sockets;
 
 namespace WebLogger_UnitTests.Logger
 {
@@ -29,28 +24,23 @@ namespace WebLogger_UnitTests.Logger
         }
 
         [TestMethod]
-        public void WebLogger_StartsAndStops_WebSocketServer()
+        public async Task WebLogger_StartsAndStops_WebSocketServer()
         {
             var logger = WebLoggerFactory.CreateWebLogger();
             logger.Start();
             Assert.IsTrue(logger.IsRunning);
 
             var client = new TcpClient();
-            client.Connect("127.0.0.1", 54321);
+            await client.ConnectAsync("127.0.0.1", 54321);
             Assert.IsTrue(client.Connected);
 
-            try
-            {
-                client.Close();
-                logger.Stop();
+            client.Close();
+            logger.Stop();
 
-                Assert.IsFalse(logger.IsRunning);
-            }
-            catch (Exception e)
-            {
-                
-            }
-            
+            await Task.Delay(1000);
+
+            Assert.IsFalse(logger.IsRunning);
+
         }
 
         [TestMethod]

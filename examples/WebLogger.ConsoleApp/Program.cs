@@ -1,12 +1,10 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.Reflection;
 using Serilog;
-using Serilog.Data;
+using System.Reflection;
 using WebLogger;
-using WebLogger.ConsoleApp.Commands;
+using WebLogger.ConsoleApp.GeneratedCommands;
 using WebLogger.Utilities;
-
 
 
 // Optionally create a collection of commands using the provided WebLoggerCommand class
@@ -40,7 +38,8 @@ Log.Logger = new LoggerConfiguration()
             logger.DiscoverCommands(Assembly.GetAssembly(typeof(Program)))
                 .DiscoverProvidedCommands();
 
-            //logger.RegisterCommand(new GeneratedCommand());
+            logger.RegisterCommand(new AnotherCommand());
+            //logger.RegisterCommand(new sdgdfgdfg());
         })
     .WriteTo.Console()
     .CreateLogger();

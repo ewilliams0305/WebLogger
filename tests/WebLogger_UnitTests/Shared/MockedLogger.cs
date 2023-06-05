@@ -3,7 +3,7 @@
 {
     internal class MockedLogger : IWebLogger
     {
-        private WebLoggerCommands _commands = new WebLoggerCommands();
+        private readonly WebLoggerCommands _commands = new();
 
         public Action<string>? CommandWriteLine { get; set; }
 
@@ -84,12 +84,12 @@
             
         }
 
-        public void WriteLine<T1, T2>(string msg, T1 property1, T2 property2 = default)
+        public void WriteLine<T1, T2>(string msg, T1 property1, T2 property2)
         {
             
         }
 
-        public void WriteLine<T1, T2, T3>(string msg, T1 property1, T2 property2, T3 property3 = default)
+        public void WriteLine<T1, T2, T3>(string msg, T1 property1, T2 property2, T3 property3)
         {
             
         }
