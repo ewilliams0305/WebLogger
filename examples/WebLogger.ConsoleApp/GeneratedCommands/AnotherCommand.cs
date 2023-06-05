@@ -4,8 +4,6 @@ namespace WebLogger.ConsoleApp.GeneratedCommands
 {
     public partial class AnotherCommand
     {
-
-
         [CommandHandler(
             "Another Command",
             "Hot Damn",

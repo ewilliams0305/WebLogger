@@ -26,7 +26,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebLogger_UnitTests", "test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebLogger.Serilog", "source\WebLogger.Serilog\WebLogger.Serilog.csproj", "{8719CA40-5DE3-40D7-94DD-CDC452056850}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebLogger.Generators", "source\WebLogger.Generators\WebLogger.Generators.csproj", "{102E0DD8-91A8-440E-B76F-104D022D0C1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebLogger.Generators", "source\WebLogger.Generators\WebLogger.Generators.csproj", "{102E0DD8-91A8-440E-B76F-104D022D0C1A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -41,27 +41,21 @@ namespace WebLogger.Generators
                     attributeValues.Add(literal.Token.ValueText);
                 }
             }
+            
+            var nameSpace = attribute.GetParent<NamespaceDeclarationSyntax>();
+            var classDeclaration = attribute.GetParent<ClassDeclarationSyntax>();
+            var method = attribute.GetParent<MethodDeclarationSyntax>();
+            var key = method.Identifier.Text;
 
-            try
-            {
-                var nameSpace = attribute.GetParent<NamespaceDeclarationSyntax>();
-                var classDeclaration = attribute.GetParent<ClassDeclarationSyntax>();
-                var method = attribute.GetParent<MethodDeclarationSyntax>();
-                var key = method.Identifier.Text;
+            Captures.Add(new Capture(
+                key,
+                attributeValues[0],
+                attributeValues[1],
+                attributeValues[2],
+                nameSpace,
+                classDeclaration,
+                method));
 
-                Captures.Add(new Capture(
-                    key,
-                    attributeValues[0],
-                    attributeValues[1],
-                    attributeValues[2],
-                    nameSpace,
-                    classDeclaration,
-                    method));
-            }
-            catch (Exception e)
-            {
-                
-            }
             
         }
 

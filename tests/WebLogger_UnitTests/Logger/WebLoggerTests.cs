@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net.Sockets;
 
 namespace WebLogger_UnitTests.Logger
 {
@@ -46,11 +41,10 @@ namespace WebLogger_UnitTests.Logger
 
                 Assert.IsFalse(logger.IsRunning);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                
+                throw;
             }
-            
         }
 
         [TestMethod]
