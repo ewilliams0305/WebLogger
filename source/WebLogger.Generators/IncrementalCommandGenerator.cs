@@ -6,9 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
-using System.Reflection.Metadata;
 
 namespace WebLogger.Generators
 {
@@ -25,8 +23,8 @@ namespace WebLogger.Generators
             IncrementalValuesProvider<PartialClassContext> provider = context.SyntaxProvider
                 .CreateSyntaxProvider(SyntacticPredicate, SemanticTransform)
                 .Where(static ((INamedTypeSymbol, IMethodSymbol, List<string>)? type) => type.HasValue)
-                .Select(static ((INamedTypeSymbol, IMethodSymbol, List<string>)? type, CancellationToken _) => TransformType(type!.Value));
-            //TODO: Add WithComparer;
+                .Select(static ((INamedTypeSymbol, IMethodSymbol, List<string>)? type, CancellationToken _) => TransformType(type!.Value))
+                .WithComparer(PartialClassContextComparer.Instance);
 
             context.RegisterSourceOutput(provider, Execute);
         }
@@ -149,10 +147,11 @@ namespace WebLogger.Generators
             return new PartialClassContext(@namespace, name, targetType, methodTarget, type.Values);
         }
 
+
         /// <summary>
         /// Stores the gathered information from the partial class.
         /// </summary>
-        internal class PartialClassContext
+        internal class PartialClassContext: IComparable<PartialClassContext>, IEquatable<PartialClassContext>
         {
             public string Namespace { get; }
             public string Name { get; }
@@ -169,6 +168,87 @@ namespace WebLogger.Generators
                 MethodTarget = methodTarget;
                 PropertyValues = propertyValues;
             }
+
+            public int CompareTo(PartialClassContext other)
+            {
+                if (other.Namespace != Namespace) return -1;
+
+                if (other.Name != Name) return -1;
+
+                if (other.TargetType != TargetType) return -1;
+
+                if (other.MethodTarget != MethodTarget) return -1;
+
+                if (other.PropertyValues.Count != PropertyValues.Count) return -1;
+
+                if (other.PropertyValues[0] != PropertyValues[0]) return -1;
+                if (other.PropertyValues[1] != PropertyValues[1]) return -1;
+                if (other.PropertyValues[2] != PropertyValues[2]) return -1;
+
+                return 0;
+            }
+
+            public bool Equals(PartialClassContext other)
+            {
+                if(other == null) return false;
+
+                if (other.Namespace != Namespace) return false;
+
+                if (other.Name != Name) return false;
+
+                if (other.TargetType != TargetType) return false;
+
+                if (other.MethodTarget != MethodTarget) return false;
+
+                if (other.PropertyValues.Count != PropertyValues.Count) return false;
+
+                if (other.PropertyValues[0] != PropertyValues[0]) return false;
+                if (other.PropertyValues[1] != PropertyValues[1]) return false;
+                if (other.PropertyValues[2] != PropertyValues[2]) return false;
+
+                return true;
+            }
+        }
+
+
+        internal class PartialClassContextComparer : IEqualityComparer<PartialClassContext>
+        {
+            private static readonly Lazy<PartialClassContextComparer> Lazy =
+                new Lazy<PartialClassContextComparer>(() => new PartialClassContextComparer());
+
+            /// <summary>
+            /// Singleton web logger instance.
+            /// </summary>
+            public static PartialClassContextComparer Instance => Lazy.Value;
+
+            public bool Equals(PartialClassContext x, PartialClassContext y)
+            {
+                if (ReferenceEquals(x, y)) return true;
+                if (ReferenceEquals(x, null)) return false;
+                if (ReferenceEquals(y, null)) return false;
+                if (x.GetType() != y.GetType()) return false;
+
+                return x.Equals(y);
+
+                //return x.Namespace == y.Namespace 
+                //       && x.Name == y.Name 
+                //       && x.TargetType == y.TargetType
+                //       && x.MethodTarget == y.MethodTarget ;
+                //       //&& Equals(x.PropertyValues, y.PropertyValues);
+            }
+
+            public int GetHashCode(PartialClassContext obj)
+            {
+                unchecked
+                {
+                    var hashCode = (obj.Namespace != null ? obj.Namespace.GetHashCode() : 0);
+                    hashCode = (hashCode * 397) ^ (obj.Name != null ? obj.Name.GetHashCode() : 0);
+                    hashCode = (hashCode * 397) ^ (obj.TargetType != null ? obj.TargetType.GetHashCode() : 0);
+                    hashCode = (hashCode * 397) ^ (obj.MethodTarget != null ? obj.MethodTarget.GetHashCode() : 0);
+                    hashCode = (hashCode * 397) ^ (obj.PropertyValues != null ? obj.PropertyValues.GetHashCode() : 0);
+                    return hashCode;
+                }
+            }
         }
 
         /// <summary>
@@ -183,7 +263,7 @@ namespace WebLogger.Generators
             var command = subject.PropertyValues[0] is not null ? subject.PropertyValues[0] : "ERROR" ;
             var description = subject.PropertyValues[0] is not null ? subject.PropertyValues[1] : "ERROR" ;
             var help = subject.PropertyValues[0] is not null ? subject.PropertyValues[2] : "ERROR" ;
-            var code = $@"// <auto-generated/>
+            var code = $@"// <auto-generated/> @{DateTime.UtcNow}
 {@namespace}
 {{
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute(""WebLogger"", ""1.1.3"")]

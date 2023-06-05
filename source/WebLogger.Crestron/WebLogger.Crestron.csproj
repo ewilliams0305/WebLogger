@@ -107,6 +107,7 @@
     <Compile Include="IAssemblyMarker.cs" />
     <Compile Include="IpConfigCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Simpl\LazyWebLogger.cs" />
     <Compile Include="Simpl\SimplCommand.cs" />
     <Compile Include="Simpl\SimplCommandArgs.cs" />
     <Compile Include="Simpl\SimplWebLogger.cs" />
