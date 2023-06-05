@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>WebLogger</RootNamespace>
-    <Version>1.1.2</Version>
-    <FileVersion>1.1.2</FileVersion>
+    <Version>1.1.3</Version>
+    <FileVersion>1.1.3</FileVersion>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>WebLogger Serilog Sink</Title>
     <Description>A serilog Sink implementation of the weblogger providing a web socket servers used to send/receive console communications from an embedded HTML user interface to a application.
@@ -13,6 +13,7 @@
     <PackageIcon>log.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/ewilliams0305/WebLogger</RepositoryUrl>
+    <Company>ewilliams0305</Company>
     <PackageTags>Logging;Crestron;VirtualControl;Websocket;Serilog</PackageTags>
     <PackageReleaseNotes>#### Version 1.1.0
 - Changed command handler from ```Action&lt;string, List&lt;string&gt;``` to ```Func&lt;string, List&lt;string&gt;, string``` 

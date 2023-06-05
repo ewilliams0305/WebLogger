@@ -68,7 +68,7 @@ namespace WebLogger.Generators
 
             INamedTypeSymbol commandHandlerAttribute = context.SemanticModel.Compilation.GetTypeByMetadataName(Constants.CommandHandlerAttributeName);
 
-            List<string> parameters = new List<string>();
+            List<string> parameters = new();
 
             foreach (var methodDeclarationAttributeList in methodDeclaration.AttributeLists)
             {
@@ -210,16 +210,13 @@ namespace WebLogger.Generators
             }
         }
 
-
+        /// <summary>
+        /// Comparision to prevent extraneous generation. 
+        /// </summary>
         internal class PartialClassContextComparer : IEqualityComparer<PartialClassContext>
         {
-            private static readonly Lazy<PartialClassContextComparer> Lazy =
-                new Lazy<PartialClassContextComparer>(() => new PartialClassContextComparer());
-
-            /// <summary>
-            /// Singleton web logger instance.
-            /// </summary>
-            public static PartialClassContextComparer Instance => Lazy.Value;
+            private static readonly Lazy<PartialClassContextComparer> _lazy = new(() => new PartialClassContextComparer());
+            public static PartialClassContextComparer Instance => _lazy.Value;
 
             public bool Equals(PartialClassContext x, PartialClassContext y)
             {
@@ -229,12 +226,6 @@ namespace WebLogger.Generators
                 if (x.GetType() != y.GetType()) return false;
 
                 return x.Equals(y);
-
-                //return x.Namespace == y.Namespace 
-                //       && x.Name == y.Name 
-                //       && x.TargetType == y.TargetType
-                //       && x.MethodTarget == y.MethodTarget ;
-                //       //&& Equals(x.PropertyValues, y.PropertyValues);
             }
 
             public int GetHashCode(PartialClassContext obj)
