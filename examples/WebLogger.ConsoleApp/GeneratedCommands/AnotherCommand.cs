@@ -4,14 +4,6 @@ namespace WebLogger.ConsoleApp.GeneratedCommands
 {
     public partial class AnotherCommand
     {
-        public string Type { get; set; }
-
-        public List<string> Values { get; set; } = new List<string>();
-
-        public AnotherCommand()
-        {
-            Type = Command;
-        }
         [CommandHandler(
             "Another",
             "Hot Damn",
