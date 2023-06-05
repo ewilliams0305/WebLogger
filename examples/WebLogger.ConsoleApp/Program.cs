@@ -39,6 +39,7 @@ Log.Logger = new LoggerConfiguration()
                 .DiscoverProvidedCommands();
 
             logger.RegisterCommand(new AnotherCommand());
+            //logger.RegisterCommand(new sdgdfgdfg());
         })
     .WriteTo.Console()
     .CreateLogger();

@@ -8,7 +8,7 @@ namespace WebLogger.ConsoleApp.GeneratedCommands
             "Another Command",
             "Hot Damn",
             "We made a command from nothing")]
-        public ICommandResponse ExecutedMethod(string command, List<string> args)
+        public static ICommandResponse ExecutedMethod(string command, List<string> args)
         {
             return CommandResponse.Success(command, "We build this city on source generators");
         }

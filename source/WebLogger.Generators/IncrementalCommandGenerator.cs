@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
+using System.Reflection.Metadata;
 
 namespace WebLogger.Generators
 {
@@ -23,8 +24,8 @@ namespace WebLogger.Generators
 
             IncrementalValuesProvider<PartialClassContext> provider = context.SyntaxProvider
                 .CreateSyntaxProvider(SyntacticPredicate, SemanticTransform)
-                .Where(static ((INamedTypeSymbol, IMethodSymbol)? type) => type.HasValue)
-                .Select(static ((INamedTypeSymbol, IMethodSymbol)? type, CancellationToken _) => TransformType(type!.Value));
+                .Where(static ((INamedTypeSymbol, IMethodSymbol, List<string>)? type) => type.HasValue)
+                .Select(static ((INamedTypeSymbol, IMethodSymbol, List<string>)? type, CancellationToken _) => TransformType(type!.Value));
             //TODO: Add WithComparer;
 
             context.RegisterSourceOutput(provider, Execute);
@@ -36,41 +37,68 @@ namespace WebLogger.Generators
             context.AddSource(Constants.WebLoggerCommandAttributeFile, Constants.WebLoggerCommandAttributeValue);
         }
 
+        /// <summary>
+        /// Ensure the node is a method and the node has at least 1 attribute
+        /// </summary>
         private static bool SyntacticPredicate(SyntaxNode node, CancellationToken cancellation)
         {
             if (node is not MethodDeclarationSyntax { AttributeLists: { Count: > 0 } } candidate) 
                 return false;
 
             return true;
-
-            //var parentClass = candidate.GetParent<ClassDeclarationSyntax>();
-
-            //return parentClass != null
-            //       && parentClass.Modifiers.Any(SyntaxKind.PartialKeyword)
-            //       && !parentClass.Modifiers.Any(SyntaxKind.StaticKeyword);
         }
 
-        private static (INamedTypeSymbol, IMethodSymbol)? SemanticTransform(GeneratorSyntaxContext context, CancellationToken cancellation)
+        /// <summary>
+        /// Validate the method, class declaration, and capture metadata
+        /// </summary>
+        private static (INamedTypeSymbol, IMethodSymbol, List<string>)? SemanticTransform(GeneratorSyntaxContext context, CancellationToken cancellation)
         {
             Debug.Assert(context.Node is MethodDeclarationSyntax);
 
             var methodDeclaration = Unsafe.As<MethodDeclarationSyntax>(context.Node);
+            ISymbol methodSymbol = context.SemanticModel.GetDeclaredSymbol(methodDeclaration);
+
+            if (methodSymbol is not IMethodSymbol method)
+            {
+                return null;
+            }
+
             var candidate = methodDeclaration.GetParent<ClassDeclarationSyntax>();
 
-            ISymbol methodSymbol = context.SemanticModel.GetDeclaredSymbol(methodDeclaration);
+            if (!ValidateCandidateModifiers(candidate)) 
+                return null;
+
+            INamedTypeSymbol commandHandlerAttribute = context.SemanticModel.Compilation.GetTypeByMetadataName(Constants.CommandHandlerAttributeName);
+
+            List<string> parameters = new List<string>();
+
+            foreach (var methodDeclarationAttributeList in methodDeclaration.AttributeLists)
+            {
+                foreach (var attribute in methodDeclarationAttributeList.Attributes)
+                {
+                    SymbolInfo symbolInfo = context.SemanticModel.GetSymbolInfo(attribute);
+                    ISymbol attSymbol = symbolInfo.Symbol;
+
+                    if (attSymbol is null)
+                        return null;
+
+                    if (!SymbolEqualityComparer.Default.Equals(attSymbol.ContainingSymbol, commandHandlerAttribute))
+                        return null;
+
+                    if (attribute.ArgumentList != null)
+                    {
+                        foreach (var argument in attribute.ArgumentList.Arguments)
+                        {
+                            if (argument.Expression is LiteralExpressionSyntax literal)
+                            {
+                                parameters.Add(literal.Token.ValueText);
+                            }
+                        }
+                    }
+                }
+            }
+
             ISymbol typeSymbol = context.SemanticModel.GetDeclaredSymbol(candidate);
-
-            //if (typeSymbol is IMethodSymbol method)
-            //{
-            //    //TODO: Might not really need to evaluate this as it already passed the 
-            //    INamedTypeSymbol commandHandlerAttribute =
-            //        context.SemanticModel.Compilation.GetTypeByMetadataName(Constants.CommandHandlerAttributeName);
-
-            //    if (method.)
-            //    {
-            //        return type;
-            //    }
-            //}
 
             if (typeSymbol is INamedTypeSymbol type)
             {
@@ -80,113 +108,31 @@ namespace WebLogger.Generators
                 if (!type.Interfaces.Any(@interface =>
                         @interface.OriginalDefinition.Equals(iWebLoggerCommand, SymbolEqualityComparer.Default)))
                 {
-                    if (methodSymbol is IMethodSymbol method)
-                    {
-                        //TODO: Grab the parameters from the TryGet method below and return a list of the values.
-                        
-                        
-                        return (type, method);
-                    }
+                    return (type, method, parameters);
                 }
             }
 
             return null;
         }
-        //private static (INamedTypeSymbol, IEnumerable<string>) SemanticTransform(GeneratorSyntaxContext context, CancellationToken cancellation)
-        //{
-        //    Debug.Assert(context.Node is ClassDeclarationSyntax);
 
-        //    var candidate = Unsafe.As<ClassDeclarationSyntax>(context.Node);
-
-        //    ISymbol symbol = context.SemanticModel.GetDeclaredSymbol(candidate);
-
-        //    if (symbol is INamedTypeSymbol type)
-        //    {
-        //        INamedTypeSymbol iWebLoggerCommand =
-        //            context.SemanticModel.Compilation.GetTypeByMetadataName(Constants.CommandInterface);
-
-        //        //TODO: Might not really need to evaluate this as it already passed the 
-        //        INamedTypeSymbol commandHandlerAttribute =
-        //            context.SemanticModel.Compilation.GetTypeByMetadataName(Constants.CommandHandlerAttributeName);
-
-        //        if (!type.Interfaces.Any(@interface =>
-        //                @interface.OriginalDefinition.Equals(iWebLoggerCommand, SymbolEqualityComparer.Default)))
-        //        {
-        //            return type;
-        //        }
-        //    }
-
-        //    return null;
-        //}
-
-        private static bool TryGetAttributeInfo(
-            MethodDeclarationSyntax candidate, 
-            INamedTypeSymbol target,
-            SemanticModel semanticModel)
+        private static bool ValidateCandidateModifiers(ClassDeclarationSyntax candidate)
         {
-            foreach (var candidateAttributeList in candidate.AttributeLists)
-            {
-                foreach (var attribute in candidateAttributeList.Attributes)
-                {
-                    SymbolInfo symbolInfo = semanticModel.GetSymbolInfo(attribute);
-                    ISymbol symbol = symbolInfo.Symbol;
+            if (candidate == null)
+                return false;
 
-                    if (symbol is not null
-                        && SymbolEqualityComparer.Default.Equals(symbol.ContainingSymbol, target)
-                        && attribute.ArgumentList is { Arguments: { Count: 3 } } argumentList)
-                    {
-                        return true;
-                    }
-                }
-            }
+            if(!candidate.Modifiers.Any(SyntaxKind.PartialKeyword))
+               return false;
 
-            return false;
+            if(candidate.Modifiers.Any(SyntaxKind.StaticKeyword))
+                return false;
+
+            return true;
         }
 
-
-        private static bool TryGetAttributeValues(ClassDeclarationSyntax candidate, INamedTypeSymbol target, SemanticModel semanticModel, out IEnumerable<string> values)
-        {
-            var methods = candidate.GetChildrenOfType<MethodDeclarationSyntax>();
-
-            foreach (var methodDeclarationSyntax in methods)
-            {
-                //TODO: Might not really need to evaluate this as it already passed the 
-                INamedTypeSymbol commandHandlerAttribute =
-                    semanticModel.Compilation.GetTypeByMetadataName(Constants.CommandHandlerAttributeName);
-
-            }
-
-            foreach (var candidateAttributeList in candidate.AttributeLists)
-            {
-                foreach (var attribute in candidateAttributeList.Attributes)
-                {
-                    SymbolInfo symbolInfo = semanticModel.GetSymbolInfo(attribute);
-                    ISymbol symbol = symbolInfo.Symbol;
-
-                    if (symbol is not null
-                        && SymbolEqualityComparer.Default.Equals(symbol.ContainingSymbol, target)
-                        && attribute.ArgumentList is { Arguments: { Count: 3 } } argumentList)
-                    {
-                        var parameters = new List<string>();
-
-                        foreach (var argument in argumentList.Arguments)
-                        {
-                            if (argument.Expression is LiteralExpressionSyntax literal)
-                            {
-                                parameters.Add(literal.Token.ValueText);
-                            }
-                        }
-
-                        values = parameters;
-                        return true;
-                    }
-                }
-            }
-            values = new List<string>();
-            return false;
-        }
-
-        private static PartialClassContext TransformType((INamedTypeSymbol PartialType, IMethodSymbol Handler) type)
+        /// <summary>
+        /// Creates the partial class capture from the provided type, method, and args
+        /// </summary>
+        private static PartialClassContext TransformType((INamedTypeSymbol PartialType, IMethodSymbol Handler, List<string> Values) type)
         {
             var @namespace = type.PartialType.ContainingNamespace.IsGlobalNamespace
                 ? null
@@ -200,20 +146,22 @@ namespace WebLogger.Generators
 
             var methodTarget = type.Handler.Name;
 
-            return new PartialClassContext(@namespace, name, targetType, methodTarget, new List<string>());
+            return new PartialClassContext(@namespace, name, targetType, methodTarget, type.Values);
         }
 
-
+        /// <summary>
+        /// Stores the gathered information from the partial class.
+        /// </summary>
         internal class PartialClassContext
         {
             public string Namespace { get; }
             public string Name { get; }
             public string TargetType { get; }
             public string MethodTarget { get; }
-            public IEnumerable<string> PropertyValues { get; }
+            public List<string> PropertyValues { get; }
 
             public PartialClassContext(
-                string @namespace, string name, string targetType, string methodTarget, IEnumerable<string> propertyValues)
+                string @namespace, string name, string targetType, string methodTarget, List<string> propertyValues)
             {
                 Namespace = @namespace;
                 Name = name;
@@ -223,10 +171,18 @@ namespace WebLogger.Generators
             }
         }
 
+        /// <summary>
+        /// Writes the gathered information to the source code.
+        /// </summary>
+        /// <param name="context">Production</param>
+        /// <param name="subject">Partial class gathered information</param>
         private static void Execute(SourceProductionContext context, PartialClassContext subject)
         {
 
             var @namespace = $"namespace {subject.Namespace ?? string.Empty}";
+            var command = subject.PropertyValues[0] is not null ? subject.PropertyValues[0] : "ERROR" ;
+            var description = subject.PropertyValues[0] is not null ? subject.PropertyValues[1] : "ERROR" ;
+            var help = subject.PropertyValues[0] is not null ? subject.PropertyValues[2] : "ERROR" ;
             var code = $@"// <auto-generated/>
 {@namespace}
 {{
@@ -239,9 +195,10 @@ namespace WebLogger.Generators
         //TargetType: {subject.TargetType}
         //MethodName: {subject.MethodTarget}
 
-        public string Command => ""ReplaceMeCommand"";
-        public string Description => ""ReplaceMeDescription"";
-        public string Help => ""ReplaceMeHelp"";
+        public string Command => ""{command.RemoveWhiteSpace().ToUpper()}"";
+        public string Description => ""{description}"";
+        public string Help => ""{help}"";
+
         public Func<string, List<string>, ICommandResponse> CommandHandler => ExecuteCommand_Generated;
 
         protected ICommandResponse ExecuteCommand_Generated(string command, List<string> args)
@@ -258,7 +215,7 @@ namespace WebLogger.Generators
     }}
 }}
 ";
-            string qualifiedName = subject.Namespace is null ? subject.Name : $"{subject.Namespace}.{subject.Name}";
+            var qualifiedName = subject.Namespace is null ? subject.Name : $"{subject.Namespace}.{subject.Name}";
             context.AddSource($"{qualifiedName}.WebLoggerCommand.g.cs", code);
         }
     }
