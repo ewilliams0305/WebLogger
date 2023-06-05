@@ -1,4 +1,61 @@
-﻿using Serilog.Core;
+﻿using System;
+using System.IO;
+using Serilog.Core;
+using Serilog.Events;
+using Serilog.Formatting.Json;
+
+namespace YourNamespace
+{
+    public class WebLoggerSink : ILogEventSink
+    {
+        private readonly string _logPath;
+        private readonly object _syncRoot = new object();
+
+        public WebLoggerSink(string logPath)
+        {
+            _logPath = logPath;
+        }
+
+        public void Emit(LogEvent logEvent)
+        {
+            lock (_syncRoot)
+            {
+                var logMessage = new
+                {
+                    Timestamp = logEvent.Timestamp.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"),
+                    Level = logEvent.Level.ToString(),
+                    Message = logEvent.RenderMessage(),
+                    Exception = logEvent.Exception?.ToString()
+                };
+
+                try
+                {
+                    using (var writer = new StreamWriter(_logPath, true))
+                    {
+                        var jsonFormatter = new JsonFormatter();
+                        writer.WriteLine(jsonFormatter.Format(logMessage));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error writing log message to file: {ex.Message}");
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+/*using Serilog.Core;
 using Serilog.Events;
 using System;
 using System.Collections.Generic;
@@ -14,12 +71,14 @@ namespace WebLogger
     /// <seealso cref="Serilog.ILogger" />
     /// <seealso cref="IFormatProvider" />
     /// <seealso cref="System.IDisposable" />
-    public sealed class WebLoggerSink : ILogEventSink, IDisposable
+    public sealed class WebLoggerSink : ILogEventSink // , IDisposable
     {
 
-        private bool _disposed;
-        private readonly IWebLogger _logger;
-        private readonly IFormatProvider _formatProvider;
+	private readonly string _logPath;
+        private readonly object _syncRoot = new object();
+     // private bool _disposed;
+     // private readonly IWebLogger _logger;
+     // private readonly IFormatProvider _formatProvider;
 
         ///// <summary>
         ///// Initializes a new instance of the <see cref="WebLoggerSink"/> class.
@@ -67,14 +126,16 @@ namespace WebLogger
         /// <param name="options">provides the weblogger factory configuration options</param>
         /// <param name="logger">the action provides access to the logger after construction and can be used to provide commands</param>
         /// <param name="formatProvider">The format provider.</param>
-        public WebLoggerSink(Action<WebLoggerOptions> options, Action<IWebLogger> logger = default, IFormatProvider formatProvider = default)
+      //public WebLoggerSink(Action<WebLoggerOptions> options, Action<IWebLogger> logger = default, IFormatProvider formatProvider = default)
+        public WebLoggerSink(string logPath)
         {
-            _logger = WebLoggerFactory.CreateWebLogger(options);
+           /* _logger = WebLoggerFactory.CreateWebLogger(options);
             _formatProvider = formatProvider;
 
             logger?.Invoke(_logger);
 
-            _logger.Start();
+            _logger.Start();*/
+	    _logPath = logPath;
         }
 
         /// <summary>
@@ -85,9 +146,10 @@ namespace WebLogger
         public void Emit(LogEvent logEvent)
         {
 
-            var data = $"{logEvent.Timestamp} [{logEvent.Level.ToString().ToUpper()}] {logEvent.RenderMessage(_formatProvider)}";
+           // var data = $"{logEvent.Timestamp} [{logEvent.Level.ToString().ToUpper()}] {logEvent.RenderMessage(_formatProvider)}";
 
-            switch (logEvent.Level)
+            //switch (logEvent.Level)
+	      lock (_syncRoot)
             {
                 case LogEventLevel.Verbose:
                     _logger.WriteLine(data);
@@ -145,4 +207,4 @@ namespace WebLogger
 
         }
     }
-}
+}*/
