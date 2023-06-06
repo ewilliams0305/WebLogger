@@ -403,6 +403,7 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateLogger();
 ```
+
 ## Source Generators
 
 A source generator analyzer project has now been created and is included in the solution.  This is my first shot at these so be kind!

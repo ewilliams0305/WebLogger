@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>WebLogger</RootNamespace>
-    <Version>1.1.3</Version>
-    <FileVersion>1.1.3</FileVersion>
+    <Version>1.1.4</Version>
+    <FileVersion>1.1.4</FileVersion>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>WebLogger Serilog Sink</Title>
     <Description>A serilog Sink implementation of the weblogger providing a web socket servers used to send/receive console communications from an embedded HTML user interface to a application.
