@@ -29,7 +29,7 @@ However it has since proven usefull in other application so a move to .netstanda
 The included solution includes five projects including two example projects and 4 libraries. 
 
 - /source/`WebLogger.csproj`
-- [Serilog Sink](#source/WebLogger.Serilog/)
+- [Serilog Sink](source/WebLogger.Serilog/WebLogger.Serilog.csproj)
 - /source/`WebLogger.Crestron.csproj`
 - /source/`WebLogger.Generators.csproj`
 - /example/`WebLogger.ConsoleApp.csproj`
