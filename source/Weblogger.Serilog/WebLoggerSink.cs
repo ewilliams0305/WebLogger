@@ -21,45 +21,6 @@ namespace WebLogger
         private readonly IWebLogger _logger;
         private readonly IFormatProvider _formatProvider;
 
-        ///// <summary>
-        ///// Initializes a new instance of the <see cref="WebLoggerSink"/> class.
-        ///// Provide an instance of the weblogger to be utilized by the sink.
-        ///// </summary>
-        ///// <param name="formatProvider">The format provider.</param>
-        ///// <param name="logger">The logger.</param>
-        ///// <param name="commands"></param>
-        //public WebLoggerSink(IFormatProvider formatProvider, IWebLogger logger, IEnumerable<IWebLoggerCommand> commands = null)
-        //{
-        //    _formatProvider = formatProvider;
-        //    _logger = logger;
-
-        //    RegisterCommands(commands);
-        //    _logger.Start();
-        //}
-
-        ///// <summary>
-        ///// Initializes a new instance of the <see cref="WebLoggerSink"/> class.
-        ///// Alternatively the Serilog sink can instantiate the weblogger and manage it for the application lifetime.
-        ///// </summary>
-        ///// <param name="formatProvider">The format provider.</param>
-        ///// <param name="port"></param>
-        ///// <param name="secured"></param>
-        ///// <param name="applicationDirectory"></param>
-        ///// <param name="commands"></param>
-        //public WebLoggerSink(IFormatProvider formatProvider, int port, bool secured, string applicationDirectory, IEnumerable<IWebLoggerCommand> commands = null)
-        //{
-        //    _logger = WebLoggerFactory.CreateWebLogger(options =>
-        //    {
-        //        options.WebSocketTcpPort = port;
-        //        options.Secured = secured;
-        //        options.DestinationWebpageDirectory = applicationDirectory;
-        //    });
-        //    _formatProvider = formatProvider;
-
-        //    RegisterCommands(commands);
-        //    _logger.Start();
-        //}
-
         /// <summary>
         /// Initializes a new instance of the <see cref="WebLoggerSink"/> class.
         /// Alternatively the Serilog sink can instantiate the weblogger and manage it for the application lifetime.
@@ -112,8 +73,6 @@ namespace WebLogger
                     throw new ArgumentOutOfRangeException();
             }
         }
-
-        
 
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources.

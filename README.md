@@ -6,9 +6,9 @@
 ![GitHub Repo stars](https://img.shields.io/github/stars/ewilliams0305/WebLogger?style=social)
 ![GitHub forks](https://img.shields.io/github/forks/ewilliams0305/WebLogger?style=social)
 
-WebLogger is a websocket server designed to provide an accessible console application served to an html user interface. The WebLogger library targets .netstandard 2.0 and can be used in any .net framework 4.7 and .net Core application. WebLogger will manage the server and provide an easy way to create a custom CLI using commands and prompts.
-This library also includes an HTML front end using vanilla JS to handle the socket connection.
-The webpage is embedded into the DLL and will be extracted when executed to a destination of your choosing.
+The WebLogger is a websocket server designed to provide an accessible console application served to an html user interface. The WebLogger library targets .netstandard 2.0 and can be used in any .net framework 4.7 and .net Core application. WebLogger will manage the server and provide an easy way to create a custom CLI using commands and prompts.
+This library also includes an HTML front end using vanilla JS to handle the user interface component.
+The webpage is embedded into the DLL and will be extracted to a destination of your choosing when executed.
 
 Inspiration for this project comes from https://kielthecoder.com/2021/04/16/vc-4-websocket-sharp/.  This was original created to solve the problems described in his blog regarding Crestron's Virtual Control platform.
 However it has since proven usefull in other application so a move to .netstandard was important.
@@ -28,16 +28,18 @@ However it has since proven usefull in other application so a move to .netstanda
 
 The included solution includes five projects including two example projects and 4 libraries. 
 
-- /source/`WebLogger.csproj`
-- /source/`WebLogger.Serilog.csproj`
-- /source/`WebLogger.Crestron.csproj`
-- /source/`WebLogger.Generators.csproj`
-- /example/`WebLogger.ConsoleApp.csproj`
-- /example/`WebLogger.CrestronApp.csproj`
+- [WebLogger](source/WebLogger/)
+- [WebLogger.Serilog](source/WebLogger.Serilog/)
+- [WebLogger.Crestron](source/WebLogger.Crestron/)
+- [WebLogger.Generators](source/WebLogger.Generators/)
+- [Console Application](examples/WebLogger.ConsoleApp/Program.cs)
+- [Crestron Application](examples/WebLogger.CrestronApp/ControlSystem.cs)
 
-A unit test project is also included and located in the tests directory
+Unit test project is also included and located in the tests directory.  This area needs `Improvement`
 
-- /tests/`WebLogger_UnitTests`
+- [Unit Tests](tests/WebLogger_UnitTests/)
+- [Unit Tests](tests/WebLogger.Generators_UnitTests/)
+
 
 ### WebLogger.csproj
 
@@ -61,10 +63,10 @@ an unsecured http server to distribute the HTML files
 Provides source generators used to create commands and (other cool stuff in the future).
 
 ### WebLogger.ConsoleApp Example Program
-The Weblogger example is a simple console application showing SerilogSink usage.
+The WebLogger example is a simple console application showing SerilogSink usage.
 
 ### WebLogger.CrestronApp Example Program
-The Weblogger example is a Crestron SDK SimpleSharp program that demonstrates how to instantiate the `WebLogger` class and add console commands with callbacks.
+The WebLogger example is a Crestron SDK SimpleSharp program that demonstrates how to instantiate the `WebLogger` class and add console commands with callbacks.
 
 ## Create a WebLogger
 
@@ -384,6 +386,23 @@ webLogger
 
 ```
 
+A custom command has also been provided and can be registered to control the logging minimum logging level.  Create an instance of the `LogLevelCommand` and register it with the logger.
+```csharp
+
+var logLevelCommand = new LoggerLevelCommand(LogEventLevel.Verbose);
+
+Log.Logger = new LoggerConfiguration()
+    //Set the `ControlledBy` level to the value stored in the logLevelCommand
+    .MinimumLevel.ControlledBy(logLevelCommand.LoggingLevelSwitch)
+    .WriteTo.WebloggerSink(
+        logger =>
+        {
+            //Register the command and now you can change the logging level.
+            logger.RegisterCommand(logLevelCommand);
+        })
+    .WriteTo.Console()
+    .CreateLogger();
+```
 ## Source Generators
 
 A source generator analyzer project has now been created and is included in the solution.  This is my first shot at these so be kind!
@@ -395,7 +414,7 @@ Note: As of 1.1.3 Generators now use IIncrementalGenerator interface and only ge
 ```xml
 <ProjectReference Include="..\..\source\WebLogger.Generators\WebLogger.Generators.csproj" />
 ```
-After adding the package the `CommandHandlerAttribute` will be generated and added to your project in the CommandHandlerAttribute.g.cs file.
+After adding the package the `CommandHandlerAttribute`, `CommandStore`, `TargetCommand`, `IStoredCommands`, and `StoredCommandsExtensions` types will be generated and added to your project in the CommandHandlerAttribute.g.cs file.
 
 ```csharp
 // <auto-generated/>
@@ -473,6 +492,122 @@ logger.DiscoverCommands(Assembly.GetAssembly(typeof(Program)))
 
 logger.RegisterCommand(new GeneratedCommand());
 ```
+You can also create a single class containing several CLI commands known as a `CommandStore`.  Create a partial class
+marked with the `CommandStore` attribute that includes at least one method marked with the `TargetCommand` attribute.  The source generator will created a new partial class extending your functionality.
+This new partial class will include a private readonly `List<IWebLoggerCommand> _commands` pointing the handlers at the methods you defined.
+
+```csharp
+[CommandStore]
+public partial class RoomControlCommandStore
+{
+    [TargetCommand(
+        "PWRON",
+        "Powers on the room",
+        "Parameters: NA")]
+    public ICommandResponse PowerOnCommand(string command, List<string> args)
+    {
+        //Power on the room and return the results.
+        return CommandResponse.Success(command, "We did the thing worth doing");
+    }
+
+    [TargetCommand(
+        "PWROFF",
+        "Powers off the room",
+        "Parameters: NA")]
+    public ICommandResponse PowerOffCommand(string command, List<string> args)
+    {
+        //Power off the room and return the results.
+        throw new NotImplementedException("Room power off threw exception");
+    }
+    
+    [TargetCommand(
+        "SOURCE",
+        "Selects the specified source in the room",
+        "Parameters: NA")]
+    public ICommandResponse SelectSourceCommand(string command, List<string> args)
+    {
+        return args.Count > 0 
+            ? CommandResponse.Success(command, $"Selected source: {args[0]}") 
+            : CommandResponse.Failure(command, "Please provide a valid Source key argument.");
+    }
+
+    /// <summary>
+    /// Note, this method will not generate a command.
+    /// </summary>
+    public void TestInvalid()
+    {
+
+    }
+}
+
+```
+The generator will implement the `IStoredCommands` interface and you type can now be used to register commands with the weblogger.  
+During command registration your private list will be constructed and populated with values.
+```csharp
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Verbose()
+    .WriteTo.WebloggerSink(
+        logger =>
+        {
+            //Use the generated logger extension method
+            logger.RegisterCommandStore(new RoomControlCommandStore());
+
+            //Or use the IStoredCommands interface extensions
+            var roomCli = new RoomControlCommandStore();
+            roomCli.RegisterCommands(logger);
+        })
+    .WriteTo.Console()
+    .CreateLogger();
+```
+Behind the scenes the follow partial class will created by the generator.
+```csharp
+// <auto-generated/> @6/6/2023 7:59:59 PM
+namespace WebLogger.ConsoleApp.GeneratedCommandStore
+{
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("WebLogger", "1.1.4")]
+    partial class RoomControlCommandStore : global::WebLogger.Generators.IStoredCommands
+    {
+        //Code generated by reading the following:
+        //Namespace : namespace WebLogger.ConsoleApp.GeneratedCommandStore
+        //Name: RoomControlCommandStore
+
+        private List<IWebLoggerCommand> _commands;
+
+        private ICommandResponse PowerOnCommand_Generated(string command, List<string> args)
+        {
+            try
+            {
+                return PowerOnCommand(command, args);
+            }
+            catch (Exception e)
+            {
+                return CommandResponse.Error(command, e.Message);
+            }
+        }
+        private ICommandResponse PowerOffCommand_Generated(string command, List<string> args)
+        {
+            try
+            {
+                return PowerOffCommand(command, args);
+            }
+            catch (Exception e)
+            {
+                return CommandResponse.Error(command, e.Message);
+            }
+        }
+
+        public IEnumerable<IWebLoggerCommand> GetStoredCommands()
+        {
+            _commands = new List<IWebLoggerCommand>()
+            {
+                new WebLoggerCommand(PowerOnCommand_Generated, "PWRON","Powers on the room","Parameters: NA"),
+                new WebLoggerCommand(PowerOffCommand_Generated, "PWROFF","Powers off the room","Parameters: NA"),
+            };
+            return _commands;
+        }
+    }
+}
+```
 
 There are still a *few open issues* that could really improve this.  
 - Attribute parameters must be string literals, using `nameof(Blah)` for example will throw an exception during generation.
@@ -480,6 +615,10 @@ There are still a *few open issues* that could really improve this.
 The example console application includes a folder with (4) example generated commands.
 
 ## Release Notes
+
+#### Version 1.1.4 
+- Created command store generator.
+- Created `ControlledBy` command in the serilog sink to updated verbosity levels at runtime.
 
 #### Version 1.1.3
 - Moved to inremental source generator

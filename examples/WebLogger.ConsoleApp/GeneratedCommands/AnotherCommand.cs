@@ -12,4 +12,10 @@ public partial class AnotherCommand
     {
         return CommandResponse.Success(command, "We build this city on source generators");
     }
+
+    public void StartSystem()
+    {
+
+
+    }
 }

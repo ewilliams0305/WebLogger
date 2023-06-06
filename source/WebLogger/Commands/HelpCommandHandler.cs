@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Windows.Input;
 
@@ -49,7 +50,11 @@ namespace WebLogger.Commands
         /// <param name="args">Collected args received from the command.</param>
         public ICommandResponse HandleCommand(string command, List<string> args)
         {
-            var commands = _logger.ListCommands();
+            var commands = _logger
+                .ListCommands()
+                .ToList();
+
+            commands.Sort(Comparison);
 
             var builder =
                 new StringBuilder(
@@ -64,6 +69,11 @@ namespace WebLogger.Commands
             }
             builder.Append("<br>");
             return CommandResponse.Success(this, builder.ToString());
+        }
+
+        private int Comparison(IWebLoggerCommand x, IWebLoggerCommand y)
+        {
+            return x.Command.CompareTo(y.Command);
         }
     }
 }

@@ -2,8 +2,11 @@
 
 using Serilog;
 using System.Reflection;
+using Serilog.Events;
 using WebLogger;
 using WebLogger.ConsoleApp.GeneratedCommands;
+using WebLogger.ConsoleApp.GeneratedCommandStore;
+using WebLogger.Generators;
 using WebLogger.Utilities;
 
 
@@ -23,8 +26,11 @@ var commands = new List<IWebLoggerCommand>()
         "Parameter: NA")
 };
 
+//Set the default logging level and pass it into the `ControlledBy` method
+var logLevelCommand = new LoggerLevelCommand(LogEventLevel.Verbose);
+
 Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Verbose()
+    .MinimumLevel.ControlledBy(logLevelCommand.LoggingLevelSwitch)
     .WriteTo.WebloggerSink(
         options =>
         {
@@ -38,8 +44,14 @@ Log.Logger = new LoggerConfiguration()
             logger.DiscoverCommands(Assembly.GetAssembly(typeof(Program)))
                 .DiscoverProvidedCommands();
 
+            //Register the command and now you can change the logging level.
+            logger.RegisterCommand(logLevelCommand);
             logger.RegisterCommand(new AnotherCommand());
-            //logger.RegisterCommand(new sdgdfgdfg());
+
+            logger.RegisterCommandStore(new RoomControlCommandStore());
+
+            var roomCli = new RoomControlCommandStore();
+            roomCli.RegisterCommands(logger);
         })
     .WriteTo.Console()
     .CreateLogger();
@@ -67,6 +79,12 @@ async Task DoWork()
     while (!token.IsCancellationRequested)
     {
         await Task.Delay(1000);
+        Log.Logger.Verbose("Verbose Log Level");
+        Log.Logger.Debug("Debug Log Level");
+        Log.Logger.Information("Information Log Level");
+        Log.Logger.Warning("Warning Log Level");
+        Log.Logger.Error("Error Log Level");
+        Log.Logger.Fatal("Fatal Log Level");
     }
 }
 
