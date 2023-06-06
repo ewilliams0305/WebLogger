@@ -386,6 +386,23 @@ webLogger
 
 ```
 
+A custom command has also been provided and can be registered to control the logging minimum logging level.  Create an instance of the `LogLevelCommand` and register it with the logger.
+```csharp
+
+var logLevelCommand = new LoggerLevelCommand(LogEventLevel.Verbose);
+
+Log.Logger = new LoggerConfiguration()
+    //Set the `ControlledBy` level to the value stored in the logLevelCommand
+    .MinimumLevel.ControlledBy(logLevelCommand.LoggingLevelSwitch)
+    .WriteTo.WebloggerSink(
+        logger =>
+        {
+            //Register the command and now you can change the logging level.
+            logger.RegisterCommand(logLevelCommand);
+        })
+    .WriteTo.Console()
+    .CreateLogger();
+```
 ## Source Generators
 
 A source generator analyzer project has now been created and is included in the solution.  This is my first shot at these so be kind!
