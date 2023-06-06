@@ -12,9 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\source\WebLogger.Generators\WebLogger.Generators.csproj" 
-                      OutputItemType="Analyzer" 
-                      ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\..\source\WebLogger.Generators\WebLogger.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\..\source\WebLogger.Serilog\WebLogger.Serilog.csproj" />
     <ProjectReference Include="..\..\source\WebLogger\WebLogger.csproj" />
   </ItemGroup>

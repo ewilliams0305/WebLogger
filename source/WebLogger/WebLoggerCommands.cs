@@ -65,7 +65,7 @@ namespace WebLogger
 
             if (commandValue == null)
             {
-                return CommandResponse.Error(command, "Not Registered");
+                return CommandResponse.Error(command, "Invalid Command");
             }
 
             var args = new List<string>();
