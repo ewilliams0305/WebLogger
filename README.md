@@ -6,9 +6,9 @@
 ![GitHub Repo stars](https://img.shields.io/github/stars/ewilliams0305/WebLogger?style=social)
 ![GitHub forks](https://img.shields.io/github/forks/ewilliams0305/WebLogger?style=social)
 
-WebLogger is a websocket server designed to provide an accessible console application served to an html user interface. The WebLogger library targets .netstandard 2.0 and can be used in any .net framework 4.7 and .net Core application. WebLogger will manage the server and provide an easy way to create a custom CLI using commands and prompts.
-This library also includes an HTML front end using vanilla JS to handle the socket connection.
-The webpage is embedded into the DLL and will be extracted when executed to a destination of your choosing.
+The WebLogger is a websocket server designed to provide an accessible console application served to an html user interface. The WebLogger library targets .netstandard 2.0 and can be used in any .net framework 4.7 and .net Core application. WebLogger will manage the server and provide an easy way to create a custom CLI using commands and prompts.
+This library also includes an HTML front end using vanilla JS to handle the user interface component.
+The webpage is embedded into the DLL and will be extracted to a destination of your choosing when executed.
 
 Inspiration for this project comes from https://kielthecoder.com/2021/04/16/vc-4-websocket-sharp/.  This was original created to solve the problems described in his blog regarding Crestron's Virtual Control platform.
 However it has since proven usefull in other application so a move to .netstandard was important.
@@ -29,7 +29,7 @@ However it has since proven usefull in other application so a move to .netstanda
 The included solution includes five projects including two example projects and 4 libraries. 
 
 - /source/`WebLogger.csproj`
-- /source/`WebLogger.Serilog.csproj`
+- [Serilog Sink](#source/WebLogger.Serilog/)
 - /source/`WebLogger.Crestron.csproj`
 - /source/`WebLogger.Generators.csproj`
 - /example/`WebLogger.ConsoleApp.csproj`
