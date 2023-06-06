@@ -5,12 +5,6 @@ namespace WebLogger.ConsoleApp.GeneratedCommandStore;
 [CommandStore]
 public partial class RoomControlCommandStore
 {
-
-    public RoomControlCommandStore()
-    {
-        
-    }
-
     [TargetCommand(
         "PWRON",
         "Powers on the room",

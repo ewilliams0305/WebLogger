@@ -28,16 +28,18 @@ However it has since proven usefull in other application so a move to .netstanda
 
 The included solution includes five projects including two example projects and 4 libraries. 
 
-- /source/`WebLogger.csproj`
-- [Serilog Sink](source/WebLogger.Serilog/WebLogger.Serilog.csproj)
-- /source/`WebLogger.Crestron.csproj`
-- /source/`WebLogger.Generators.csproj`
-- /example/`WebLogger.ConsoleApp.csproj`
-- /example/`WebLogger.CrestronApp.csproj`
+- [WebLogger](source/WebLogger/)
+- [WebLogger.Serilog](source/WebLogger.Serilog/)
+- [WebLogger.Crestron](source/WebLogger.Crestron/)
+- [WebLogger.Generators](source/WebLogger.Generators/)
+- [Console Application](examples/WebLogger.ConsoleApp/Program.cs)
+- [Crestron Application](examples/WebLogger.CrestronApp/ControlSystem.cs)
 
-A unit test project is also included and located in the tests directory
+Unit test project is also included and located in the tests directory.  This area needs `Improvement`
 
-- /tests/`WebLogger_UnitTests`
+- [Unit Tests](tests/WebLogger_UnitTests/)
+- [Unit Tests](tests/WebLogger.Generators_UnitTests/)
+
 
 ### WebLogger.csproj
 
@@ -61,10 +63,10 @@ an unsecured http server to distribute the HTML files
 Provides source generators used to create commands and (other cool stuff in the future).
 
 ### WebLogger.ConsoleApp Example Program
-The Weblogger example is a simple console application showing SerilogSink usage.
+The WebLogger example is a simple console application showing SerilogSink usage.
 
 ### WebLogger.CrestronApp Example Program
-The Weblogger example is a Crestron SDK SimpleSharp program that demonstrates how to instantiate the `WebLogger` class and add console commands with callbacks.
+The WebLogger example is a Crestron SDK SimpleSharp program that demonstrates how to instantiate the `WebLogger` class and add console commands with callbacks.
 
 ## Create a WebLogger
 
@@ -596,6 +598,10 @@ There are still a *few open issues* that could really improve this.
 The example console application includes a folder with (4) example generated commands.
 
 ## Release Notes
+
+#### Version 1.1.4 
+- Created command store generator.
+- Created `ControlledBy` command in the serilog sink to updated verbosity levels at runtime.
 
 #### Version 1.1.3
 - Moved to inremental source generator

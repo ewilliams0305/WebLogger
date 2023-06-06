@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using Serilog;
+﻿using Serilog;
 using Serilog.Configuration;
+using System;
 
 namespace WebLogger
 {
