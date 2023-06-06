@@ -4,6 +4,7 @@ using Serilog;
 using System.Reflection;
 using WebLogger;
 using WebLogger.ConsoleApp.GeneratedCommands;
+using WebLogger.Generators;
 using WebLogger.Utilities;
 
 
@@ -39,7 +40,11 @@ Log.Logger = new LoggerConfiguration()
                 .DiscoverProvidedCommands();
 
             logger.RegisterCommand(new AnotherCommand());
-            //logger.RegisterCommand(new sdgdfgdfg());
+
+            //This ?
+            new TestCommandStore().RegisterCommands(logger);
+            //Or that?
+            logger.RegisterCommandStore(new TestCommandStore());
         })
     .WriteTo.Console()
     .CreateLogger();
