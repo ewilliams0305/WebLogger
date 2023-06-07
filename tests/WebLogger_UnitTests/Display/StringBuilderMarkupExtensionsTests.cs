@@ -28,35 +28,35 @@ namespace WebLogger_UnitTests.Display
         }
 
         [TestMethod]
-        [DataRow("<div color=\"#000000\" font=\"blah\" style=\"bling\">", Element.Div, 0, 0, 0, "blah", "bling")]
-        [DataRow("<header color=\"#000000\" font=\"blah\" style=\"blam\">", Element.Header, 0, 0, 0, "blah", "blam")]
-        [DataRow("<p color=\"#000000\" font=\"blah\" style=\"bling\">", Element.Paragraph, 0, 0, 0, "blah", "bling")]
-        [DataRow("<h1 color=\"#000000\" font=\"blah\" style=\"bling\">", Element.H1, 0, 0, 0, "blah", "bling")]
-        [DataRow("<h2 color=\"#000000\" font=\"blah\" style=\"bling\">", Element.H2, 0, 0, 0, "blah", "bling")]
-        [DataRow("<h3 color=\"#000000\" font=\"blah\" style=\"bling\">", Element.H3, 0, 0, 0, "blah", "bling")]
-        [DataRow("<h4 color=\"#000000\" font=\"blah\" style=\"bling\">", Element.H4, 0, 0, 0, "blah", "bling")]
-        [DataRow("<h5 color=\"#000000\" font=\"blah\" style=\"bling\">", Element.H5, 0, 0, 0, "blah", "bling")]
-        [DataRow("<div color=\"#000000\" font=\"blah\">", Element.Div, 0, 0, 0, "blah", "")]
-        [DataRow("<header color=\"#000000\" font=\"blah\">", Element.Header, 0, 0, 0, "blah", "")]
-        [DataRow("<p color=\"#000000\" font=\"blah\">", Element.Paragraph, 0, 0, 0, "blah", "")]
-        [DataRow("<h1 color=\"#000000\" font=\"blah\">", Element.H1, 0, 0, 0, "blah", "")]
-        [DataRow("<h2 color=\"#000000\" font=\"blah\">", Element.H2, 0, 0, 0, "blah", "")]
-        [DataRow("<h3 color=\"#000000\" font=\"blah\">", Element.H3, 0, 0, 0, "blah", "")]
-        [DataRow("<h4 color=\"#000000\" font=\"blah\">", Element.H4, 0, 0, 0, "blah", "")]
-        [DataRow("<h5 color=\"#000000\" font=\"blah\">", Element.H5, 0, 0, 0, "blah", "")]
-        [DataRow("<div color=\"#000000\" style=\"bling\">", Element.Div, 0, 0, 0, "", "bling")]
-        [DataRow("<header color=\"#000000\" style=\"blam\">", Element.Header, 0, 0, 0, "", "blam")]
-        [DataRow("<p color=\"#000000\" style=\"bling\">", Element.Paragraph, 0, 0, 0, "", "bling")]
-        [DataRow("<h1 color=\"#000000\" style=\"bling\">", Element.H1, 0, 0, 0, "", "bling")]
-        [DataRow("<h2 color=\"#000000\" style=\"bling\">", Element.H2, 0, 0, 0, "", "bling")]
-        [DataRow("<h3 color=\"#000000\" style=\"bling\">", Element.H3, 0, 0, 0, "", "bling")]
-        [DataRow("<h4 color=\"#000000\" style=\"bling\">", Element.H4, 0, 0, 0, "", "bling")]
-        [DataRow("<h5 color=\"#000000\" style=\"bling\">", Element.H5, 0, 0, 0, "", "bling")]
-        public void AppendOpener_ReturnsElement_WithOptions(string expected, Element element, int r, int g, int b, string font, string style)
+        [DataRow("<div style=\"color:#000000;font-family:blah;font-size:12px;\">", Element.Div, 0, 0, 0, "blah", 12)]
+        [DataRow("<header style=\"color:#000000;font-family:blah;font-size:12px;\">", Element.Header, 0, 0, 0, "blah", 12)]
+        [DataRow("<p style=\"color:#000000;font-family:blah;font-size:12px;\">", Element.Paragraph, 0, 0, 0, "blah", 12)]
+        [DataRow("<h1 style=\"color:#000000;font-family:blah;font-size:12px;\">", Element.H1, 0, 0, 0, "blah", 12)]
+        [DataRow("<h2 style=\"color:#000000;font-family:blah;font-size:12px;\">", Element.H2, 0, 0, 0, "blah", 12)]
+        [DataRow("<h3 style=\"color:#000000;font-family:blah;font-size:12px;\">", Element.H3, 0, 0, 0, "blah", 12)]
+        [DataRow("<h4 style=\"color:#000000;font-family:blah;font-size:12px;\">", Element.H4, 0, 0, 0, "blah", 12)]
+        [DataRow("<h5 style=\"color:#000000;font-family:blah;font-size:12px;\">", Element.H5, 0, 0, 0, "blah", 12)]
+        [DataRow("<div style=\"color:#000000;font-family:blah;\">", Element.Div, 0, 0, 0, "blah", 0)]
+        [DataRow("<header style=\"color:#000000;font-family:blah;\">", Element.Header, 0, 0, 0, "blah", 0)]
+        [DataRow("<p style=\"color:#000000;font-family:blah;\">", Element.Paragraph, 0, 0, 0, "blah", 0)]
+        [DataRow("<h1 style=\"color:#000000;font-family:blah;\">", Element.H1, 0, 0, 0, "blah", 0)]
+        [DataRow("<h2 style=\"color:#000000;font-family:blah;\">", Element.H2, 0, 0, 0, "blah", 0)]
+        [DataRow("<h3 style=\"color:#000000;font-family:blah;\">", Element.H3, 0, 0, 0, "blah", 0)]
+        [DataRow("<h4 style=\"color:#000000;font-family:blah;\">", Element.H4, 0, 0, 0, "blah", 0)]
+        [DataRow("<h5 style=\"color:#000000;font-family:blah;\">", Element.H5, 0, 0, 0, "blah", 0)]
+        [DataRow("<div style=\"color:#000000;font-size:32px;\">", Element.Div, 0, 0, 0, "", 32)]
+        [DataRow("<header style=\"color:#000000;font-size:32px;\">", Element.Header, 0, 0, 0, "", 32)]
+        [DataRow("<p style=\"color:#000000;font-size:12px;\">", Element.Paragraph, 0, 0, 0, "", 12)]
+        [DataRow("<h1 style=\"color:#000000;font-size:12px;\">", Element.H1, 0, 0, 0, "", 12)]
+        [DataRow("<h2 style=\"color:#000000;font-size:12px;\">", Element.H2, 0, 0, 0, "", 12)]
+        [DataRow("<h3 style=\"color:#000000;font-size:12px;\">", Element.H3, 0, 0, 0, "", 12)]
+        [DataRow("<h4 style=\"color:#000000;font-size:12px;\">", Element.H4, 0, 0, 0, "", 12)]
+        [DataRow("<h5 style=\"color:#000000;font-size:12px;\">", Element.H5, 0, 0, 0, "", 12)]
+        public void AppendOpener_ReturnsElement_WithOptions(string expected, Element element, int r, int g, int b, string font, int size)
         {
             var builder = new StringBuilder();
 
-            var options = new HtmlElementOptions(Color.FromArgb(r, g, b), font: font, style: style);
+            var options = new HtmlElementOptions(Color.FromArgb(r, g, b), fontFamily: font, fontSize: size);
 
             builder.AppendOpener(element, options);
 
@@ -64,35 +64,34 @@ namespace WebLogger_UnitTests.Display
         }
 
         [TestMethod]
-        [DataRow("<div font=\"blah\" style=\"bling\">", Element.Div, "blah", "bling")]
-        [DataRow("<header font=\"blah\" style=\"blam\">", Element.Header, "blah", "blam")]
-        [DataRow("<p font=\"blah\" style=\"bling\">", Element.Paragraph, "blah", "bling")]
-        [DataRow("<h1 font=\"blah\" style=\"bling\">", Element.H1, "blah", "bling")]
-        [DataRow("<h2 font=\"blah\" style=\"bling\">", Element.H2, "blah", "bling")]
-        [DataRow("<h3 font=\"blah\" style=\"bling\">", Element.H3, "blah", "bling")]
-        [DataRow("<h4 font=\"blah\" style=\"bling\">", Element.H4, "blah", "bling")]
-        [DataRow("<h5 font=\"blah\" style=\"bling\">", Element.H5, "blah", "bling")]
-        [DataRow("<div font=\"blah\">", Element.Div, "blah", "")]
-        [DataRow("<header font=\"blah\">", Element.Header, "blah", "")]
-        [DataRow("<p font=\"blah\">", Element.Paragraph, "blah", "")]
-        [DataRow("<h1 font=\"blah\">", Element.H1, "blah", "")]
-        [DataRow("<h2 font=\"blah\">", Element.H2, "blah", "")]
-        [DataRow("<h3 font=\"blah\">", Element.H3, "blah", "")]
-        [DataRow("<h4 font=\"blah\">", Element.H4, "blah", "")]
-        [DataRow("<h5 font=\"blah\">", Element.H5, "blah", "")]
-        [DataRow("<div style=\"bling\">", Element.Div, "", "bling")]
-        [DataRow("<header style=\"blam\">", Element.Header, "", "blam")]
-        [DataRow("<p style=\"bling\">", Element.Paragraph, "", "bling")]
-        [DataRow("<h1 style=\"bling\">", Element.H1, "", "bling")]
-        [DataRow("<h2 style=\"bling\">", Element.H2, "", "bling")]
-        [DataRow("<h3 style=\"bling\">", Element.H3, "", "bling")]
-        [DataRow("<h4 style=\"bling\">", Element.H4, "", "bling")]
-        [DataRow("<h5 style=\"bling\">", Element.H5, "", "bling")]
-        public void AppendOpener_ReturnsElement_WithOptionsWithoutColor(string expected, Element element, string font, string style)
+        [DataRow("<div style=\"font-family:blah;font-size:12px;\">", Element.Div, "blah", 12)]
+        [DataRow("<header style=\"font-family:blah;font-size:20px;\">", Element.Header, "blah", 20)]
+        [DataRow("<p style=\"font-family:blah;font-size:24px;\">", Element.Paragraph, "blah", 24)]
+        [DataRow("<h1 style=\"font-family:blah;font-size:25px;\">", Element.H1, "blah", 25)]
+        [DataRow("<h2 style=\"font-family:blah;font-size:75px;\">", Element.H2, "blah", 75)]
+        [DataRow("<h3 style=\"font-family:blah;font-size:85px;\">", Element.H3, "blah", 85)]
+        [DataRow("<h5 style=\"font-family:blah;font-size:85px;\">", Element.H5, "blah", 85)]
+        [DataRow("<div style=\"font-family:blah;\">", Element.Div, "blah", null)]
+        [DataRow("<header style=\"font-family:blah;\">", Element.Header, "blah", 0)]
+        [DataRow("<p style=\"font-family:blah;\">", Element.Paragraph, "blah", 0)]
+        [DataRow("<h1 style=\"font-family:blah;\">", Element.H1, "blah", 0)]
+        [DataRow("<h2 style=\"font-family:blah;\">", Element.H2, "blah", 0)]
+        [DataRow("<h3 style=\"font-family:blah;\">", Element.H3, "blah", 0)]
+        [DataRow("<h4 style=\"font-family:blah;\">", Element.H4, "blah", 0)]
+        [DataRow("<h5 style=\"font-family:blah;\">", Element.H5, "blah", 0)]
+        [DataRow("<div style=\"font-family:bling;\">", Element.Div, "bling", null)]
+        [DataRow("<header style=\"font-size:50px;\">", Element.Header, "", 50)]
+        [DataRow("<p style=\"font-size:85px;\">", Element.Paragraph, "", 85)]
+        [DataRow("<h1 style=\"font-size:50px;\">", Element.H1, "", 50)]
+        [DataRow("<h2 style=\"font-size:50px;\">", Element.H2, "", 50)]
+        [DataRow("<h3 style=\"font-size:50px;\">", Element.H3, "", 50)]
+        [DataRow("<h4 style=\"font-size:50px;\">", Element.H4, "", 50)]
+        [DataRow("<h5 style=\"font-size:50px;\">", Element.H5, "", 50)]
+        public void AppendOpener_ReturnsElement_WithOptionsWithoutColor(string expected, Element element, string font, int size)
         {
             var builder = new StringBuilder();
 
-            var options = new HtmlElementOptions(font: font, style: style);
+            var options = new HtmlElementOptions(fontFamily: font, fontSize: size);
 
             builder.AppendOpener(element, options);
 
@@ -158,16 +157,16 @@ namespace WebLogger_UnitTests.Display
         }
         
         [TestMethod]
-        [DataRow("color=\"#000000\"", 0, 0, 0, "", "")]
-        [DataRow("color=\"#FFFFFF\"", 255, 255, 255, "", "")]
-        [DataRow("color=\"#FFFFFF\" font=\"arial\" style=\"ux\"", 255, 255, 255, "arial", "ux")]
-        [DataRow("color=\"#FFFFFF\" font=\"seguio\" style=\"styles\"", 255, 255, 255, "seguio", "styles")]
-        [DataRow("color=\"#000000\" style=\"styles\"", 0, 0, 0, "", "styles")]
-        [DataRow("color=\"#000000\" font=\"fonts\"", 0, 0, 0, "fonts", "")]
-        public void RenderAttributes_CreatesValidAttributes_WithOptions(string expected, int r, int g, int b, string font, string style)
+        [DataRow("style=\"color:#000000;\"", 0, 0, 0, "", null)]
+        [DataRow("style=\"color:#FFFFFF;font-size:20px;\"", 255, 255, 255, "", 20)]
+        [DataRow("style=\"color:#FFFFFF;font-family:arial;font-size:12px;\"", 255, 255, 255, "arial", 12)]
+        [DataRow("style=\"color:#FFFFFF;font-family:seguio;font-size:16px;\"", 255, 255, 255, "seguio", 16)]
+        [DataRow("style=\"color:#000000;font-size:85px;\"", 0, 0, 0, "", 85)]
+        [DataRow("style=\"color:#000000;font-family:fonts;font-size:125px;\"", 0, 0, 0, "fonts", 125)]
+        public void RenderAttributes_CreatesValidAttributes_WithOptions(string expected, int r, int g, int b, string font, int size)
         {
-            var options = new HtmlElementOptions(Color.FromArgb(r,g,b), font, style);
-                var builder = new StringBuilder(string.Empty);
+            var options = new HtmlElementOptions(Color.FromArgb(r,g,b), fontFamily: font, fontSize: size);
+            var builder = new StringBuilder(string.Empty);
 
             builder.RenderAttributes(options);
             var value = builder.ToString();
@@ -175,14 +174,14 @@ namespace WebLogger_UnitTests.Display
         }
 
         [TestMethod]
-        [DataRow("font=\"arial\" style=\"ux\"", "arial", "ux")]
-        [DataRow("font=\"seguio\" style=\"styles\"", "seguio", "styles")]
-        [DataRow("style=\"styles\"","", "styles")]
-        [DataRow("font=\"fonts\"", "fonts", "")]
-        public void RenderAttributes_CreatesValidAttributes_WithOptionsWithoutColor(string expected, string font, string style)
+        [DataRow("style=\"font-family:arial;font-size:20px;\"", "arial", 20)]
+        [DataRow("style=\"font-family:seguio;font-size:45px;\"", "seguio", 45)]
+        [DataRow("style=\"font-size:55px;\"", "", 55)]
+        [DataRow("style=\"font-family:fonts;\"", "fonts", null)]
+        public void RenderAttributes_CreatesValidAttributes_WithOptionsWithoutColor(string expected, string font, int size)
         {
-            var options = new HtmlElementOptions(font: font, style: style);
-                var builder = new StringBuilder(string.Empty);
+            var options = new HtmlElementOptions(fontFamily: font, fontSize: size);
+            var builder = new StringBuilder(string.Empty);
 
             builder.RenderAttributes(options);
             var value = builder.ToString();

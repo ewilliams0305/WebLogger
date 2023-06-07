@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+﻿using System.Reflection;
 using System.Text;
 
 namespace WebLogger.Display
@@ -27,37 +27,8 @@ namespace WebLogger.Display
             {
                 return builder;
             }
-
-            if(!options.Color.IsEmpty)
-                builder.Append(HtmlAttributes.Color)
-                    .Append("=\"")
-                    .RenderColor(options.Color)
-                    .Append(string.IsNullOrWhiteSpace(options.Font) && string.IsNullOrWhiteSpace(options.Style) ? "\"" : "\" ");
-
-            if (!string.IsNullOrWhiteSpace(options.Font))
-                builder.Append(HtmlAttributes.Font)
-                    .Append("=\"")
-                    .Append(options.Font)
-                    .Append(string.IsNullOrWhiteSpace(options.Style) ? "\"" : "\" ");
-
-            if (!string.IsNullOrWhiteSpace(options.Style))
-                builder.Append(HtmlAttributes.Style)
-                    .Append("=\"")
-                    .Append(options.Style)
-                    .Append("\"");
-
-            return builder;
-        }
-
-        public static StringBuilder RenderColor(this StringBuilder builder, Color color)
-        {
-            if(color == default)
-                return builder;
-
-            return builder.Append("#")
-                .Append(color.R.ToString("X2"))
-                .Append(color.G.ToString("X2"))
-                .Append(color.B.ToString("X2"));
+            
+            return builder.RenderStyleAttribute(options);
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System.Drawing;
+using System.Reflection.Emit;
+using System.Text;
 
 namespace WebLogger.Display
 {
@@ -14,23 +16,26 @@ namespace WebLogger.Display
         /// <summary>
         /// Font applied the html element.
         /// </summary>
-        public string Font { get; }
+        public string FontFamily { get; }
         /// <summary>
-        /// Style applied to the elements.
+        /// 
         /// </summary>
-        public string Style { get;}
+        public int? FontSize { get; set; }
 
         /// <summary>
         /// Creates a new HTML Options object with a defined color, font, and style
         /// </summary>
         /// <param name="color">Color</param>
-        /// <param name="font">Font Attribute</param>
-        /// <param name="style">Style Attribute</param>
-        public HtmlElementOptions(Color color = default, string font = default, string style = default)
+        /// <param name="fontFamily">Font Attribute</param>
+        /// <param name="fontSize">Style Attribute</param>
+        public HtmlElementOptions(Color color = default, string fontFamily = default, int? fontSize = null)
         {
             Color = color;
-            Font = font;
-            Style = style;
+            FontFamily = fontFamily;
+            FontSize = fontSize;
         }
+
+        public static implicit operator HtmlElementOptions(Color color) => new HtmlElementOptions(color);
+        public static implicit operator Color(HtmlElementOptions options) => options.Color;
     }
 }

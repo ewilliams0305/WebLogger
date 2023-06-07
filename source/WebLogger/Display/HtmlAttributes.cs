@@ -9,6 +9,8 @@
         /// Font attribute
         /// </summary>
         public const string Font = "font";
+        public const string FontSize = "font-size";
+        public const string FontFamily = "font-family";
         /// <summary>
         /// Style attribute
         /// </summary>
