@@ -1,238 +1,246 @@
 var defaultPort = "54321";
 var defaultIP = `127.0.0.1`;
 var connection = null;
-var lastCommands = [];
 var scrolling = false;
 var connected = false;
+var lastCommands = [];
 
-var connect;// = document.getElementById("connectBtn");
-var disconnect;// = document.getElementById("disconnectBtn");
+/****************
+ * ELEMENTS
+ ****************/
+var connect;          //connect button
+var disconnect;       //disconnect button
+var locationInput;    //url input
+var output;           //output display
+var console;          //console window
+var command;          //command input
+var send;             //send button
+var clear;            //clear button
+
+/****************
+ * INITIALIZE
+ ****************/
 
 function init(ip) {
-  const inputBox = document.getElementById("wsurladdress");
-  const window = document.getElementById("output");
 
-    this.connect = document.getElementById("connectBtn");
-    this.disconnect = document.getElementById("disconnectBtn");
+    this.locationInput = document.getElementById("wsurladdress");
+    this.output = document.getElementById("output-input");
+    this.display = document.getElementById("consoleWindow");
 
-  if (window != null) {
-    window.addEventListener("mouseenter", (e) => {
-      console.log(e);
-      scrolling = true;
-    });
+    this.command = document.getElementById("command-input");
+    this.connect = document.getElementById("connect-btn");
+    this.disconnect = document.getElementById("disconnect-btn");
+    this.send = document.getElementById("send-btn");
+    this.clear = document.getElementById("clear-btn");
 
-    window.addEventListener("mouseleave", (e) => {
-      console.log(e);
-      scrolling = false;
-    });
-  }
+    //Regsiter handlers
+    if (this.connect != null) this.connect.addEventListener("click", connectPressed);
+    if (this.disconnect != null) this.disconnect.addEventListener("click", disconnectPressed);
+    if (this.send != null) this.send.addEventListener("click", sendPressed);
+    if (this.clear != null) this.clear.addEventListener("click", clearPressed);
 
-  var location = "";
+    if (this.output != null) {
+        this.output.addEventListener("mouseenter", (e) => {
+            console.log(e);
+            scrolling = true;
+        });
 
-  if (ip != null && ip.length > 0) {
-    location = `${ip}:${defaultPort}`;
-    console.warn(`Using window location ${location}`);
-  } else {
-    location = `${defaultIP}:${defaultPort}`;
-    console.warn(`Using default location ${location}`);
-  }
+        this.output.addEventListener("mouseleave", (e) => {
+            console.log(e);
+            scrolling = false;
+        });
+    }
 
-  if (inputBox != null) inputBox.value = location;
+    //Set URL
+    var url = "";
 
-  startWebsocket();
+    if (ip != null && ip.length > 0) {
+        url = `${ip}:${defaultPort}`;
+        console.warn(`Using window location ${url}`);
+    } else {
+        url = `${defaultIP}:${defaultPort}`;
+        console.warn(`Using default location ${url}`);
+    }
 
-  if (connect != null)
-    connect.addEventListener("click", () => {
-      console.log("Connect");
-      if (!connected) startWebsocket();
-    });
+    if (this.locationInput != null)
+        this.locationInput.value = url;
 
-  if (disconnect != null)
-    disconnect.addEventListener("click", () => {
-      if (connected) socketclose();
-    });
+    startWebsocket();
 }
 
 function startWebsocket(evt) {
-  var ip = document.getElementById("wsurladdress").value;
+    var ip = document.getElementById("wsurladdress").value;
 
-  if (ip != null) {
-    let wsUri = "ws://";
+    if (ip != null) {
+        let wsUri = "ws://";
 
-    if (ip.includes(":")) {
-      wsUri += ip;
-    } else {
-      wsUri += ip + ":54321/";
+        if (ip.includes(":")) {
+            wsUri += ip;
+        } else {
+            wsUri += ip + ":54321/";
+        }
+
+        websocket = new WebSocket(wsUri);
+        websocket.onopen = function (evt) {
+            connected = true;
+            onOpen(evt);
+        };
+
+        websocket.onclose = function (evt) {
+            connected = false;
+            onClose(evt);
+        };
+
+        websocket.onmessage = function (evt) {
+            onMessage(evt);
+        };
+
+        websocket.onerror = function (evt) {
+            onError(evt);
+        };
     }
-
-    websocket = new WebSocket(wsUri);
-
-    websocket.onopen = function (evt) {
-      connected = true;
-      onOpen(evt);
-    };
-
-    websocket.onclose = function (evt) {
-      connected = false;
-      onClose(evt);
-    };
-
-    websocket.onmessage = function (evt) {
-      onMessage(evt);
-    };
-
-    websocket.onerror = function (evt) {
-      onError(evt);
-    };
-  }
 }
 
 function onOpen(evt) {
-  console.log(evt);
-  //connectBtn = document.getElementById("connectBtn");
-  //disconnectBtn = document.getElementById("disconnectBtn");
-  commandWindow = document.getElementById("command-input");
-  commandSend = document.getElementById("sendCommand");
-  commandClear = document.getElementById("clear-btn");
-  output = document.getElementById("output");
-
-    //if (connect != null) 
+    console.log(evt);
     this.connect.classList.add("disabled");
-    //if (disconnect != null) 
     this.disconnect.classList.remove("disabled");
-  if (commandWindow != null) commandWindow.classList.remove("disabled");
-  if (commandSend != null) commandSend.classList.remove("disabled");
-  if (commandClear != null) commandClear.classList.remove("disabled");
-  if (output != null) output.classList.remove("disabled");
+    this.output.classList.remove("disabled");
+    this.send.classList.remove("disabled");
+    this.clear.classList.remove("disabled");
+    this.display.classList.remove("disabled");
+    this.command.classList.remove("disabled");
 }
 
 function onClose(evt) {
-  console.log(evt);
-
-  //connectBtn = document.getElementById("connectBtn");
-  //disconnectBtn = document.getElementById("disconnectBtn");
-  commandWindow = document.getElementById("command-input");
-  commandSend = document.getElementById("sendCommand");
-  commandClear = document.getElementById("clear-btn");
-  output = document.getElementById("output");
-
-    //if (connect != null)
+    console.log(evt);
     this.connect.classList.remove("disabled");
-    //if (disconnect != null) 
-this.disconnect.classList.add("disabled");
-  if (commandWindow != null) commandWindow.classList.add("disabled");
-  if (commandSend != null) commandSend.classList.add("disabled");
-  if (commandClear != null) commandClear.classList.add("disabled");
-  if (output != null) output.classList.add("disabled");
+    this.disconnect.classList.add("disabled");
+    this.output.classList.add("disabled");
+    this.send.classList.add("disabled");
+    this.clear.classList.add("disabled");
+    this.display.classList.add("disabled");
+    this.command.classList.add("disabled");
 }
 
 function onMessage(evt) {
-  console.log(evt);
-  if (evt != null) {
-    let msg = "";
-    msg = evt.data;
+    console.log(evt);
 
-    var other = document.getElementById("consoleWindow");
-    var window = document.getElementById("output");
+    if (evt != null) {
+        let msg = "";
+        msg = evt.data;
 
-    if (window != null && !scrolling) window.scrollTop = window.scrollHeight;
+        if (!scrolling)
+            this.output.scrollTop = this.output.scrollHeight;
 
-    if (other != null) {
-      other.innerHTML += `${msg}\n`;
+        this.display.innerHTML += `${msg}\n`;
     }
-  }
 }
 
 function onError(evt) {
-  console.error(evt);
-}
-
-function doSend(message) {
-  console.log(message);
-  websocket.send(message);
+    console.error(evt);
 }
 
 function socketclose(evt) {
-  websocket.close();
+    websocket.close();
 }
 
-var lastCommandIndex = 0;
-
 function sendString() {
-  var inputText = document.getElementById("command-input");
 
-  if (inputText != null) {
     lastCommandIndex = 0;
-    doSend(inputText.value);
+    websocket.send(this.command.value);
 
-    if (inputText.value.length > 0) {
-      var index = lastCommands.indexOf(inputText.value);
-      if (index >= 0) lastCommands.splice(index);
+    if (this.command.value.length > 0) {
 
-      lastCommands.unshift(inputText.value);
+        var index = lastCommands.indexOf(this.command.value);
+        lastCommands.unshift(this.command.value);
     }
-    inputText.value = "";
-  }
+    this.command.value = "";
 }
 
 function historyInc() {
-  if (lastCommands.length - 1 == lastCommandIndex) lastCommandIndex = 0;
-  else lastCommandIndex++;
+    if (lastCommands.length - 1 == lastCommandIndex)
+        lastCommandIndex = 0;
+    else
+        lastCommandIndex++;
+
+    console.log(`HISTORY INDEX ${lastCommandIndex} COMMAND ${lastCommand}`, lastCommands);
+
+    if (lastCommands.length > 0) {
+        var lastCommand = lastCommands[lastCommandIndex];
+        var inputText = document.getElementById("command-input");
+        inputText.value = lastCommand;
+    }
 }
 
 function historyDec() {
-  if (lastCommandIndex == 0) lastCommandIndex = lastCommands.length - 1;
-  else lastCommandIndex--;
+    if (lastCommandIndex == 0)
+        lastCommandIndex = lastCommands.length - 1;
+    else
+        lastCommandIndex--;
+
+    console.log(`HISTORY INDEX ${lastCommandIndex} COMMAND ${lastCommand}`, lastCommands);
+
+    if (lastCommands.length > 0) {
+        var lastCommand = lastCommands[lastCommandIndex];
+        var inputText = document.getElementById("command-input");
+        inputText.value = lastCommand;
+    }
 }
 
 function commandKeyUp(event) {
-  console.log(event);
-  if (event.keyCode === 13) {
-    event.preventDefault();
-    document.getElementById("sendCommand").click();
-  } else if (event.keyCode === 38) {
-    historyInc();
-    console.log(
-      `HISTORY INDEX ${lastCommandIndex} COMMAND ${lastCommand}`,
-      lastCommands
-    );
+    console.log(event);
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        this.sendString();
 
-    if (lastCommands.length > 0) {
-      var lastCommand = lastCommands[lastCommandIndex];
-      var inputText = document.getElementById("command-input");
-      inputText.value = lastCommand;
-    }
-  } else if (event.keyCode === 40) {
-    historyDec();
-    console.log(
-      `HISTORY INDEX ${lastCommandIndex} COMMAND ${lastCommand}`,
-      lastCommands
-    );
+    } else if (event.keyCode === 38) {
+        historyInc();
 
-    if (lastCommands.length > 0) {
-      var lastCommand = lastCommands[lastCommandIndex];
-      var inputText = document.getElementById("command-input");
-      inputText.value = lastCommand;
+    } else if (event.keyCode === 40) {
+        historyDec();
     }
-  }
+}
+
+/***********************
+ * USER EVENTS
+ ***********************/
+
+function connectPressed(event) {
+    console.log(event);
+    if (!connected) startWebsocket();
+}
+
+function disconnectPressed(event) {
+    console.log(event);
+    if (connected) socketclose();
+}
+
+function sendPressed(event) {
+    console.log(event);
+    sendString();
+}
+
+function clearPressed(event) {
+    console.log(event);
+    this.display.innerHTML = "";
 }
 
 function urlKeyUp(event) {
-  console.log(event);
-  if (event.keyCode === 13) {
-    event.preventDefault();
-    document.getElementById("connectBtn").click();
-  }
+    console.log(event);
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        this.connect.click();
+    }
 }
 
-function clearConsole() {
-  var output = document.getElementById("consoleWindow");
-  output.innerHTML = "";
-}
+/***********
+ * ENTRY
+ ***********/
 
 window.addEventListener("load", (event) => {
-  setTimeout(() => {
-    console.log(window.location.hostname);
-    init(window.location.hostname);
-  }, 200);
+    setTimeout(() => {
+        console.log(window.location.hostname);
+        init(window.location.hostname);
+    }, 200);
 });
