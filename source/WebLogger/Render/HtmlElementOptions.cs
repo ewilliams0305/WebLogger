@@ -1,8 +1,6 @@
 ﻿using System.Drawing;
-using System.Reflection.Emit;
-using System.Text;
 
-namespace WebLogger.Display
+namespace WebLogger.Render
 {
     /// <summary>
     /// Provides options to configure attributes on an HTML element.

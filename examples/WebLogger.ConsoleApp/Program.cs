@@ -1,12 +1,11 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using Serilog;
-using System.Reflection;
 using Serilog.Events;
+using System.Reflection;
 using WebLogger;
 using WebLogger.ConsoleApp.GeneratedCommands;
 using WebLogger.ConsoleApp.GeneratedCommandStore;
-using WebLogger.Generators;
 using WebLogger.Utilities;
 
 

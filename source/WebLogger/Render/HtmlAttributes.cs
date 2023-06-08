@@ -1,4 +1,4 @@
-﻿namespace WebLogger.Display
+﻿namespace WebLogger.Render
 {
     /// <summary>
     /// Defines supported attributes

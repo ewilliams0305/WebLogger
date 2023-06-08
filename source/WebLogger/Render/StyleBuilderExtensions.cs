@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Text;
 
-namespace WebLogger.Display
+namespace WebLogger.Render
 {
     internal static class StyleBuilderExtensions
     {

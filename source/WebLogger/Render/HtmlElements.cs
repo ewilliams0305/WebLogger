@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WebLogger.Display
+namespace WebLogger.Render
 {
     /// <summary>
     /// Provides the constant string definitions required to created an HTML Tag

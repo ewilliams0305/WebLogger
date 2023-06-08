@@ -1,8 +1,6 @@
-﻿using System;
-using System.Reflection;
-using System.Text;
+﻿using System.Text;
 
-namespace WebLogger.Display
+namespace WebLogger.Render
 {
     public readonly ref struct NewLineElement
     {

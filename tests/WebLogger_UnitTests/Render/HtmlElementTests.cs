@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
 using System.Text;
-using WebLogger.Display;
+using WebLogger.Render;
 
-namespace WebLogger_UnitTests.Display;
+namespace WebLogger_UnitTests.Render;
 
 [TestClass]
 public class HtmlElementTests
