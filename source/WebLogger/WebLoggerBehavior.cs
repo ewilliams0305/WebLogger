@@ -34,12 +34,12 @@ namespace WebLogger
         protected override void OnOpen()
         {
             _connected = true;
-            var styles  = new StringBuilder("text-align:center;padding:10px;margin:10px;font-weight:bold;background-color:")
-                .RenderColor(ColorFactory.Instance.InformationColor)
+            var styles  = new StringBuilder("text-align:center;padding:10px;font-weight:bold;border: 3px solid ")
+                .RenderColor(ColorFactory.Instance.WarningColor)
                 .Append(";");
 
             var options = new HtmlElementOptions(additionalStyles: styles.ToString());
-            var welcome = HtmlElement.H3Element("WEBLOGGER CONSOLE")
+            var welcome = HtmlElement.H1Element("WEBLOGGER CONSOLE", ColorFactory.Instance.WarningColor)
                 .AppendLine()
                 .Append(HtmlElement.Paragraph("Welcome to the WebLogger HTML console application."))
                 .Append(HtmlElement.Paragraph(

@@ -22,7 +22,8 @@ However it has since proven usefull in other application so a move to .netstanda
 4. [Embedded HTML](#Embedded-HTML)
 5. [Serilog Sink](#Serilog-Sink)
 6. [Source Generators](#Source-Generators)
-7. [Release Notes](#Release-Notes)
+7. [HTML Renders](#HTML-Rendering)
+8. [Release Notes](#Release-Notes)
 
 ## Visual Studio Solution
 
@@ -609,6 +610,8 @@ namespace WebLogger.ConsoleApp.GeneratedCommandStore
     }
 }
 ```
+## HTML Rednering
+
 
 There are still a *few open issues* that could really improve this.  
 - Attribute parameters must be string literals, using `nameof(Blah)` for example will throw an exception during generation.
@@ -616,6 +619,11 @@ There are still a *few open issues* that could really improve this.
 The example console application includes a folder with (4) example generated commands.
 
 ## Release Notes
+
+#### Version 1.1.5
+- Created HTML Renders
+- Moved Source Generator static files to WebLogger project to resolve issues with multiple projects in a single solution
+- Serilog sink is now formatting HTML messages.
 
 #### Version 1.1.4 
 - Created command store generator.
