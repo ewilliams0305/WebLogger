@@ -30,17 +30,27 @@
 
       <!-- CONNECT BUTTON -->
       <div>
-        <button class="btn btn-green" id="connectBtn" onclick="startWebsocket(event)">CONNECT</button>
+        <button
+          class="btn btn-green"
+          id="connect-btn"
+        >
+          CONNECT
+        </button>
       </div>
 
       <!-- DISCONNECT BUTTON -->
       <div>
-        <button class="btn btn-red disabled" id="disconnectBtn" onclick="socketclose(event)">X</button>
+        <button
+          class="btn btn-red disabled"
+          id="disconnect-btn"
+        >
+          X
+        </button>
       </div>
 
       <!-- CONSOLE OUTPUT -->
       <div class="item-output">
-        <div id="output" class="console-window custom-scroll disabled">
+        <div id="output-input" class="console-window custom-scroll disabled">
           <p class="console-text" id="consoleWindow"></p>
         </div>
       </div>
@@ -50,7 +60,7 @@
         <input
           class="input disabled"
           id="command-input"
-          role="presentation" 
+          role="presentation"
           autocomplete="off"
           placeholder="ENTER CONSOLE COMMANDS HERE (EX: 'HELP')"
           onkeyup="commandKeyUp(event)"
@@ -63,7 +73,7 @@
       <div>
         <button
           class="btn btn-green disabled"
-          id="sendCommand"
+          id="send-btn"
           onclick="JavaScript:sendString();"
         >
           SEND
@@ -75,7 +85,6 @@
         <button
           class="btn btn-red disabled"
           id="clear-btn"
-          onclick="clearConsole()"
         >
           X
         </button>

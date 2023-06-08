@@ -1,6 +1,4 @@
-﻿using WebLogger.Generators;
-
-namespace WebLogger.ConsoleApp.GeneratedCommandStore;
+﻿namespace WebLogger.ConsoleApp.GeneratedCommandStore;
 
 [CommandStore]
 public partial class RoomControlCommandStore

@@ -18,7 +18,7 @@ namespace WebLogger.Generators
     {
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
-            context.RegisterPostInitializationOutput(PostInitializationCallback);
+            //context.RegisterPostInitializationOutput(PostInitializationCallback);
 
             IncrementalValuesProvider<PartialClassContext> provider = context.SyntaxProvider
                 .CreateSyntaxProvider(SyntacticPredicate, SemanticTransform)
@@ -31,8 +31,8 @@ namespace WebLogger.Generators
 
         private static void PostInitializationCallback(IncrementalGeneratorPostInitializationContext context)
         {
-            context.AddSource(Constants.CommandHandlerAttributeFile, Constants.CommandHandlerAttributeValue);
-            context.AddSource(Constants.WebLoggerCommandAttributeFile, Constants.WebLoggerCommandAttributeValue);
+            //context.AddSource(Constants.CommandHandlerAttributeFile, Constants.CommandHandlerAttributeValue);
+            //context.AddSource(Constants.WebLoggerCommandAttributeFile, Constants.WebLoggerCommandAttributeValue);
         }
 
         /// <summary>

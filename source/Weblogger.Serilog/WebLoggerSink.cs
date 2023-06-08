@@ -1,10 +1,6 @@
 ﻿using Serilog.Core;
 using Serilog.Events;
 using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using WebLogger.Utilities;
 
 namespace WebLogger
 {
@@ -16,7 +12,6 @@ namespace WebLogger
     /// <seealso cref="System.IDisposable" />
     public sealed class WebLoggerSink : ILogEventSink, IDisposable
     {
-
         private bool _disposed;
         private readonly IWebLogger _logger;
         private readonly IFormatProvider _formatProvider;
@@ -45,28 +40,21 @@ namespace WebLogger
         /// <param name="logEvent">The log event to write.</param>
         public void Emit(LogEvent logEvent)
         {
-
-            var data = $"{logEvent.Timestamp} [{logEvent.Level.ToString().ToUpper()}] {logEvent.RenderMessage(_formatProvider)}";
-
             switch (logEvent.Level)
             {
                 case LogEventLevel.Verbose:
-                    _logger.WriteLine(data);
-                    break;
                 case LogEventLevel.Debug:
-                    _logger.WriteLine(data);
+                    _logger.WriteLine(RenderHtml.RenderVerbose(logEvent, _formatProvider));
                     break;
                 case LogEventLevel.Information:
-                    _logger.WriteLine(data);
+                    _logger.WriteLine(RenderHtml.RenderInformation(logEvent, _formatProvider));
                     break;
                 case LogEventLevel.Warning:
-                    _logger.WriteLine(data);
+                    _logger.WriteLine(RenderHtml.RenderWarning(logEvent, _formatProvider));
                     break;
                 case LogEventLevel.Error:
-                    _logger.WriteLine(data);
-                    break;
                 case LogEventLevel.Fatal:
-                    _logger.WriteLine(data);
+                    _logger.WriteLine(RenderHtml.RenderError(logEvent, _formatProvider));
                     break;
 
                 default:

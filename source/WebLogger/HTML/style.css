@@ -1,163 +1,185 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    text-decoration: none;
-    font-family: 'Roboto Mono', monospace;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  font-family: "Roboto Mono", monospace;
 }
 
-body{
-    
-    background-color: #fff;
-    min-height: 100vh;
-    margin: 0 auto;
+body {
+  background-color: #fff;
+  min-height: 100vh;
+  margin: 0 auto;
+}
+
+/****************************
+* TABLES
+*****************************/
+
+table {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 0, 0.6);
+  border-collapse: collapse;
+}
+
+th {
+  border: 1px solid rgba(255, 255, 0, 0.6);
+  padding: 15px;
+}
+
+td {
+  border: 1px solid rgba(255, 255, 0, 0.6);
+  padding: 15px;
+  text-align: left;
+}
+
+tr:hover {
+  background-color: coral;
+  font-weight: bold;
 }
 
 /****************************
 * GRID / PAGE LAYOUT
 *****************************/
-
-.container{
-    display: grid;
-    grid-template-columns:  10fr 2fr .8fr;
-    grid-template-rows:  7vh 86vh 7vh;
-    min-height: 100vh
+.container {
+  display: grid;
+  grid-template-columns: 10fr 2fr 0.8fr;
+  grid-template-rows: 7vh 86vh 7vh;
+  min-height: 100vh;
 }
 
-.container > div{
-    padding: 5px;
-    /* margin: 10px; */
+.container > div {
+  padding: 5px;
+  /* margin: 10px; */
 }
 
-.item-header{
-    grid-column: 1 / span 3;
-    color: whitesmoke;   
+.item-header {
+  grid-column: 1 / span 3;
+  color: whitesmoke;
 }
-.item-header > span{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+.item-header > span {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
-.item-header > span > h3{
-    position: relative;
-    
-    padding-left: 10px;
+.item-header > span > h3 {
+  position: relative;
+
+  padding-left: 10px;
 }
 
-.item-connection{
-    grid-column: 1 ;
+.item-connection {
+  grid-column: 1;
 }
 
-.item-output{
-    grid-column: 1 /span 4;
+.item-output {
+  grid-column: 1 / span 4;
 }
 
 /****************************
 * INPUT FIELDS
 *****************************/
 
-.input{
-    padding:10px;
-    height: 100%;
-    width: 100%;
-    height: 100%;
-    font-size: medium;
-    font-weight: bold;
-    border:0;
-    border-bottom: 1px solid #eee;
+.input {
+  padding: 10px;
+  height: 100%;
+  width: 100%;
+  height: 100%;
+  font-size: medium;
+  font-weight: bold;
+  border: 0;
+  border-bottom: 1px solid #eee;
 }
-.input:hover{
-    transition:all;
-    transition-duration: 500ms;
-    box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
+.input:hover {
+  transition: all;
+  transition-duration: 500ms;
+  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
 }
-.input:focus{
-    outline: none;
-    transition:all;
-    transition-duration: 500ms;
-    box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
-    border-bottom: 2px solid #ddd
+.input:focus {
+  outline: none;
+  transition: all;
+  transition-duration: 500ms;
+  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+  border-bottom: 2px solid #ddd;
 }
 
 /****************************
 * BUTTON STYLES
 *****************************/
 
-.btn{
-    height: 100%;
-    width: 100%;
-    color: white;
-    border-radius: 3px;
-    border: none;
-
+.btn {
+  height: 100%;
+  width: 100%;
+  color: white;
+  border-radius: 3px;
+  border: none;
 }
-.btn-green{
-    background-color: green;
-    font-size: medium;
-    
+.btn-green {
+  background-color: green;
+  font-size: medium;
 }
-.btn-red{
-    background-color: red;
-    font-size: large;
-    font-weight: bold;
+.btn-red {
+  background-color: red;
+  font-size: large;
+  font-weight: bold;
 }
 
-.btn:hover{
-    transition:all;
-    transition-duration: 500ms;
-    box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
+.btn:hover {
+  transition: all;
+  transition-duration: 500ms;
+  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
 }
 
 /****************************
 * DYNAMIC CLASSES JS ADDED
 *****************************/
 
-.hidden{
-    display: none;
+.hidden {
+  display: none;
 }
 
-.disabled{
-    opacity: .3;
+.disabled {
+  opacity: 0.3;
 }
 
 /****************************
 * CONSOLE WINDOW
 *****************************/
 
-.console-window{
-    background-color: black;
-    white-space: pre-wrap;
-    overflow: auto;
-    scrollbar-width: 5px;
-    color: white;
-    padding-left: 10px;
-    border: 1px solid rgba(255, 255, 255, .5);
-    border-radius: 5px;
-    min-height: 100%;
-    max-height: 100%;
+.console-window {
+  background-color: black;
+  white-space: pre-wrap;
+  overflow: auto;
+  scrollbar-width: 5px;
+  color: white;
+  padding-left: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 5px;
+  min-height: 100%;
+  max-height: 100%;
 }
-    
+
 .custom-scroll::-webkit-scrollbar {
-    width: 5px;
-    height: 30px;
-    opacity: 0;
+  width: 5px;
+  height: 30px;
+  opacity: 0;
 }
 .custom-scroll::-webkit-scrollbar-button:vertical {
-    opacity: 0;
+  opacity: 0;
 }
 .custom-scroll::-webkit-scrollbar-track:vertical {
-    opacity: 0;
+  opacity: 0;
 }
 .custom-scroll::-webkit-scrollbar-thumb:vertical {
-    height: 40px;
-    background-color: rgba(255, 255, 0, 0.6);
-    border-radius: 2px;
-    border:1px black solid;
-} 
+  height: 40px;
+  background-color: rgba(255, 255, 0, 0.6);
+  border-radius: 2px;
+  border: 1px black solid;
+}
 
-.console-text{
-    margin-left: 5px;
-    line-height: normal;
+.console-text {
+  margin-left: 5px;
+  line-height: normal;
 }
 
 /****************************
@@ -165,22 +187,19 @@ body{
 *****************************/
 
 @media (max-width: 700px) {
-
-    .container{
-        grid-template-columns:  10fr 3fr 2fr;
-    }
+  .container {
+    grid-template-columns: 10fr 3fr 2fr;
+  }
 }
 
 @media (max-height: 700px) {
-    .container{
-        grid-template-rows:  10vh 80vh 10vh;
-    }
+  .container {
+    grid-template-rows: 10vh 80vh 10vh;
+  }
 }
 
 @media (max-height: 400px) {
-    .container{
-        grid-template-rows:  13vh 74vh 13vh;
-    }
+  .container {
+    grid-template-rows: 13vh 74vh 13vh;
+  }
 }
-
-

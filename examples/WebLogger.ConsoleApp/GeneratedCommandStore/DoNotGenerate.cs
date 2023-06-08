@@ -1,6 +1,4 @@
-﻿using WebLogger.Generators;
-
-namespace WebLogger.ConsoleApp.GeneratedCommandStore;
+﻿namespace WebLogger.ConsoleApp.GeneratedCommandStore;
 
 //No attribute applied.
 public partial class DoNotGenerate

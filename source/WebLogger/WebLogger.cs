@@ -16,6 +16,7 @@ namespace WebLogger
     {
         #region Static
 
+
         private static readonly Mutex Mutex = new Mutex(false);
 
         #endregion

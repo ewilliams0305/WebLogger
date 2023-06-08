@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Windows.Input;
+using WebLogger.Render;
 
 namespace WebLogger.Commands
 {
@@ -42,7 +41,6 @@ namespace WebLogger.Commands
             _logger = logger;
         }
 
-
         /// <summary>
         /// The command handle that will be executed when the command is parsed from the weblogger
         /// </summary>
@@ -56,24 +54,32 @@ namespace WebLogger.Commands
 
             commands.Sort(Comparison);
 
-            var builder =
-                new StringBuilder(
-                        $@"<br><span style="" color:#FF00FF; "">{"COMMAND".PadRight(22, '.')} | {"HELP".PadRight(60, '.')}  </>")
-                    .Append("<br>");
-            
-            foreach (var cmd in commands)
+            var tableHeader = HtmlElement.TableHeader(
+                new List<string>(3) { "COMMAND", "DESCRIPTION", "HELP INFO" });
+
+            var table = HtmlElement.Table();
+
+            for (var i = commands.Count - 1; i >= 0; i--)
             {
-                builder.Append(
-                        $@"<span style="" color:#dddd11; "">>&nbsp;{cmd.Command.ToUpper().PadRight(20, '.')} | </><span style=""color:#FFF;"">{cmd.Description.ToUpper().PadRight(40, '.')} | </><span style=""color:#FFF;"">{cmd.Help} | </>")
-                    .Append("<br>");
+                var cmd = commands[i];
+                var row = HtmlElement.TableRow().Insert(
+                    HtmlElement.TableData(cmd.Command.ToUpper()).Append(
+                    HtmlElement.TableData(cmd.Description.ToUpper()).Append(
+                    HtmlElement.TableData(cmd.Help))));
+
+                table.Insert(row);
             }
-            builder.Append("<br>");
-            return CommandResponse.Success(this, builder.ToString());
+
+            var result = table
+                .Insert(tableHeader)
+                .Render();
+
+            return CommandResponse.Success(this, result);
         }
 
         private int Comparison(IWebLoggerCommand x, IWebLoggerCommand y)
         {
-            return x.Command.CompareTo(y.Command);
+            return string.Compare(x.Command, y.Command, StringComparison.Ordinal);
         }
     }
 }

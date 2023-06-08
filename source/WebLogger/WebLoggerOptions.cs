@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using WebLogger.Render;
 
 namespace WebLogger
 {
@@ -20,6 +21,10 @@ namespace WebLogger
         /// Location of the HTML files to be extracted to and served.
         /// </summary>
         public string DestinationWebpageDirectory { get; set; } = ConstantValues.DefaultHtmlDirectory;
+        /// <summary>
+        /// Used to define colors utilized through the application. 
+        /// </summary>
+        public IColorFactory Colors => ColorFactory.Instance; 
         /// <summary>
         /// Provides an initial collection of commands to register with the logger.
         /// </summary>

@@ -17,7 +17,7 @@ namespace WebLogger
         {
             var configuration = new WebLoggerOptions();
             options?.Invoke(configuration);
-
+            
             var logger = new WebLogger(
                 configuration.WebSocketTcpPort,
                 configuration.Secured,
