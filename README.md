@@ -22,7 +22,7 @@ However it has since proven usefull in other application so a move to .netstanda
 4. [Embedded HTML](#Embedded-HTML)
 5. [Serilog Sink](#Serilog-Sink)
 6. [Source Generators](#Source-Generators)
-7. [HTML Renders](#HTML-Rendering)
+7. [HTML Rendering](#HTML-Rendering)
 8. [Release Notes](#Release-Notes)
 
 ## Visual Studio Solution
@@ -625,7 +625,7 @@ There are still a *few open issues* that could really improve this.
 
 The example console application includes a folder with (4) example generated commands.
 
-## HTML Rednering
+## HTML Rendering
 Messages sent back to the web logger console can now render HTML templates.  Using the HTML template classes in the `WebLgger.Render` namespace
 you can compose HTML markup that will be honored in the console output window of the webloger.  See main image for example output.  To get started create a `HtmlElement` instance.
 The `HtmlElement` is `public readonly ref struct HtmlElement` nad must be created with valid data. 
