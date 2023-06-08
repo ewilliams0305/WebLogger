@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
-using WebSocketSharp;
 
 namespace WebLogger.Utilities
 {

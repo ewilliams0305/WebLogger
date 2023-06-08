@@ -3,6 +3,9 @@ using System.Text;
 
 namespace WebLogger.Render
 {
+    /// <summary>
+    /// Extensions used to render HTML text
+    /// </summary>
     public static class StyleBuilderExtensions
     {
         internal static StringBuilder RenderStyleAttribute(this StringBuilder builder, HtmlElementOptions options)
@@ -56,6 +59,12 @@ namespace WebLogger.Render
             return builder.Append(styles);
         }
 
+        /// <summary>
+        /// Creates a HEX formatted color.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="color"></param>
+        /// <returns></returns>
         public static StringBuilder RenderColor(this StringBuilder builder, Color color)
         {
             if (color.IsEmpty)

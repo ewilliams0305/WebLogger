@@ -223,7 +223,8 @@ function sendPressed(event) {
 
 function clearPressed(event) {
     console.log(event);
-    this.display.innerHTML = "";
+    var output = document.getElementById("consoleWindow");
+    output.innerHTML = "";
 }
 
 function urlKeyUp(event) {

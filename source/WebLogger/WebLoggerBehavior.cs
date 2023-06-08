@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Reflection;
 using System.Text;
 using WebLogger.Exceptions;
 using WebLogger.Render;
@@ -17,17 +18,11 @@ namespace WebLogger
         private IWebLoggerCommander _logger;
         private bool _connected;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public WebLoggerBehavior()
         {
 
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void InitializeBehavior(
             IWebLoggerCommander logger, 
             Action<CloseEventArgs> connectionClosedHandler = null, 
@@ -39,8 +34,18 @@ namespace WebLogger
         protected override void OnOpen()
         {
             _connected = true;
+            var styles  = new StringBuilder("text-align:center;padding:10px;margin:10px;font-weight:bold;background-color:")
+                .RenderColor(ColorFactory.Instance.InformationColor)
+                .Append(";");
 
-            SendSerial("\rWEB LOGGER> CONNECTED TO CONSOLE");
+            var options = new HtmlElementOptions(additionalStyles: styles.ToString());
+            var welcome = HtmlElement.H3Element("WEBLOGGER CONSOLE")
+                .AppendLine()
+                .Append(HtmlElement.Paragraph("Welcome to the WebLogger HTML console application."))
+                .Append(HtmlElement.Paragraph(
+                    "Enter console commands into the input field below.  Type help at anytime to display all available commands"));
+
+            SendSerial(HtmlElement.Div(welcome, options: options).Render());
         }
 
         protected override void OnClose(CloseEventArgs e)
