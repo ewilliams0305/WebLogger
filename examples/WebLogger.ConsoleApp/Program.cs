@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System.Drawing;
 using Serilog;
 using Serilog.Events;
 using System.Reflection;
@@ -37,6 +38,11 @@ Log.Logger = new LoggerConfiguration()
             options.Secured = false;
             options.DestinationWebpageDirectory = "C:/Temp/WebLogger/Logger";
             options.WebSocketTcpPort = 54321;
+
+            options.Colors.ProvideColors(
+                verbose: Color.Blue,
+                information: Color.DarkOrange,
+                error: Color.Chocolate);
         },
         logger =>
         {

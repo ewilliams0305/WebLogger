@@ -101,6 +101,11 @@ var logger = WebLoggerFactory.CreateWebLogger(options =>
     options.WebSocketTcpPort = 54321;                  //allows you to provide a TCP port used by the web socket server
     options.DestinationWebpageDirectory = "C:/Temp/";  //allows you to provide a file directory to extract the embedded html files.
     options.Commands = commands;                       //provide a collection of custom commands that will be registered with the console.
+
+    options.Colors.ProvideColors(                      //provide colors for all rendered messages.
+        verbose: Color.Blue,
+        information: Color.DarkOrange,
+        error: Color.Chocolate);
 });
 
 ```
@@ -307,6 +312,10 @@ Log.Logger = new LoggerConfiguration()
             options.Secured = false;
             options.DestinationWebpageDirectory = Path.Combine(Directory.GetApplicationRootDirectory(), "html/logger");
             options.WebSocketTcpPort = 54321;
+            options.Colors.ProvideColors(                      
+                verbose: Color.Blue,
+                information: Color.DarkOrange,
+                error: Color.Chocolate);
         },
         logger =>
         {
@@ -610,13 +619,87 @@ namespace WebLogger.ConsoleApp.GeneratedCommandStore
     }
 }
 ```
-## HTML Rednering
-
 
 There are still a *few open issues* that could really improve this.  
 - Attribute parameters must be string literals, using `nameof(Blah)` for example will throw an exception during generation.
 
 The example console application includes a folder with (4) example generated commands.
+
+## HTML Rednering
+Messages sent back to the web logger console can now render HTML templates.  Using the HTML template classes in the `WebLgger.Render` namespace
+you can compose HTML markup that will be honored in the console output window of the webloger.  See main image for example output.  To get started create a `HtmlElement` instance.
+The `HtmlElement` is `public readonly ref struct HtmlElement` nad must be created with valid data. 
+
+```csharp
+HtmlElement div = new HtmlElement(Element.Div);
+```
+Several static factories are provided to created Markup that is ready to use.
+```csharp
+var paragraph = HtmlElement.Paragraph("Welcome to the WebLogger HTML console application.");
+var header = HtmlElement.H1Element("Welcome to the WebLogger HTML console application.");
+```
+Elements can be configured with an `HtmlElementOptions` class.  `HtmlElementOptions` can be implicatly converted to a `System.Drawing.Color` struc and colors can be passed into the element directly.
+
+```
+//Get a color back from the configured colors in the WebLogger Options.
+var color = ColorsFactory.Instance.GetColor(Severity.Verbose)
+
+var options = new HtmlElementOptions(additionalStyles: "background-color:red;", color: color);
+var paragraph = HtmlElement.Paragraph("Welcome to the WebLogger HTML console application.", options);
+
+var paragraphWithColor = HtmlElement.Paragraph("Welcome to the WebLogger HTML console application.", color);
+```
+Elements can be Appended and Inserterd into one another using the `Apend()` and `Insert()` method.  Using these method you can put it all together and build markup.  The example below is from the WebLogger welcome.
+```csharp
+var styles  = new StringBuilder("text-align:center;padding:10px;font-weight:bold;border: 3px solid ")
+    .RenderColor(ColorFactory.Instance.WarningColor)
+    .Append(";");
+
+    var options = new HtmlElementOptions(additionalStyles: styles.ToString());
+    var welcome = HtmlElement.H1Element("WEBLOGGER CONSOLE", ColorFactory.Instance.WarningColor)
+        .AppendLine()
+        .Append(HtmlElement.Paragraph("Welcome to the WebLogger HTML console application."))
+        .Append(HtmlElement.Paragraph(
+            "Enter console commands into the input field below.  Type help at anytime to display all available commands"));
+
+    SendSerial(HtmlElement.Div(welcome, options: options).Render());
+```
+Note the final line calls the `Render()` method.  This method converts the build up elements into a sting.  Another example from the `WebLoggerSink` renders exceptions in a red box. Note the use of a string builder is only required to provide custom styles.
+
+```csharp
+ public static string RenderError(LogEvent logEvent, IFormatProvider formatProvider)
+{
+    var color = ColorFactory.Instance.GetColor(Severity.Error);
+
+    if (logEvent.Exception != null)
+    {
+        return CreatePrefix(logEvent, color)
+            .Append(logEvent.RenderMessage(formatProvider))
+            .Append(HtmlElement.Span(", Exception: "))
+            .Append(RenderExceptions(logEvent.Exception, color))
+            .Render();
+    }
+
+    return CreatePrefix(logEvent, color)
+        .Append(HtmlElement.Span(logEvent.RenderMessage(formatProvider), color))
+        .Render();
+}
+
+private static HtmlElement RenderExceptions(Exception exception, Color color)
+{
+    var builder = new StringBuilder("background-color:")
+        .RenderColor(Color.DarkRed)
+        .Append(";border: 3px solid rgba(255,0,0,1);");
+
+    return HtmlElement.Table(
+        HtmlElement.TableRow(
+            HtmlElement.TableData(exception.ToString(), new HtmlElementOptions(additionalStyles: builder.ToString()))
+            ));
+}
+
+```
+
+Looking forward to seeing what complex markup your able to create with these builder functions. 
 
 ## Release Notes
 
@@ -624,6 +707,7 @@ The example console application includes a folder with (4) example generated com
 - Created HTML Renders
 - Moved Source Generator static files to WebLogger project to resolve issues with multiple projects in a single solution
 - Serilog sink is now formatting HTML messages.
+- WebLogger Options now includes a colors factory.
 
 #### Version 1.1.4 
 - Created command store generator.

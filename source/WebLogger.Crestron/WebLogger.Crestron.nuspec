@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>$id$</id>
-    <version>1.1.3</version>
+    <version>1.1.5</version>
     <title>$title$</title>
     <authors>ewilliams0305</authors>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
@@ -10,7 +10,11 @@
     <projectUrl>https://github.com/ewilliams0305/Weblogger</projectUrl>
     <repository type="git" url="https://github.com/ewilliams0305/Weblogger" branch="Master"/>
     <description>Crestron SDK Implementation of the WebLogger Console</description>
-    <releaseNotes>Adds an unsecured http service that will run on the Crestron Platform</releaseNotes>
+    <releaseNotes>#### Version 1.1.5
+- Created HTML Renders
+- Moved Source Generator static files to WebLogger project to resolve issues with multiple projects in a single solution
+- Serilog sink is now formatting HTML messages.
+- WebLogger Options now includes a colors factory.</releaseNotes>
     <copyright></copyright>
     <tags>Logging Serilog Crestron</tags>
     <icon>log.png</icon>
