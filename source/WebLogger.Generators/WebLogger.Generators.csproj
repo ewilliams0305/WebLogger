@@ -13,10 +13,16 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/ewilliams0305/VirtualControlWeblogger</RepositoryUrl>
     <PackageTags>Logging;Crestron;VirtualControl;Websocket</PackageTags>
-    <Version>1.1.4</Version>
-    <FileVersion>1.1.4</FileVersion>
+    <Version>1.1.5</Version>
+    <FileVersion>1.1.5</FileVersion>
     <Company>ewilliams0305</Company>
-    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageReleaseNotes>
+      #### Version 1.1.5
+      - Created HTML Renders
+      - Moved Source Generator static files to WebLogger project to resolve issues with multiple projects in a single solution
+      - Serilog sink is now formatting HTML messages.
+      - WebLogger Options now includes a colors factory.
+    </PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

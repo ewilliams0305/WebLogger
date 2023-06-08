@@ -64,8 +64,7 @@ tr:hover {
 }
 .item-header > span > h3 {
   position: relative;
-
-  padding-left: 10px;
+    padding-left: 10px;
 }
 
 .item-connection {
@@ -147,16 +146,16 @@ tr:hover {
 *****************************/
 
 .console-window {
-  background-color: black;
-  white-space: pre-wrap;
-  overflow: auto;
-  scrollbar-width: 5px;
-  color: white;
-  padding-left: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 5px;
-  min-height: 100%;
-  max-height: 100%;
+    background-color: black;
+    white-space: pre-wrap;
+    overflow: auto;
+    scrollbar-width: 5px;
+    color: white;
+    padding: 0 15px 0 10px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+    min-height: 100%;
+    max-height: 100%;
 }
 
 .custom-scroll::-webkit-scrollbar {
