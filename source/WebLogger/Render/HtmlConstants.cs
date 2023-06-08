@@ -18,8 +18,8 @@ namespace WebLogger.Render
         private const string Span = "span";
         private const string Table = "table";
         private const string TableHeader = "th";
-        private const string TableRow = "td";
-        private const string TableContent = "tr";
+        private const string TableRow = "tr";
+        private const string TableData = "td";
 
         public const string Open = "<";
         public const string Close = ">";
@@ -40,7 +40,7 @@ namespace WebLogger.Render
             { Element.Table, Table },
             { Element.TableHeader, TableHeader },
             { Element.TableRow, TableRow },
-            { Element.TableContent, TableContent },
+            { Element.TableData, TableData },
             { Element.Paragraph, Paragraph }
         };
 

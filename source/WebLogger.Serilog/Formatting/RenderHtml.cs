@@ -16,7 +16,7 @@ namespace WebLogger
                 .Append(logEvent.Level.GetLevel())
                 .Append("] ");
 
-            return HtmlElement.SpanElement(builder.ToString(), color);
+            return HtmlElement.Span(builder.ToString(), color);
         }
 
         public static string RenderVerbose(LogEvent logEvent, IFormatProvider formatProvider)
@@ -53,26 +53,26 @@ namespace WebLogger
             {
                 return CreatePrefix(logEvent, color)
                     .Append(logEvent.RenderMessage(formatProvider))
-                    .Append(HtmlElement.SpanElement(" Exception: ", color))
+                    .Append(HtmlElement.Span(", Exception: "))
                     .Append(RenderExceptions(logEvent.Exception, color))
                     .Render();
             }
 
             return CreatePrefix(logEvent, color)
-                .Append(HtmlElement.SpanElement(logEvent.RenderMessage(formatProvider), color))
+                .Append(HtmlElement.Span(logEvent.RenderMessage(formatProvider), color))
                 .Render();
         }
 
         private static HtmlElement RenderExceptions(Exception exception, Color color)
         {
-            var header = HtmlElement.SpanElement(exception.Message);
+            var builder = new StringBuilder("background-color:")
+                .RenderColor(Color.DarkRed)
+                .Append(";border: 3px solid rgba(255,0,0,1);");
 
-            var stacktrace = HtmlElement.ParagraphElement(exception.StackTrace
-                    .Replace('<', '|')
-                    .Replace('>', '|'),
-                color);
-
-            return header.Append(HtmlElement.ParagraphElement(stacktrace, color));
+            return HtmlElement.Table(
+                HtmlElement.TableRow(
+                    HtmlElement.TableData(exception.ToString(), new HtmlElementOptions(additionalStyles: builder.ToString()))
+                    ));
         }
     }
 }

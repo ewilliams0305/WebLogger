@@ -3,7 +3,7 @@ using System.Text;
 
 namespace WebLogger.Render
 {
-    internal static class StyleBuilderExtensions
+    public static class StyleBuilderExtensions
     {
         internal static StringBuilder RenderStyleAttribute(this StringBuilder builder, HtmlElementOptions options)
         {
@@ -12,6 +12,7 @@ namespace WebLogger.Render
                 .AppendColorStyle(options.Color)
                 .AppendFontFamily(options.FontFamily)
                 .AppendFontSize(options.FontSize)
+                .AppendAdditionalStyles(options.AdditionalStyles)
                 .Append("\"");
         }
 
@@ -47,8 +48,15 @@ namespace WebLogger.Render
                 .Append(fontFamily)
                 .Append(";");
         }
+        internal static StringBuilder AppendAdditionalStyles(this StringBuilder builder, string styles)
+        {
+            if (string.IsNullOrEmpty(styles))
+                return builder;
 
-        internal static StringBuilder RenderColor(this StringBuilder builder, Color color)
+            return builder.Append(styles);
+        }
+
+        public static StringBuilder RenderColor(this StringBuilder builder, Color color)
         {
             if (color.IsEmpty)
                 return builder;

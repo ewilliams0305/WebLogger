@@ -6,10 +6,12 @@
     internal sealed class HtmlAttributes
     {
         /// <summary>
-        /// Font attribute
+        /// 
         /// </summary>
-        public const string Font = "font";
         public const string FontSize = "font-size";
+        /// <summary>
+        /// 
+        /// </summary>
         public const string FontFamily = "font-family";
         /// <summary>
         /// Style attribute

@@ -56,6 +56,6 @@
         /// <summary>
         /// Creates content in a Table
         /// </summary>
-        TableContent,
+        TableData,
     }
 }

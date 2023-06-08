@@ -56,24 +56,26 @@ namespace WebLogger.Commands
 
             commands.Sort(Comparison);
 
-            var header = HtmlElement.SpanElement("COMMAND".PadRight(22, '.'), new HtmlElementOptions(Color.BlueViolet))
-                .Append(" | ")
-                .Append("HELP".PadRight(60, '.'));
+            var tableHeader = HtmlElement.TableHeader(
+                new List<string>(3) { "COMMAND", "DESCRIPTION", "HELP INFO" });
 
-            var paragraph = HtmlElement.ParagraphElement(header);
+            var table = HtmlElement.Table();
 
-            var content = HtmlElement.DivElement(HtmlConstants.NewLine);
-            
-            foreach (var cmd in commands)
+            for (var i = commands.Count - 1; i >= 0; i--)
             {
-                content.Append(
-                    HtmlElement.SpanElement(cmd.Command.ToUpper().PadRight(20, '.').PadLeft(5, ' '), Color.Chartreuse)).Append(
-                    HtmlElement.SpanElement(cmd.Description.ToUpper().PadRight(40, '.'), Color.Chartreuse)).Append(
-                    HtmlElement.SpanElement(cmd.Help))
-                    .AppendLine();
+                var cmd = commands[i];
+                var row = HtmlElement.TableRow().Insert(
+                    HtmlElement.TableData(cmd.Command.ToUpper()).Append(
+                    HtmlElement.TableData(cmd.Description.ToUpper()).Append(
+                    HtmlElement.TableData(cmd.Help))));
+
+                table.Insert(row);
             }
 
-            var result = paragraph.Insert(content).Render();
+            var result = table
+                .Insert(tableHeader)
+                .Render();
+
             return CommandResponse.Success(this, result);
         }
 

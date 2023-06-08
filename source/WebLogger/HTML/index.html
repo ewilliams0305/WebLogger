@@ -30,12 +30,24 @@
 
       <!-- CONNECT BUTTON -->
       <div>
-        <button class="btn btn-green" id="connectBtn" onclick="startWebsocket(event)">CONNECT</button>
+        <button
+          class="btn btn-green"
+          id="connectBtn"
+          onclick="startWebsocket(event)"
+        >
+          CONNECT
+        </button>
       </div>
 
       <!-- DISCONNECT BUTTON -->
       <div>
-        <button class="btn btn-red disabled" id="disconnectBtn" onclick="socketclose(event)">X</button>
+        <button
+          class="btn btn-red disabled"
+          id="disconnectBtn"
+          onclick="socketclose(event)"
+        >
+          X
+        </button>
       </div>
 
       <!-- CONSOLE OUTPUT -->
@@ -50,7 +62,7 @@
         <input
           class="input disabled"
           id="command-input"
-          role="presentation" 
+          role="presentation"
           autocomplete="off"
           placeholder="ENTER CONSOLE COMMANDS HERE (EX: 'HELP')"
           onkeyup="commandKeyUp(event)"
