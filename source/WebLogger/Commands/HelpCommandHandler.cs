@@ -62,7 +62,7 @@ namespace WebLogger.Commands
 
             var paragraph = HtmlElement.ParagraphElement(header);
 
-            var content = HtmlElement.DivElement(HtmlElements.NewLine);
+            var content = HtmlElement.DivElement(HtmlConstants.NewLine);
             
             foreach (var cmd in commands)
             {

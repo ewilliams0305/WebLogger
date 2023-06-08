@@ -6,18 +6,18 @@ namespace WebLogger.Render
     {
         public static StringBuilder AppendOpener(this StringBuilder builder, Element element, HtmlElementOptions options = default)
         {
-            return builder.Append(HtmlElements.Open)
-                .Append(HtmlElements.GetElement(element))
+            return builder.Append(HtmlConstants.Open)
+                .Append(HtmlConstants.GetElement(element))
                 .Append(options != null ? " " : string.Empty)
                 .RenderAttributes(options)
-                .Append(HtmlElements.Close);
+                .Append(HtmlConstants.Close);
         }
 
         public static StringBuilder AppendCloser(this StringBuilder builder, Element element)
         {
-            return builder.Append(HtmlElements.ClosureHeader)
-                .Append(HtmlElements.GetElement(element))
-                .Append(HtmlElements.Close);
+            return builder.Append(HtmlConstants.ClosureHeader)
+                .Append(HtmlConstants.GetElement(element))
+                .Append(HtmlConstants.Close);
         }
 
         public static StringBuilder RenderAttributes(this StringBuilder builder, HtmlElementOptions options = default)

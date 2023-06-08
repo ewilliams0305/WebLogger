@@ -82,8 +82,16 @@ async Task DoWork()
         Log.Logger.Debug("Debug Log Level");
         Log.Logger.Information("Information Log Level");
         Log.Logger.Warning("Warning Log Level");
-        Log.Logger.Error("Error Log Level");
-        Log.Logger.Fatal("Fatal Log Level");
+
+        try
+        {
+            throw new NotImplementedException("This is the exception message");
+        }
+        catch (Exception e)
+        {
+            Log.Logger.Error(e,"Error Log Level");
+            Log.Logger.Fatal(e,"Fatal Log Level");
+        }
     }
 }
 

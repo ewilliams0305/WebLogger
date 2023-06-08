@@ -1,6 +1,4 @@
-﻿using WebLogger.Generators;
-
-namespace WebLogger.ConsoleApp.GeneratedCommands
+﻿namespace WebLogger.ConsoleApp.GeneratedCommands
 {
     public partial class WayCoolCommand
     {

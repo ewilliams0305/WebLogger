@@ -40,6 +40,22 @@
         /// <summary>
         /// Span Element
         /// </summary>
-        Span
+        Span,
+        /// <summary>
+        /// Creates a table
+        /// </summary>
+        Table,
+        /// <summary>
+        /// Creates a table Header
+        /// </summary>
+        TableHeader,
+        /// <summary>
+        /// Creates a Row in a Table
+        /// </summary>
+        TableRow,
+        /// <summary>
+        /// Creates content in a Table
+        /// </summary>
+        TableContent,
     }
 }

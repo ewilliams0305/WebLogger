@@ -4,7 +4,7 @@ namespace WebLogger.Render
 {
     public readonly ref struct NewLineElement
     {
-        private StringBuilder Builder => new StringBuilder(HtmlElements.NewLine);
+        private StringBuilder Builder => new StringBuilder(HtmlConstants.NewLine);
 
         ///// <summary>
         ///// Appends a string to the html element
@@ -53,7 +53,7 @@ namespace WebLogger.Render
     
     public readonly ref struct ClosureElement
     {
-        private StringBuilder Builder => new StringBuilder(HtmlElements.Closure);
+        private StringBuilder Builder => new StringBuilder(HtmlConstants.Closure);
 
         ///// <summary>
         ///// Appends a string to the html element
@@ -249,7 +249,7 @@ namespace WebLogger.Render
         /// <returns></returns>
         public HtmlElement AppendLine()
         {
-            Builder.Append(HtmlElements.NewLine);
+            Builder.Append(HtmlConstants.NewLine);
             return this;
         }
 

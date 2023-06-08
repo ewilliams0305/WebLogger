@@ -16,7 +16,7 @@ namespace WebLogger.Generators
     {
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
-            context.RegisterPostInitializationOutput(PostInitializationCallback);
+            //context.RegisterPostInitializationOutput(PostInitializationCallback);
 
             IncrementalValuesProvider<TargetClassCaptureContext> provider = context.SyntaxProvider
                 .CreateSyntaxProvider(SyntacticPredicate, SemanticTransform)
@@ -30,10 +30,10 @@ namespace WebLogger.Generators
         private static void PostInitializationCallback(IncrementalGeneratorPostInitializationContext context)
         {
 
-            context.AddSource(Constants.CommandStoreAttributeFile, Constants.CommandStoreAttributeValue);
-            context.AddSource(Constants.TargetCommandAttributeFile, Constants.TargetCommandAttributeValue);
-            context.AddSource(Constants.StoredCommandsInterfaceExtensionsFile, Constants.StoredCommandsInterfaceExtensionsValue);
-            context.AddSource(Constants.StoredCommandsInterfaceFile, Constants.StoredCommandsInterfaceValue);
+            //context.AddSource(Constants.CommandStoreAttributeFile, Constants.CommandStoreAttributeValue);
+            //context.AddSource(Constants.TargetCommandAttributeFile, Constants.TargetCommandAttributeValue);
+            //context.AddSource(Constants.StoredCommandsInterfaceExtensionsFile, Constants.StoredCommandsInterfaceExtensionsValue);
+            //context.AddSource(Constants.StoredCommandsInterfaceFile, Constants.StoredCommandsInterfaceValue);
         }
 
         private static bool SyntacticPredicate(SyntaxNode node, CancellationToken cancellation)

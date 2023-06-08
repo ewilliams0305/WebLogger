@@ -5,7 +5,7 @@ namespace WebLogger.Render
     /// <summary>
     /// Provides the constant string definitions required to created an HTML Tag
     /// </summary>
-    internal sealed class HtmlElements
+    internal sealed class HtmlConstants
     {
         private const string Paragraph = "p";
         private const string Header = "header";
@@ -16,6 +16,10 @@ namespace WebLogger.Render
         private const string H5 = "h5";
         private const string Div = "div";
         private const string Span = "span";
+        private const string Table = "table";
+        private const string TableHeader = "th";
+        private const string TableRow = "td";
+        private const string TableContent = "tr";
 
         public const string Open = "<";
         public const string Close = ">";
@@ -33,6 +37,10 @@ namespace WebLogger.Render
             { Element.H5, H5 },
             { Element.Div, Div },
             { Element.Span, Span },
+            { Element.Table, Table },
+            { Element.TableHeader, TableHeader },
+            { Element.TableRow, TableRow },
+            { Element.TableContent, TableContent },
             { Element.Paragraph, Paragraph }
         };
 

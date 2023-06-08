@@ -229,28 +229,28 @@ function init(ip)
             
             if (other != null){
 
-				let end = msg.indexOf(']');
-				var colored = msg.substring(0, end + 1);
+				//let end = msg.indexOf(']');
+				//var colored = msg.substring(0, end + 1);
 
-				if(msg.toUpperCase().includes("VERBOSE]"))
-					other.innerHTML += `<span style="color:#dddd11;">${colored}</><span style="color:#FFF;">${msg.replace(colored, '')}</>\n`;
+				//if(msg.toUpperCase().includes("VERBOSE]"))
+				//	other.innerHTML += `<span style="color:#dddd11;">${colored}</><span style="color:#FFF;">${msg.replace(colored, '')}</>\n`;
 
-				else if(msg.toUpperCase().includes("BEBUG]"))
-					other.innerHTML += `<span style="color:#dddd11;">${colored}</><span style="color:#FFF;">${msg.replace(colored, '')}</>\n`;
+				//else if(msg.toUpperCase().includes("BEBUG]"))
+				//	other.innerHTML += `<span style="color:#dddd11;">${colored}</><span style="color:#FFF;">${msg.replace(colored, '')}</>\n`;
 					
-				else if(msg.toUpperCase().includes("INFORMATION]"))
-					other.innerHTML += `<span style="color:#FF00FF;">${colored}</><span style="color:#FFF;">${msg.replace(colored, '')}</>\n`;
+				//else if(msg.toUpperCase().includes("INFORMATION]"))
+				//	other.innerHTML += `<span style="color:#FF00FF;">${colored}</><span style="color:#FFF;">${msg.replace(colored, '')}</>\n`;
 
-				else if(msg.toUpperCase().includes("WARNING]"))
-					other.innerHTML += `<span style="color:rgb(242, 91, 91);">${colored}</><span style="color:#FFF;">${msg.replace(colored, '')}</>\n`;
+				//else if(msg.toUpperCase().includes("WARNING]"))
+				//	other.innerHTML += `<span style="color:rgb(242, 91, 91);">${colored}</><span style="color:#FFF;">${msg.replace(colored, '')}</>\n`;
 
-				else if(msg.toUpperCase().includes("ERROR]"))
-					other.innerHTML += `<span style="color:rgb(242, 91, 91);">${msg}</>\n`;
+				//else if(msg.toUpperCase().includes("ERROR]"))
+				//	other.innerHTML += `<span style="color:rgb(242, 91, 91);">${msg}</>\n`;
 
-				else if(msg.toUpperCase().includes("FATAL]"))
-					other.innerHTML += `<span style="color:rgb(242, 91, 91);">${msg}</>\n`;
+				//else if(msg.toUpperCase().includes("FATAL]"))
+				//	other.innerHTML += `<span style="color:rgb(242, 91, 91);">${msg}</>\n`;
 
-				else
+				//else
 					other.innerHTML += `${msg}\n`;
 			} 
 		}
