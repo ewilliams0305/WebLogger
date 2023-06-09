@@ -39,10 +39,7 @@ Log.Logger = new LoggerConfiguration()
             options.DestinationWebpageDirectory = "C:/Temp/WebLogger/Logger";
             options.WebSocketTcpPort = 54321;
 
-            options.Colors.ProvideColors(
-                verbose: Color.Blue,
-                information: Color.DarkOrange,
-                error: Color.Chocolate);
+            options.Colors.ProvideColors();
         },
         logger =>
         {
@@ -84,13 +81,22 @@ async Task DoWork()
     while (!token.IsCancellationRequested)
     {
         await Task.Delay(1000);
-        //Log.Logger.Verbose("Verbose Log Level {name}, {something}", "Name", 2);
-        //Log.Logger.Debug("Debug Log Level");
-        //Log.Logger.Information("Information Log Level");
-        //Log.Logger.Warning("Warning Log Level");
-        //Log.Logger.Error("Error Log Level");
-        //Log.Logger.Fatal(new Exception("Fake Fatal Exception", new Exception("Inner Exception", new Exception())), "Fatal Log Level");
-        
+        Log.Logger.Verbose("Verbose Log Level {name}, {something}", "Name", 2);
+        Log.Logger.Debug("Debug Log Level");
+        Log.Logger.Information("Information Log Level");
+        Log.Logger.Warning("Warning Log Level");
+        Log.Logger.Error("Error Log Level");
+        Log.Logger.Fatal(new Exception("Fake Fatal Exception", new Exception("Inner Exception", new Exception())), "Fatal Log Level");
+
+
+        try
+        {
+            throw new ArgumentException("Something cray");
+        }
+        catch (Exception e)
+        {
+            Log.Logger.Fatal(e, "First Exception");
+        }
     }
 }
 

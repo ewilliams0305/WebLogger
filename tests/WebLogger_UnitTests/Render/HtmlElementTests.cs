@@ -153,4 +153,34 @@ public class HtmlElementTests
 
         Assert.AreEqual(expected, element.Render());
     }
+
+    [TestMethod]
+    [DataRow("<div></div><h1></h1>", Element.Div, Element.H1)]
+    [DataRow("<h1></h1><span></span>", Element.H1, Element.Span)]
+    [DataRow("<p></p><div></div>", Element.Paragraph, Element.Div)]
+    public void Before_InsertsElement_BeforeProvidedElement(string expected, Element first, Element last)
+    {
+        var before = new HtmlElement(first);
+
+        var element = new HtmlElement(last)
+            .Before(before);
+
+        Assert.AreEqual(expected, element.Render());
+    }
+
+    [TestMethod]
+    [DataRow("<h1></h1><h2></h2><h3></h3><p></p>")]
+    public void Before_InsertsElements_BeforeProvidedElement(string expected)
+    {
+        var first = new HtmlElement(Element.H1);
+        var second = new HtmlElement(Element.H2);
+        var third = new HtmlElement(Element.H3);
+
+        var parent = new HtmlElement(Element.Paragraph)
+            .Before(third)
+            .Before(second)
+            .Before(first);
+
+        Assert.AreEqual(expected, parent.Render());
+    }
 }

@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 using WebLogger.Commands;
 using WebLogger.Utilities;
+using WebSocketSharp;
+using WebSocketSharp.Net;
 using WebSocketSharp.Server;
 
 namespace WebLogger
@@ -104,8 +107,10 @@ namespace WebLogger
             if (_server == null)
                 return;
 
-            if(!_server.IsListening) 
+            if (!_server.IsListening)
+            {
                 _server.Start();
+            }
         }
         /// <summary>
         /// Stops the server
@@ -116,7 +121,9 @@ namespace WebLogger
                 return;
 
             if (!_server.IsListening)
+            {
                 _server.Stop();
+            }
         }
         /// <summary>
         /// Writes a message to the client
@@ -167,22 +174,11 @@ namespace WebLogger
         /// </summary>
         public IEnumerable<IWebLoggerCommand> ListCommands()
         {
-            //var header = $@"<br><span style="" color:#FF00FF; "">{"COMMAND".PadRight(22, '.')} | {"HELP".PadRight(60, '.')}  </>";
-            //_logger?.WriteLine(header);
-
-            //foreach (var cmd in _commands.GetAllCommands())
-            //{
-            //    var result = $@"<span style="" color:#dddd11; "">>&nbsp;{ cmd.Command.ToUpper().PadRight(20, '.')} | </><span style=""color:#FFF;"">{cmd.Description.ToUpper().PadRight(40, '.')} | </><span style=""color:#FFF;"">{cmd.Help} | </>";
-                
-            //    _logger?.WriteLine(result);
-            //}
-            //_logger?.WriteLine("<br>");
-
             return _commands.GetAllCommands();
         }
 
         /// <inheritdoc />
-        public string GetHelpInfo(string command)
+        public ICommandResponse GetHelpInfo(string command)
         {
             return _commands.GetHelpInfo(command);
         }

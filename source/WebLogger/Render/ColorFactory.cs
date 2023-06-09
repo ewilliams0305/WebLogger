@@ -21,7 +21,7 @@ namespace WebLogger.Render
         /// <summary>
         /// Sets the verbose color used to render messages in the console.
         /// </summary>
-        public Color InformationColor { get; private set; } = Color.LimeGreen;
+        public Color InformationColor { get; private set; } = Color.CornflowerBlue;
         /// <summary>
         /// Sets the verbose color used to render messages in the console.
         /// </summary>
@@ -40,22 +40,22 @@ namespace WebLogger.Render
         /// <param name="error">Error message color</param>
         public void ProvideColors(Color verbose = default, Color information = default, Color warning = default, Color error = default)
         {
-            if (verbose != VerboseColor)
+            if (!verbose.IsEmpty)
             {
                 VerboseColor = verbose;
             }
 
-            if (information != InformationColor)
+            if (!information.IsEmpty)
             {
                 InformationColor = information;
             }
 
-            if (warning != WarningColor)
+            if (!warning.IsEmpty)
             {
                 WarningColor = warning;
             }
 
-            if (error != ErrorColor)
+            if (!error.IsEmpty)
             {
                 ErrorColor = error;
             }

@@ -1,3 +1,7 @@
+using System.Drawing;
+using System.Text;
+using WebLogger.Render;
+
 namespace WebLogger_UnitTests.Factory
 {
     [TestClass]
@@ -82,8 +86,35 @@ namespace WebLogger_UnitTests.Factory
 
             
             Assert.IsNotNull(logger);
-            Assert.AreEqual("EXAMPLE|Simple example of console command|Parameter: NA", logger.GetHelpInfo("EXAMPLE"));
-            Assert.AreEqual("TEST|Simple example of console command|Parameter: NA", logger.GetHelpInfo("TEST"));
+
+            var example = logger.GetHelpInfo("EXAMPLE");
+            var test = logger.GetHelpInfo("TEST");
+
+            Assert.AreEqual("Simple example of console command | Parameter: NA", example.Response);
+            Assert.AreEqual("Simple example of console command | Parameter: NA", test.Response);
+        }
+
+        [TestMethod]
+        public void Factory_WithColorOptions_ChangesColors()
+        {
+            var logger = WebLoggerFactory.CreateWebLogger(options =>
+            {
+                options.Colors.ProvideColors(
+                    verbose: Color.AliceBlue,
+                    information: Color.Aqua,
+                    warning: Color.Bisque,
+                    error: Color.Azure);
+            });
+
+            var verbose = ColorFactory.Instance.GetColor(Severity.Verbose);
+            var information = ColorFactory.Instance.GetColor(Severity.Information);
+            var warning = ColorFactory.Instance.GetColor(Severity.Warning);
+            var error = ColorFactory.Instance.GetColor(Severity.Error);
+
+            Assert.AreEqual(Color.AliceBlue, verbose);
+            Assert.AreEqual(Color.Aqua, information);
+            Assert.AreEqual(Color.Bisque, warning);
+            Assert.AreEqual(Color.Azure, error);
         }
     }
 }

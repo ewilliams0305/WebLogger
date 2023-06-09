@@ -24,21 +24,21 @@ namespace WebLogger_UnitTests.Logger
         }
 
         [TestMethod]
-        public async Task WebLogger_StartsAndStops_WebSocketServer()
+        public void WebLogger_StartsAndStops_WebSocketServer()
         {
             var logger = WebLoggerFactory.CreateWebLogger();
             logger.Start();
             Assert.IsTrue(logger.IsRunning);
 
             var client = new TcpClient();
-            await client.ConnectAsync("127.0.0.1", 54321);
+            client.Connect("127.0.0.1", 54321);
             Assert.IsTrue(client.Connected);
 
             client.Close();
             logger.Stop();
+            logger.Dispose();
 
-            await Task.Delay(1000);
-
+            Assert.IsFalse(client.Connected);
             Assert.IsFalse(logger.IsRunning);
 
         }

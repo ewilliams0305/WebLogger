@@ -361,7 +361,19 @@ namespace WebLogger.Render
         /// <returns>This element.</returns>
         public HtmlElement Insert(HtmlElement innerElement)
         {
-            var result = RenderInnerElement(this, innerElement);
+            RenderInnerElement(this, innerElement);
+            return this;
+        }
+
+        /// <summary>
+        /// Adds an element before the provided element.
+        /// <remarks>This is useful for building tables in loops.</remarks>
+        /// </summary>
+        /// <param name="beforeElement">Element to add before this element</param>
+        /// <returns>This element.</returns>
+        public HtmlElement Before(HtmlElement beforeElement)
+        {
+            RenderBeforeElement(this, beforeElement);
             return this;
         }
 
@@ -399,6 +411,13 @@ namespace WebLogger.Render
         {
             var length = outerElement.HeaderLength + innerElement.HeaderLength;
             var builder = new StringBuilder().Append(outerElement.Builder.Insert(outerElement.HeaderLength, innerElement));
+            return (builder, length);
+        }
+
+        private static (StringBuilder, int) RenderBeforeElement(HtmlElement beforeElement, HtmlElement afterElement)
+        {
+            var length = beforeElement.HeaderLength;
+            var builder = beforeElement.Builder.Insert(0, afterElement);
             return (builder, length);
         }
 

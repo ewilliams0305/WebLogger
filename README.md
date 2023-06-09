@@ -414,6 +414,17 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 ```
 
+You can also create customer `Renders` that format the entire log message.  The `WebLoggerSink` accepts an `IRenderMessage` interface as an optional parameter.
+Two implmentation have been provided in the library for you.  The `renderer: new RenderSinkTextColor())` formats the time stamp and log level as colored text surrounded with "[]".
+The default provided Renderer wraps the timestamp and log level inside a colored div and provides addtional padding.  This is achived by using the `renderer: new RenderSinkHtml())` implmentation.
+
+```csharp
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Verbose()
+    .WriteTo.WebloggerSink(renderer: new RenderSinkTextColor())
+    .CreateLogger();
+```
+
 ## Source Generators
 
 A source generator analyzer project has now been created and is included in the solution.  This is my first shot at these so be kind!

@@ -40,7 +40,7 @@ namespace WebLogger
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        string GetHelpInfo(string command);
+        ICommandResponse GetHelpInfo(string command);
 
         /// <summary>
         /// 

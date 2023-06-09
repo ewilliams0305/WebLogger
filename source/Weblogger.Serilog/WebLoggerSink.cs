@@ -15,6 +15,7 @@ namespace WebLogger
         private bool _disposed;
         private readonly IWebLogger _logger;
         private readonly IFormatProvider _formatProvider;
+        private readonly IRenderMessages _renderer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WebLoggerSink"/> class.
@@ -23,10 +24,11 @@ namespace WebLogger
         /// <param name="options">provides the weblogger factory configuration options</param>
         /// <param name="logger">the action provides access to the logger after construction and can be used to provide commands</param>
         /// <param name="formatProvider">The format provider.</param>
-        public WebLoggerSink(Action<WebLoggerOptions> options, Action<IWebLogger> logger = default, IFormatProvider formatProvider = default)
+        public WebLoggerSink(Action<WebLoggerOptions> options, Action<IWebLogger> logger = default, IFormatProvider formatProvider = default, IRenderMessages renderer = default)
         {
             _logger = WebLoggerFactory.CreateWebLogger(options);
             _formatProvider = formatProvider;
+            _renderer = renderer ?? new RenderSinkHtml();
 
             logger?.Invoke(_logger);
 
@@ -44,17 +46,17 @@ namespace WebLogger
             {
                 case LogEventLevel.Verbose:
                 case LogEventLevel.Debug:
-                    _logger.WriteLine(RenderHtml.RenderVerbose(logEvent, _formatProvider));
+                    _logger.WriteLine(_renderer.RenderVerbose(logEvent, _formatProvider));
                     break;
                 case LogEventLevel.Information:
-                    _logger.WriteLine(RenderHtml.RenderInformation(logEvent, _formatProvider));
+                    _logger.WriteLine(_renderer.RenderInformation(logEvent, _formatProvider));
                     break;
                 case LogEventLevel.Warning:
-                    _logger.WriteLine(RenderHtml.RenderWarning(logEvent, _formatProvider));
+                    _logger.WriteLine(_renderer.RenderWarning(logEvent, _formatProvider));
                     break;
                 case LogEventLevel.Error:
                 case LogEventLevel.Fatal:
-                    _logger.WriteLine(RenderHtml.RenderError(logEvent, _formatProvider));
+                    _logger.WriteLine(_renderer.RenderError(logEvent, _formatProvider));
                     break;
 
                 default:
