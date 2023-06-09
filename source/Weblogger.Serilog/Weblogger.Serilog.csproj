@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>WebLogger</RootNamespace>
-    <Version>1.1.5</Version>
-    <FileVersion>1.1.5</FileVersion>
+    <Version>1.1.6</Version>
+    <FileVersion>1.1.6</FileVersion>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>WebLogger Serilog Sink</Title>
     <Description>A serilog Sink implementation of the weblogger providing a web socket servers used to send/receive console communications from an embedded HTML user interface to a application.</Description>
@@ -15,11 +15,8 @@
     <Company>ewilliams0305</Company>
     <PackageTags>Logging;Crestron;VirtualControl;Websocket;Serilog</PackageTags>
     <PackageReleaseNotes>
-      #### Version 1.1.5
-      - Created HTML Renders
-      - Moved Source Generator static files to WebLogger project to resolve issues with multiple projects in a single solution
-      - Serilog sink is now formatting HTML messages.
-      - WebLogger Options now includes a colors factory.
+      #### Version 1.1.6
+      - Added renders (see updated readme)
     </PackageReleaseNotes>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
