@@ -15,8 +15,8 @@ This was originally created for use on Crestron VC4 but has since been migrated 
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <Company>ewilliams0305</Company>
-    <Version>1.1.5</Version>
-    <FileVersion>1.1.5</FileVersion>
+    <Version>1.1.6</Version>
+    <FileVersion>1.1.6</FileVersion>
     <PackageReleaseNotes>
       #### Version 1.1.5
       - Created HTML Renders

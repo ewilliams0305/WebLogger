@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Reflection;
 using System.Text;
 using WebLogger.Exceptions;
 using WebLogger.Render;
@@ -23,10 +20,7 @@ namespace WebLogger
 
         }
 
-        public void InitializeBehavior(
-            IWebLoggerCommander logger, 
-            Action<CloseEventArgs> connectionClosedHandler = null, 
-            Action<ErrorEventArgs> connectionErrorArgs = null)
+        public void InitializeBehavior(IWebLoggerCommander logger)
         {
             _logger = logger;
         }
@@ -64,14 +58,47 @@ namespace WebLogger
             if (!e.IsText) 
                 return;
 
-            if (e.Data.EndsWith("?"))
+            if (TryRenderHelpMessage(e.Data, out string render))
             {
-                Send("\rWEB LOGGER> " + _logger.GetHelpInfo(e.Data));
+                Send(render);
                 return;
             }
 
             var response = _logger.ExecuteCommand(e.Data);
             ProcessResponse(response);
+        }
+
+        private bool TryRenderHelpMessage(string data, out string message)
+        {
+            if (!data.EndsWith("?"))
+            {
+                message = string.Empty;
+                return false;
+            }
+            
+            var help = _logger.GetHelpInfo(data);
+            message = RenderHelpMessages(help).Render();
+            return true;
+        }
+
+        private static HtmlElement RenderHelpMessages(ICommandResponse response)
+        {
+            var builder = new StringBuilder("padding:10px;margin:10px;font-weight:bold;background-color:")
+                .RenderColor(response.Status == CommandResult.Success
+                    ? ColorFactory.Instance.InformationColor
+                    : ColorFactory.Instance.ErrorColor)
+                .Append(";");
+
+            var options = new HtmlElementOptions(additionalStyles: builder.ToString(), fontSize:20);
+
+            var header = HtmlElement.Span(
+                HtmlElement.Span("? ").Append(
+                HtmlElement.Span(response.Command)), options);
+
+            var help = header
+                .Append(HtmlElement.Span(response.Response));
+
+            return HtmlElement.Div(help);
         }
 
         private void ProcessResponse(ICommandResponse response)

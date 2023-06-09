@@ -17,14 +17,16 @@ namespace WebLogger
         /// <param name="options">WebLogger factory options configures the weblogger</param>
         /// <param name="logger">Provides access to the logger after the sink has constructed the logger</param>
         /// <param name="formatProvider">The format provider.</param>
+        /// <param name="renderer">Optional rendering used to format the serilog outputs</param>
         /// <returns></returns>
         public static LoggerConfiguration WebloggerSink(
             this LoggerSinkConfiguration loggerConfiguration,
             Action<WebLoggerOptions> options,
             Action<IWebLogger> logger,
-            IFormatProvider formatProvider = null)
+            IFormatProvider formatProvider = null,
+            IRenderMessages renderer = null)
         {
-            var sink = new WebLoggerSink(options, logger, formatProvider);
+            var sink = new WebLoggerSink(options, logger, formatProvider, renderer);
             return loggerConfiguration.Sink(sink);
         }
     }

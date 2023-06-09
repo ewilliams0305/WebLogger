@@ -41,7 +41,7 @@
             return _commands.GetAllCommands();
         }
 
-        public string GetHelpInfo(string command)
+        public ICommandResponse GetHelpInfo(string command)
         {
             return _commands.GetHelpInfo(command);
         }

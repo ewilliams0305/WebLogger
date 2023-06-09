@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace WebLogger
 {
@@ -68,29 +69,34 @@ namespace WebLogger
                 return CommandResponse.Error(command, "Invalid Command");
             }
 
-            var args = new List<string>();
+            var args = new List<string>(parts);
+            args.RemoveAt(0);
 
-            if (parts.Length > 1)
-                for(var i = 1; i < parts.Length; i++)
-                    args.Add(parts[i]);
-
-            return commandValue.CommandHandler.Invoke(command, args);
+            return commandValue.CommandHandler.Invoke(commandValue.Command, args);
         }
         /// <summary>
         /// Searches for the Desired command and returns the Help Information
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        internal string GetHelpInfo(string command)
+        internal ICommandResponse GetHelpInfo(string command)
         {
             var parts = command.Split(' ');
             var key = parts[0].ToUpper().Replace("?", "");
 
-            if (!_commandStore.ContainsKey(key)) 
-                return "WEB LOGGER> UNKNOWN COMMAND";
+            var commandValue = _commandStore.Values
+                .FirstOrDefault(c => c.Command.StartsWith(key));
 
-            var consoleCommand = _commandStore[key];
-            return consoleCommand.Command + "|" + consoleCommand.Description + "|" + consoleCommand.Help;
+            if (commandValue == null)
+            {
+                return CommandResponse.Error(key, "Invalid Command Can't Provide Help");
+            }
+
+            var help = new StringBuilder(commandValue.Description)
+                .Append(" | ")
+                .Append(commandValue.Help);
+
+            return  CommandResponse.Success(commandValue, help.ToString());
         }
         /// <summary>
         /// Returns a list of all commands and descriptions
