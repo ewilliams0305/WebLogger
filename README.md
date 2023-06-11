@@ -277,9 +277,12 @@ This decision was made to reduce disc writes and ensure files are recreated ever
 This means the HTML files will need to be deleted off the server if changes to the HTML are made.
 After starting the WebLogger, a directory will be created at the specifed location with the following file tree
 
+*As of version 1.1.7 the info.txt file will be parsed and compared.  If the loaded version is differnt that the running verson the webpage will be replaced.  this will help keep the front-end syncronized with the backed.  The update command before is still functional for legacy purposes and debugging*
+
 - index.html
 - console.js
 - style.css
+- info.txt
 
 To help with writing webpage updates a custom command is provided by the ```IWebLogger.DiscoverProvidedCommands();```
 extension method.  Execute this command and your weblogger will be provided with an `Update` command.  All files will be extracted from the embedded resources and written to the specified file directory.
@@ -713,6 +716,9 @@ private static HtmlElement RenderExceptions(Exception exception, Color color)
 Looking forward to seeing what complex markup your able to create with these builder functions. 
 
 ## Release Notes
+
+#### Version 1.1.7
+- Queried assembly versions and info.text file will now be compared and will be used to keep the webpage in sync with the running version.
 
 #### Version 1.1.5
 - Created HTML Renders
