@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 using WebLogger.Commands;
 using WebLogger.Utilities;
-using WebSocketSharp;
-using WebSocketSharp.Net;
 using WebSocketSharp.Server;
 
 namespace WebLogger
@@ -18,7 +15,6 @@ namespace WebLogger
     internal sealed class WebLogger : IWebLogger
     {
         #region Static
-
 
         private static readonly Mutex Mutex = new Mutex(false);
 
@@ -231,13 +227,20 @@ namespace WebLogger
         {
             try
             {
-                if (File.Exists(Path.Combine(destinationWebpageDirectory, ConstantValues.HtmlIndex)))
+                var path = Path.Combine(ConstantValues.DefaultHtmlDirectory, ConstantValues.HtmlIndex);
+
+                if (HtmlInformation.VerifyRunningVersionIsSameAsLoadedVersion(destinationWebpageDirectory) &&
+                    File.Exists(path))
+                {
                     return;
+                }
 
                 EmbeddedResources.ExtractEmbeddedResource(
                     Assembly.GetAssembly(typeof(IAssemblyMarker)),
                     ConstantValues.HtmlRoot,
                     destinationWebpageDirectory);
+
+                HtmlInformation.ReplaceInfoFile(destinationWebpageDirectory);
             }
             catch (FileLoadException)
             {

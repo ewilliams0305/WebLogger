@@ -13,8 +13,8 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/ewilliams0305/VirtualControlWeblogger</RepositoryUrl>
     <PackageTags>Logging;Crestron;VirtualControl;Websocket</PackageTags>
-    <Version>1.1.5</Version>
-    <FileVersion>1.1.5</FileVersion>
+    <Version>1.1.7</Version>
+    <FileVersion>1.1.7</FileVersion>
     <Company>ewilliams0305</Company>
     <PackageReleaseNotes>
       #### Version 1.1.5

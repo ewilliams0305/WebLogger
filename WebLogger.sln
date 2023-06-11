@@ -28,6 +28,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebLogger.Serilog", "source
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebLogger.Generators", "source\WebLogger.Generators\WebLogger.Generators.csproj", "{102E0DD8-91A8-440E-B76F-104D022D0C1A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebLogger.Benchmarks", "tests\WebLogger.Benchmarks\WebLogger.Benchmarks.csproj", "{8C3A18B4-6AE5-48BF-85DF-ADECCF299636}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +64,10 @@ Global
 		{102E0DD8-91A8-440E-B76F-104D022D0C1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{102E0DD8-91A8-440E-B76F-104D022D0C1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{102E0DD8-91A8-440E-B76F-104D022D0C1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C3A18B4-6AE5-48BF-85DF-ADECCF299636}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C3A18B4-6AE5-48BF-85DF-ADECCF299636}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C3A18B4-6AE5-48BF-85DF-ADECCF299636}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C3A18B4-6AE5-48BF-85DF-ADECCF299636}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,6 +80,7 @@ Global
 		{B3044627-698D-4E76-81CA-34EFE79C3927} = {73F39E85-6280-49D8-99D6-130999D0EADA}
 		{8719CA40-5DE3-40D7-94DD-CDC452056850} = {201CA3F6-C39C-492A-8FB4-E06810AC90F9}
 		{102E0DD8-91A8-440E-B76F-104D022D0C1A} = {201CA3F6-C39C-492A-8FB4-E06810AC90F9}
+		{8C3A18B4-6AE5-48BF-85DF-ADECCF299636} = {73F39E85-6280-49D8-99D6-130999D0EADA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9AE64309-38A1-4A68-AE5C-A52ECEB996D7}
