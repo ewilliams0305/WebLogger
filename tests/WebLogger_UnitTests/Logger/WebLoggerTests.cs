@@ -66,21 +66,21 @@ namespace WebLogger_UnitTests.Logger
         {
             var logger = WebLoggerFactory.CreateWebLogger(options =>
             {
-                options.DestinationWebpageDirectory = "C://Temp/Html/Logger";
+                options.DestinationWebpageDirectory = ConstantValues.DefaultHtmlDirectory;
             });
 
-            if(Directory.Exists("C://Temp/Html/Logger"))
-                Directory.Delete("C://Temp/Html/Logger", true);
+            if(Directory.Exists(ConstantValues.DefaultHtmlDirectory))
+                Directory.Delete(ConstantValues.DefaultHtmlDirectory, true);
 
-            Assert.IsFalse(Directory.Exists("C://Temp/Html/Logger"));
+            Assert.IsFalse(Directory.Exists(ConstantValues.DefaultHtmlDirectory));
 
             logger.Start();
 
-            Assert.IsTrue(File.Exists("C://Temp/Html/Logger/index.html"));
-            Assert.IsTrue(File.Exists("C://Temp/Html/Logger/console.js"));
-            Assert.IsTrue(File.Exists("C://Temp/Html/Logger/style.css"));
+            Assert.IsTrue(File.Exists(Path.Combine(ConstantValues.DefaultHtmlDirectory, "index.html")));
+            Assert.IsTrue(File.Exists(Path.Combine(ConstantValues.DefaultHtmlDirectory, "console.js")));
+            Assert.IsTrue(File.Exists(Path.Combine(ConstantValues.DefaultHtmlDirectory, "style.css")));
 
-            var info = new FileInfo("C://Temp/Html/Logger/index.html");
+            var info = new FileInfo(Path.Combine(ConstantValues.DefaultHtmlDirectory, "index.html"));
 
             var dif= info.CreationTime - DateTime.Now;
 
@@ -92,19 +92,20 @@ namespace WebLogger_UnitTests.Logger
         {
             var logger = WebLoggerFactory.CreateWebLogger(options =>
             {
-                options.DestinationWebpageDirectory = "C://Temp/Html/Logger";
+                options.DestinationWebpageDirectory = ConstantValues.DefaultHtmlDirectory;
             });
 
            
             logger.Start();
+            Path.Combine(ConstantValues.DefaultHtmlDirectory, "console.js");
 
-            Assert.IsTrue(Directory.Exists("C://Temp/Html/Logger"));
+            Assert.IsTrue(Directory.Exists(ConstantValues.DefaultHtmlDirectory));
 
-            Assert.IsTrue(File.Exists("C://Temp/Html/Logger/index.html"));
-            Assert.IsTrue(File.Exists("C://Temp/Html/Logger/console.js"));
-            Assert.IsTrue(File.Exists("C://Temp/Html/Logger/style.css"));
+            Assert.IsTrue(File.Exists(Path.Combine(ConstantValues.DefaultHtmlDirectory, "index.html")));
+            Assert.IsTrue(File.Exists(Path.Combine(ConstantValues.DefaultHtmlDirectory, "console.js")));
+            Assert.IsTrue(File.Exists(Path.Combine(ConstantValues.DefaultHtmlDirectory, "style.css")));
 
-            var info = new FileInfo("C://Temp/Html/Logger/index.html");
+            var info = new FileInfo(Path.Combine(ConstantValues.DefaultHtmlDirectory, "index.html"));
 
             var dif= DateTime.Now - info.CreationTime;
 

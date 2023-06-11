@@ -14,8 +14,12 @@
         /// </summary>
         internal const string HtmlIndex = "index.html";
         /// <summary>
+        /// Html information file.
+        /// </summary>
+        internal const string HtmlInfo = "info.txt";
+        /// <summary>
         /// Default director to extract the embedded html directory
         /// </summary>
-        internal const string DefaultHtmlDirectory = "C://Temp/Html/Logger";
+        internal const string DefaultHtmlDirectory = "C://Temp/WebLogger/Logger";
     }
 }

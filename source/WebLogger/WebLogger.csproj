@@ -29,6 +29,7 @@ This was originally created for use on Crestron VC4 but has since been migrated 
   <ItemGroup>
     <None Remove="HTML\console.js" />
     <None Remove="HTML\index.html" />
+    <None Remove="HTML\info.txt" />
     <None Remove="HTML\style.css" />
   </ItemGroup>
 
@@ -38,6 +39,9 @@ This was originally created for use on Crestron VC4 but has since been migrated 
     </EmbeddedResource>
     <EmbeddedResource Include="HTML\index.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="HTML\info.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="HTML\style.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

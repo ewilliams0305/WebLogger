@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 using WebLogger.Commands;
 using WebLogger.Utilities;
-using WebSocketSharp;
-using WebSocketSharp.Net;
 using WebSocketSharp.Server;
 
 namespace WebLogger
@@ -231,8 +228,10 @@ namespace WebLogger
         {
             try
             {
-                if (File.Exists(Path.Combine(destinationWebpageDirectory, ConstantValues.HtmlIndex)))
+                if (HtmlInformation.VerifyRunningVersionIsSameAsLoadedVersion(destinationWebpageDirectory))
+                {
                     return;
+                }
 
                 EmbeddedResources.ExtractEmbeddedResource(
                     Assembly.GetAssembly(typeof(IAssemblyMarker)),
