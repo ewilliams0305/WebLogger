@@ -16,7 +16,6 @@ namespace WebLogger
     {
         #region Static
 
-
         private static readonly Mutex Mutex = new Mutex(false);
 
         #endregion
@@ -228,7 +227,10 @@ namespace WebLogger
         {
             try
             {
-                if (HtmlInformation.VerifyRunningVersionIsSameAsLoadedVersion(destinationWebpageDirectory))
+                var path = Path.Combine(ConstantValues.DefaultHtmlDirectory, ConstantValues.HtmlIndex);
+
+                if (HtmlInformation.VerifyRunningVersionIsSameAsLoadedVersion(destinationWebpageDirectory) &&
+                    File.Exists(path))
                 {
                     return;
                 }
@@ -237,6 +239,8 @@ namespace WebLogger
                     Assembly.GetAssembly(typeof(IAssemblyMarker)),
                     ConstantValues.HtmlRoot,
                     destinationWebpageDirectory);
+
+                HtmlInformation.ReplaceInfoFile(destinationWebpageDirectory);
             }
             catch (FileLoadException)
             {

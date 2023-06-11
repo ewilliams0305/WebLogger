@@ -12,18 +12,13 @@ namespace WebLogger.Utilities
         {
             if (!InformationFileExists(htmlDirectory))
             {
-                CreateInfoFile(htmlDirectory);
+                return false;
             }
 
             var infoFile = ReadInformationFile(htmlDirectory);
             var version = ParseVersion(infoFile);
 
-            if (!VersionsMatch(version)) 
-                return true;
-
-            ReplaceInfoFile(htmlDirectory);
-            return false;
-
+            return VersionsMatch(version);
         }
 
         internal static bool InformationFileExists(string htmlDirectory)
@@ -61,8 +56,7 @@ namespace WebLogger.Utilities
             var versionNumber = match.Groups[1].Value;
 
             return Version.TryParse(versionNumber, out var version) 
-                ? version 
-                : new Version(0, 0, 0);
+                ? version : new Version(0, 0, 0);
         }
 
         internal static bool VersionsAreEqual(Version version1, Version version2)
