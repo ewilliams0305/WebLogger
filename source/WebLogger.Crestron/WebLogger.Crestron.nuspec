@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>WebLogger.Crestron</id>
-    <version>1.1.9</version>
+    <version>1.1.10.0</version>
     <title>$title$</title>
     <authors>ewilliams0305</authors>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/ewilliams0305/Weblogger</projectUrl>
     <repository type="git" url="https://github.com/ewilliams0305/Weblogger" branch="Master"/>
     <description>Crestron SDK Implementation of the WebLogger Console</description>
-    <releaseNotes>#### Version 1.1.9
+    <releaseNotes>#### Version 1.1.10.0
 - Updated Crestron SDK
 - Created HTML Renders
 - Moved Source Generator static files to WebLogger project to resolve issues with multiple projects in a single solution

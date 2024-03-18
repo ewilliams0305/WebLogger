@@ -15,10 +15,10 @@ This was originally created for use on Crestron VC4 but has since been migrated 
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <Company>ewilliams0305</Company>
-    <Version>1.1.8</Version>
-    <FileVersion>1.1.8</FileVersion>
+    <Version>1.1.9</Version>
+    <FileVersion>1.1.9</FileVersion>
     <PackageReleaseNotes>
-      #### Version 1.1.8
+      #### Version 1.1.9
       - Created HTML Renders
       - Moved Source Generator static files to WebLogger project to resolve issues with multiple projects in a single solution
       - Serilog sink is now formatting HTML messages.

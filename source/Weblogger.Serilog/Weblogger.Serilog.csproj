@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>WebLogger</RootNamespace>
-    <Version>1.1.8</Version>
-    <FileVersion>1.1.8</FileVersion>
+    <Version>1.1.9</Version>
+    <FileVersion>1.1.9</FileVersion>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>WebLogger Serilog Sink</Title>
     <Description>A serilog Sink implementation of the weblogger providing a web socket servers used to send/receive console communications from an embedded HTML user interface to a application.</Description>
@@ -15,8 +15,9 @@
     <Company>ewilliams0305</Company>
     <PackageTags>Logging;Crestron;VirtualControl;Websocket;Serilog</PackageTags>
     <PackageReleaseNotes>
-      #### Version 1.1.6
+      #### Version 1.1.9
       - Added renders (see updated readme)
+      - Downgraded Serilog for Crestron Support
     </PackageReleaseNotes>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
@@ -38,7 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Serilog" Version="3.1.1" />
+    <PackageReference Include="Serilog" Version="3.0.1" />
   </ItemGroup>
 
   <ItemGroup>
