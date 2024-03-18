@@ -4,6 +4,7 @@ using System.Drawing;
 using Serilog;
 using Serilog.Events;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using WebLogger;
 using WebLogger.ConsoleApp.GeneratedCommands;
 using WebLogger.ConsoleApp.GeneratedCommandStore;
@@ -38,7 +39,6 @@ Log.Logger = new LoggerConfiguration()
             options.Secured = false;
             options.DestinationWebpageDirectory = "C:/Temp/WebLogger/Logger";
             options.WebSocketTcpPort = 54321;
-
             options.Colors.ProvideColors();
         },
         logger =>
@@ -46,14 +46,14 @@ Log.Logger = new LoggerConfiguration()
             logger.DiscoverCommands(Assembly.GetAssembly(typeof(Program)))
                 .DiscoverProvidedCommands();
 
-            //Register the command and now you can change the logging level.
-            logger.RegisterCommand(logLevelCommand);
-            logger.RegisterCommand(new AnotherCommand());
+            ////Register the command and now you can change the logging level.
+            //logger.RegisterCommand(logLevelCommand);
+            //logger.RegisterCommand(new AnotherCommand());
 
-            logger.RegisterCommandStore(new RoomControlCommandStore());
+            //logger.RegisterCommandStore(new RoomControlCommandStore());
 
-            var roomCli = new RoomControlCommandStore();
-            roomCli.RegisterCommands(logger);
+            //var roomCli = new RoomControlCommandStore();
+            //roomCli.RegisterCommands(logger);
         })
     .WriteTo.Console()
     .CreateLogger();
