@@ -110,7 +110,7 @@ jobs:
         name: Release ${{ needs.build.outputs.Version }}
         body: Released via github actions workflow, see repository README.md
         generateReleaseNotes: true
-        artifacts: "bin/nugetPackages/*.nupkg"  
+        artifacts: "bin/nugetPackages/"  
         prerelease: true
         token: ${{ secrets.GITHUB_TOKEN }}
 
