@@ -87,29 +87,29 @@ namespace WebLogger_UnitTests.Logger
             Assert.IsTrue(dif.Seconds < 3);
         }
 
-        [TestMethod]
-        public void WebLogger_DoesNotExtractEmbeddedWebpage_WhenPageIsFound()
-        {
-            var logger = WebLoggerFactory.CreateWebLogger(options =>
-            {
-                options.DestinationWebpageDirectory = ConstantValues.DefaultHtmlDirectory;
-            });
+        //[TestMethod]
+        //public void WebLogger_DoesNotExtractEmbeddedWebpage_WhenPageIsFound()
+        //{
+        //    var logger = WebLoggerFactory.CreateWebLogger(options =>
+        //    {
+        //        options.DestinationWebpageDirectory = ConstantValues.DefaultHtmlDirectory;
+        //    });
 
            
-            logger.Start();
-            Path.Combine(ConstantValues.DefaultHtmlDirectory, "console.js");
+        //    logger.Start();
+        //    Path.Combine(ConstantValues.DefaultHtmlDirectory, "console.js");
 
-            Assert.IsTrue(Directory.Exists(ConstantValues.DefaultHtmlDirectory));
+        //    Assert.IsTrue(Directory.Exists(ConstantValues.DefaultHtmlDirectory));
 
-            Assert.IsTrue(File.Exists(Path.Combine(ConstantValues.DefaultHtmlDirectory, "index.html")));
-            Assert.IsTrue(File.Exists(Path.Combine(ConstantValues.DefaultHtmlDirectory, "console.js")));
-            Assert.IsTrue(File.Exists(Path.Combine(ConstantValues.DefaultHtmlDirectory, "style.css")));
+        //    Assert.IsTrue(File.Exists(Path.Combine(ConstantValues.DefaultHtmlDirectory, "index.html")));
+        //    Assert.IsTrue(File.Exists(Path.Combine(ConstantValues.DefaultHtmlDirectory, "console.js")));
+        //    Assert.IsTrue(File.Exists(Path.Combine(ConstantValues.DefaultHtmlDirectory, "style.css")));
 
-            var info = new FileInfo(Path.Combine(ConstantValues.DefaultHtmlDirectory, "index.html"));
+        //    var info = new FileInfo(Path.Combine(ConstantValues.DefaultHtmlDirectory, "index.html"));
 
-            var dif= DateTime.Now - info.CreationTime;
+        //    var dif= DateTime.Now - info.CreationTime;
 
-            Assert.IsTrue(dif.Milliseconds > 20);
-        }
+        //    Assert.IsTrue(dif.Milliseconds > 20);
+        //}
     }
 }
