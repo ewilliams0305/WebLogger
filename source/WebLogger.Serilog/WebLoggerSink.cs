@@ -24,6 +24,7 @@ namespace WebLogger
         /// <param name="options">provides the weblogger factory configuration options</param>
         /// <param name="logger">the action provides access to the logger after construction and can be used to provide commands</param>
         /// <param name="formatProvider">The format provider.</param>
+        /// <param name="renderer">an optional render you can use to override the default HTML provider</param>
         public WebLoggerSink(Action<WebLoggerOptions> options, Action<IWebLogger> logger = default, IFormatProvider formatProvider = default, IRenderMessages renderer = default)
         {
             _logger = WebLoggerFactory.CreateWebLogger(options);
@@ -60,7 +61,7 @@ namespace WebLogger
                     break;
 
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException(nameof(logEvent));
             }
         }
 
@@ -86,12 +87,8 @@ namespace WebLogger
         {
             // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
             Dispose(disposing: true);
+            // ReSharper disable once GCSuppressFinalizeForTypeWithoutDestructor
             GC.SuppressFinalize(this);
-        }
-
-        ~WebLoggerSink()
-        {
-
         }
     }
 }

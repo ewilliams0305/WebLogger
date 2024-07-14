@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <LangVersion>9</LangVersion>
     <Title>WebLogger Console</Title>
     <Description>Provides a web socket servers used to send/receive console communications from an embedded HTML user interface to a application.
 This was originally created for use on Crestron VC4 but has since been migrated to netstandard for use in native runtime application. </Description>

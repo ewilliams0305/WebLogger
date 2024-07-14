@@ -1,4 +1,7 @@
-﻿using Crestron.SimplSharp;
+﻿
+#pragma warning disable IDE1006
+
+using Crestron.SimplSharp;
 using Crestron.SimplSharp.CrestronIO;
 using Crestron.SimplSharp.Net.Http;
 using System;
@@ -17,7 +20,8 @@ namespace WebLogger.Crestron
         /// <summary>
         /// The extension content types
         /// </summary>
-        public static Dictionary<string, string> ExtensionContentTypes;
+        private static Dictionary<string, string> _extensionContentTypes;
+
         /// <summary>
         /// Gets the type of the content.
         /// </summary>
@@ -25,7 +29,7 @@ namespace WebLogger.Crestron
         /// <returns>System.String.</returns>
         public static string GetContentType(string extension)
         {
-            var type = ExtensionContentTypes.TryGetValue(extension, out var contentType) ? contentType : "text/plain";
+            var type = _extensionContentTypes.TryGetValue(extension, out var contentType) ? contentType : "text/plain";
             return type;
         }
 
@@ -40,7 +44,7 @@ namespace WebLogger.Crestron
         /// <param name="directory">File Directory to Serve</param>
         public WebLoggerHttpServer(int port, string directory)
         {
-            ExtensionContentTypes = new Dictionary<string, string>
+            _extensionContentTypes = new Dictionary<string, string>
             {
                 { ".html", "text/html" },
                 { ".json", "application/json" },

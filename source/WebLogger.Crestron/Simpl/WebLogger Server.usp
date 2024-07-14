@@ -23,7 +23,7 @@ Comments:
   Include Libraries
   (Uncomment and include additional libraries as needed)
 *******************************************************************************************/
-#INCLUDEPATH "..\bin\Release"
+#INCLUDEPATH "..\bin\Release\net472"
 
 #USER_SIMPLSHARP_LIBRARY "WebLogger.Crestron"
 

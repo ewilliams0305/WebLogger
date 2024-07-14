@@ -57,6 +57,34 @@ jobs:
     - name: Pack NuGet Packages
       run: dotnet pack ./**.sln -p:Version='${{ steps.gitversion.outputs.SemVer }}' -c Release -o bin/nugetPackages
 
+    - name: Find CLZ Output
+      id: find_clz
+      run: |
+        CLZ_FILE=$(find ./source/ -name "*.clz" | head -n 1)
+        echo "CLZ_PATH=${CLZ_FILE}" >> $GITHUB_OUTPUT
+        echo $CLZ_PATH
+        echo done
+
+    - name: Copy CLZ if Found
+      run: |
+        if [ -f ${{ steps.find_clz.outputs.CLZ_PATH }} ]; then
+            cp ${{ steps.find_clz.outputs.CLZ_PATH }} bin/nugetPackages
+        else
+          echo "Could not find CLZ."
+        fi
+    - name: Copy USH Files
+      run: |
+        if [ -f './source/WebLogger.Crestron/Simpl/WebLogger Command.ush' ]; then
+            cp './source/WebLogger.Crestron/Simpl/WebLogger Command.ush' bin/nugetPackages
+        else
+          echo "Could not find Command.ush"
+        fi
+        if [ -f './source/WebLogger.Crestron/Simpl/WebLogger Server.ush' ]; then
+            cp './source/WebLogger.Crestron/Simpl/WebLogger Server.ush' bin/nugetPackages
+        else
+          echo "Could not find Command.ush"
+        fi
+
     - name: Upload NuGet package to GitHub
       uses: actions/upload-artifact@v4
       with:
