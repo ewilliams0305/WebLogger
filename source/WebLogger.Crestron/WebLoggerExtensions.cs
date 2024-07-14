@@ -1,4 +1,8 @@
-﻿using System.Reflection;
+﻿#if NET6_0_OR_GREATER
+#pragma warning disable CA1806
+#endif
+
+using System.Reflection;
 using WebLogger.Utilities;
 
 namespace WebLogger.Crestron
@@ -17,7 +21,7 @@ namespace WebLogger.Crestron
         /// <returns></returns>
         public static IWebLogger ServeWebLoggerHtml(this IWebLogger logger, int httpSeverPort)
         {
-            var webPageServer = new WebLoggerHttpServer(
+            new WebLoggerHttpServer(
                 port: httpSeverPort,
                 directory: logger.HtmlDirectory);
 

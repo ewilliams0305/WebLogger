@@ -11,7 +11,7 @@
 [END]
 [BEGIN]
   ObjTp=Hd
-  IncludePath1=..\bin\Release
+  IncludePath1=..\bin\Release\net472
 [END]
 [BEGIN]
   ObjTp=Symbol

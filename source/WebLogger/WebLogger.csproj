@@ -1,29 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <LangVersion>9</LangVersion>
     <Title>WebLogger Console</Title>
     <Description>Provides a web socket servers used to send/receive console communications from an embedded HTML user interface to a application.
 This was originally created for use on Crestron VC4 but has since been migrated to netstandard for use in native runtime application. </Description>
-    <PackageProjectUrl>https://github.com/ewilliams0305/WebLogger</PackageProjectUrl>
-    <PackageIcon>log.png</PackageIcon>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/ewilliams0305/VirtualControlWeblogger</RepositoryUrl>
-    <PackageTags>Logging;Crestron;VirtualControl;Websocket</PackageTags>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <Company>ewilliams0305</Company>
-    <Version>1.1.9</Version>
-    <FileVersion>1.1.9</FileVersion>
-    <PackageReleaseNotes>
-      #### Version 1.1.9
-      - Created HTML Renders
-      - Moved Source Generator static files to WebLogger project to resolve issues with multiple projects in a single solution
-      - Serilog sink is now formatting HTML messages.
-      - WebLogger Options now includes a colors factory.
-    </PackageReleaseNotes>
+
   </PropertyGroup>
 
   <ItemGroup>
@@ -48,20 +31,6 @@ This was originally created for use on Crestron VC4 but has since been migrated 
     </EmbeddedResource>
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="..\..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-    <None Include="..\..\log.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-    <None Include="..\..\README.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="WebSocketSharp-netstandard" Version="1.0.1" />

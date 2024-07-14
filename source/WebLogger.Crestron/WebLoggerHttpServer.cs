@@ -1,4 +1,7 @@
-﻿using Crestron.SimplSharp;
+﻿
+#pragma warning disable IDE1006
+
+using Crestron.SimplSharp;
 using Crestron.SimplSharp.CrestronIO;
 using Crestron.SimplSharp.Net.Http;
 using System;
@@ -13,12 +16,12 @@ namespace WebLogger.Crestron
     /// </summary>
     public sealed class WebLoggerHttpServer : IDisposable
     {
-        #region STATIC MEMBERS
 
         /// <summary>
         /// The extension content types
         /// </summary>
-        public static Dictionary<string, string> ExtensionContentTypes;
+        private static Dictionary<string, string> _extensionContentTypes;
+
         /// <summary>
         /// Gets the type of the content.
         /// </summary>
@@ -26,19 +29,13 @@ namespace WebLogger.Crestron
         /// <returns>System.String.</returns>
         public static string GetContentType(string extension)
         {
-            var type = ExtensionContentTypes.ContainsKey(extension) ? ExtensionContentTypes[extension] : "text/plain";
+            var type = _extensionContentTypes.TryGetValue(extension, out var contentType) ? contentType : "text/plain";
             return type;
         }
-
-        #endregion
-
-        #region PRIVATE FIELDS
 
         private readonly HttpServer _server;
         private readonly string _directory;
         private bool _disposedValue;
-
-        #endregion
 
         /// <summary>
         /// Creates a new instance of the Logo Server and starts server
@@ -47,7 +44,7 @@ namespace WebLogger.Crestron
         /// <param name="directory">File Directory to Serve</param>
         public WebLoggerHttpServer(int port, string directory)
         {
-            ExtensionContentTypes = new Dictionary<string, string>
+            _extensionContentTypes = new Dictionary<string, string>
             {
                 { ".html", "text/html" },
                 { ".json", "application/json" },

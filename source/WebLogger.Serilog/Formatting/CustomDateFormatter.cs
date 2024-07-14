@@ -35,7 +35,7 @@ namespace WebLogger
             if (formatType != typeof(DateTimeFormatInfo)) 
                 return this._basedOn.GetFormat(formatType);
 
-            if (!(_basedOn.GetFormat(formatType) is DateTimeFormatInfo basedOnFormatInfo)) 
+            if (_basedOn.GetFormat(formatType) is not DateTimeFormatInfo basedOnFormatInfo) 
                 return null;
 
             var dateFormatInfo = (DateTimeFormatInfo)basedOnFormatInfo.Clone();

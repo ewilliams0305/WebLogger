@@ -3,9 +3,6 @@ using Crestron.SimplSharp.CrestronIO;
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.CrestronThread;
 using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Reflection;
 using WebLogger.Crestron;
 using WebLogger.Utilities;
 
@@ -18,7 +15,6 @@ namespace WebLogger.CrestronApp
         {
             try
             {
-                Thread.MaxNumberOfUserThreads = 20;
                 CrestronEnvironment.ProgramStatusEventHandler += new ProgramStatusEventHandler(ControllerProgramEventHandler);
             }
             catch (Exception e)
@@ -53,7 +49,7 @@ namespace WebLogger.CrestronApp
                         {
                             options.Commands = commands;
                             options.Secured = false;
-                            options.DestinationWebpageDirectory = Path.Combine(Directory.GetApplicationRootDirectory(), "html/logger");
+                            options.DestinationWebpageDirectory = Crestron.SimplSharp.CrestronIO.Path.Combine(Directory.GetApplicationRootDirectory(), "html/logger");
                             options.WebSocketTcpPort = 54321;
                         },
                         logger =>

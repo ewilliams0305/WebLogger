@@ -33,14 +33,12 @@ namespace WebLogger.Utilities
 
             try
             {
-                using (var reader = new StreamReader(path))
-                {
-                    var file = reader.ReadToEnd();
+                using var reader = new StreamReader(path);
+                var file = reader.ReadToEnd();
 
-                    return file;
-                }
+                return file;
             }
-            catch (IOException e)
+            catch (IOException)
             {
                 return string.Empty;
             }
@@ -100,15 +98,13 @@ namespace WebLogger.Utilities
                 if(!Directory.Exists(htmlDirectory))
                     Directory.CreateDirectory(htmlDirectory);
 
-                using (var writer = new FileStream(path, FileMode.Create))
-                {
-                    var builder = new StringBuilder("#VERSION:")
-                        .Append(Assembly.GetAssembly(typeof(IAssemblyMarker)).GetName().Version);
+                using var writer = new FileStream(path, FileMode.Create);
+                var builder = new StringBuilder("#VERSION:")
+                    .Append(Assembly.GetAssembly(typeof(IAssemblyMarker))!.GetName().Version);
 
-                    var bytes = Encoding.UTF8.GetBytes(builder.ToString());
+                var bytes = Encoding.UTF8.GetBytes(builder.ToString());
 
-                    writer.Write(bytes, 0, bytes.Length);
-                }
+                writer.Write(bytes, 0, bytes.Length);
             }
             catch (IOException)
             {

@@ -6,19 +6,23 @@ using WebLogger.Render;
 
 namespace WebLogger
 {
+    /// <summary>
+    /// Generates colors used for the sink
+    /// </summary>
     public sealed class RenderSinkTextColor : IRenderMessages
     {
         private static HtmlElement CreatePrefix(LogEvent logEvent, Color color)
         {
             var builder = new StringBuilder("[")
                 .Append(logEvent.Timestamp.ToString("HH:mm:ss"))
-                .Append(" ")
+                .Append(' ')
                 .Append(logEvent.Level.GetLevel())
                 .Append("] ");
 
             return HtmlElement.Span(builder.ToString(), color);
         }
 
+        /// <inheritdoc />
         public string RenderVerbose(LogEvent logEvent, IFormatProvider formatProvider)
         {
             var color = ColorFactory.Instance.GetColor(Severity.Verbose);
@@ -27,7 +31,7 @@ namespace WebLogger
                 .Append(logEvent.RenderMessage(formatProvider))
                 .Render();
         }
-
+        /// <inheritdoc />
         public string RenderInformation(LogEvent logEvent, IFormatProvider formatProvider)
         {
             var color = ColorFactory.Instance.GetColor(Severity.Verbose);
@@ -36,6 +40,7 @@ namespace WebLogger
                 .Append(logEvent.RenderMessage(formatProvider))
                 .Render();
         }
+        /// <inheritdoc />
         public string RenderWarning(LogEvent logEvent, IFormatProvider formatProvider)
         {
             var color = ColorFactory.Instance.GetColor(Severity.Warning);
@@ -44,7 +49,7 @@ namespace WebLogger
                 .Append(logEvent.RenderMessage(formatProvider))
                 .Render();
         }
-
+        /// <inheritdoc />
         public string RenderError(LogEvent logEvent, IFormatProvider formatProvider)
         {
             var color = ColorFactory.Instance.GetColor(Severity.Error);
@@ -54,7 +59,7 @@ namespace WebLogger
                 return CreatePrefix(logEvent, color)
                     .Append(logEvent.RenderMessage(formatProvider))
                     .Append(HtmlElement.Span(", Exception: "))
-                    .Append(RenderExceptions(logEvent.Exception, color))
+                    .Append(RenderExceptions(logEvent.Exception))
                     .Render();
             }
 
@@ -63,7 +68,7 @@ namespace WebLogger
                 .Render();
         }
 
-        private static HtmlElement RenderExceptions(Exception exception, Color color)
+        private static HtmlElement RenderExceptions(Exception exception)
         {
             var builder = new StringBuilder("background-color:")
                 .RenderColor(Color.DarkRed)

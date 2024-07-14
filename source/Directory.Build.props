@@ -1,0 +1,30 @@
+<Project>
+   <PropertyGroup>
+     <TargetFrameworks>netstandard2.0;net472;net6.0;net8.0</TargetFrameworks>
+     <PackageProjectUrl>https://github.com/ewilliams0305/WebLogger</PackageProjectUrl>
+     <PackageIcon>log.png</PackageIcon>
+     <PackageReadmeFile>README.md</PackageReadmeFile>
+     <RepositoryUrl>https://github.com/ewilliams0305/VirtualControlWeblogger</RepositoryUrl>
+     <PackageTags>Logging;Crestron;VirtualControl;Websocket</PackageTags>
+     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+
+     <Company>ewilliams0305</Company>
+   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\log.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+</Project>

@@ -6,50 +6,49 @@ using WebLogger.Render;
 
 namespace WebLogger
 {
+    /// <summary>
+    /// Renders the output as an HTML element
+    /// </summary>
     public sealed class RenderSinkHtml : IRenderMessages
     {
-        private const string _styleyleHeader = "padding:10px;margin:10px;font-weight:bold;background-color:";
-        private const string _styleyleSuffix = ";";
+
+        private const string StyleHeader = "padding:10px;margin:10px;font-weight:bold;background-color:";
+        private const char StyleSuffix = ';';
 
         private static HtmlElement CreatePrefix(LogEvent logEvent, Color color)
         {
-            var styles = new StringBuilder(_styleyleHeader)
+            var styles = new StringBuilder(StyleHeader)
                 .RenderColor(color)
-                .Append(_styleyleSuffix);
+                .Append(StyleSuffix);
 
             var builder = new StringBuilder(logEvent.Timestamp.ToString("HH:mm:ss"))
-                .Append(" ")
+                .Append(' ')
                 .Append(logEvent.Level.GetLevel());
 
             return HtmlElement.Span(builder.ToString(), new HtmlElementOptions(additionalStyles: styles.ToString()));
         }
 
-        private string RenderMessage(LogEvent logEvent, IFormatProvider formatProvider, Color color)
-        {
-            return HtmlElement.Div(CreatePrefix(logEvent, color)
-                    .Append(HtmlElement.Span(logEvent.RenderMessage(formatProvider))))
-                .Render();
-        }
-
+        /// <inheritdoc />
         public string RenderVerbose(LogEvent logEvent, IFormatProvider formatProvider)
         {
             var color = ColorFactory.Instance.GetColor(Severity.Verbose);
             return RenderMessage(logEvent, formatProvider, color);
         }
-
+        /// <inheritdoc />
         public string RenderInformation(LogEvent logEvent, IFormatProvider formatProvider)
         {
             var color = ColorFactory.Instance.GetColor(Severity.Verbose);
 
             return RenderMessage(logEvent, formatProvider, color);
         }
+        /// <inheritdoc />
         public string RenderWarning(LogEvent logEvent, IFormatProvider formatProvider)
         {
             var color = ColorFactory.Instance.GetColor(Severity.Warning);
 
             return RenderMessage(logEvent, formatProvider, color);
         }
-
+        /// <inheritdoc />
         public string RenderError(LogEvent logEvent, IFormatProvider formatProvider)
         {
             var color = ColorFactory.Instance.GetColor(Severity.Error);
@@ -59,14 +58,14 @@ namespace WebLogger
                 return CreatePrefix(logEvent, color)
                     .Append(logEvent.RenderMessage(formatProvider))
                     .Append(HtmlElement.Span(", Exception: "))
-                    .Append(RenderExceptions(logEvent.Exception, color))
+                    .Append(RenderExceptions(logEvent.Exception))
                     .Render();
             }
 
             return RenderMessage(logEvent, formatProvider, color);
         }
 
-        private static HtmlElement RenderExceptions(Exception exception, Color color)
+        private static HtmlElement RenderExceptions(Exception exception)
         {
             var builder = new StringBuilder("background-color:")
                 .RenderColor(Color.DarkRed)
@@ -76,6 +75,13 @@ namespace WebLogger
                 HtmlElement.TableRow(
                     HtmlElement.TableData(exception.ToString(), new HtmlElementOptions(additionalStyles: builder.ToString()))
                     ));
+        }
+
+        private static string RenderMessage(LogEvent logEvent, IFormatProvider formatProvider, Color color)
+        {
+            return HtmlElement.Div(CreatePrefix(logEvent, color)
+                    .Append(HtmlElement.Span(logEvent.RenderMessage(formatProvider))))
+                .Render();
         }
     }
 }
