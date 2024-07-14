@@ -43,29 +43,19 @@ jobs:
         echo "Version: ${{ steps.gitversion.outputs.SemVer }}"
         echo "CommitsSinceVersionSource: ${{ steps.gitversion.outputs.CommitsSinceVersionSource }}"
     
-    - name: Install xmlstarlet
-      run: sudo apt-get install -y xmlstarlet
-
-    - name: Update Tool Version In Targets
-      run: |
-        xmlstarlet ed --inplace \
-          -u "//_:PropertyGroup/_:ToolVersion" \
-          -v '${{ steps.gitversion.outputs.SemVer }}' \
-          source/SimplSharp.Library.Targets/build/SimplSharp.Library.Targets.targets
-
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.x
 
     - name: Dotnet Restore  
-      run: dotnet restore source/**.sln
+      run: dotnet restore ./**.sln
 
     - name: Build Source Projects 
-      run: dotnet build source/**.sln -p:Version='${{ steps.gitversion.outputs.SemVer }}' -c Release
+      run: dotnet build ./**.sln -p:Version='${{ steps.gitversion.outputs.SemVer }}' -c Release
 
     - name: Pack NuGet Packages
-      run: dotnet pack source/**.sln -p:Version='${{ steps.gitversion.outputs.SemVer }}' -c Release -o bin/nugetPackages
+      run: dotnet pack ./**.sln -p:Version='${{ steps.gitversion.outputs.SemVer }}' -c Release -o bin/nugetPackages
 
     - name: Upload NuGet package to GitHub
       uses: actions/upload-artifact@v4

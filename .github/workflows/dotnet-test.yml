@@ -12,7 +12,7 @@ jobs:
 
     env:
       BUILD_CONFIG: 'Release'
-      SOLUTION: 'source/**.sln'
+      SOLUTION: './**.sln'
 
     runs-on: ubuntu-latest
 
@@ -29,8 +29,5 @@ jobs:
     - name: Build Solution
       run: dotnet build $SOLUTION --no-restore
 
-    - name: Change Permissions
-      run: chmod +x /home/runner/work/simpl-sharp-targets/simpl-sharp-targets/source/SimplSharp.Tool/bin/Debug/net8.0/SimplSharp.Tool
-      
     - name: Test Solution
       run: dotnet test $SOLUTION --no-restore --verbosity normal
