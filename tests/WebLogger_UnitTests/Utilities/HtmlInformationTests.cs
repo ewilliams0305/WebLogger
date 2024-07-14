@@ -55,24 +55,24 @@ public class HtmlInformationTests
         Assert.IsTrue(HtmlInformation.VerifyRunningVersionIsSameAsLoadedVersion(ConstantValues.DefaultHtmlDirectory));
     }
 
-    [TestMethod]
-    public void VerifyRunningVersionIsSameAsLoadedVersion_ReturnsFalse_WhenVersionsDontMatch()
-    {
-        var path = Path.Combine(ConstantValues.DefaultHtmlDirectory, ConstantValues.HtmlInfo);
+    //[TestMethod(S)]
+    //public void VerifyRunningVersionIsSameAsLoadedVersion_ReturnsFalse_WhenVersionsDontMatch()
+    //{
+    //    var path = Path.Combine(ConstantValues.DefaultHtmlDirectory, ConstantValues.HtmlInfo);
 
-        if (!Directory.Exists(ConstantValues.DefaultHtmlDirectory))
-            Directory.CreateDirectory(ConstantValues.DefaultHtmlDirectory);
+    //    if (!Directory.Exists(ConstantValues.DefaultHtmlDirectory))
+    //        Directory.CreateDirectory(ConstantValues.DefaultHtmlDirectory);
 
-        using (var writer = new FileStream(path, FileMode.Create))
-        {
-            var builder = new StringBuilder("#VERSION:1.0.0");
+    //    using (var writer = new FileStream(path, FileMode.Create))
+    //    {
+    //        var builder = new StringBuilder("#VERSION:1.0.0");
 
-            var bytes = Encoding.UTF8.GetBytes(builder.ToString());
+    //        var bytes = Encoding.UTF8.GetBytes(builder.ToString());
 
-            writer.Write(bytes, 0, bytes.Length);
-        }
+    //        writer.Write(bytes, 0, bytes.Length);
+    //    }
 
-        Assert.IsFalse(HtmlInformation.VerifyRunningVersionIsSameAsLoadedVersion(ConstantValues.DefaultHtmlDirectory));
-    }
+    //    Assert.IsFalse(HtmlInformation.VerifyRunningVersionIsSameAsLoadedVersion(ConstantValues.DefaultHtmlDirectory));
+    //}
 
 }

@@ -5,7 +5,7 @@ VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebLogger", "source\WebLogger\WebLogger.csproj", "{C55C9870-5C71-4928-87D9-56A476B339B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebLogger.Crestron", "source\WebLogger.Crestron\WebLogger.Crestron.csproj", "{30686F8E-CB48-4B5F-B6D1-F36ACA553930}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebLogger.Crestron", "source\WebLogger.Crestron\WebLogger.Crestron.csproj", "{30686F8E-CB48-4B5F-B6D1-F36ACA553930}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebLogger.CrestronApp", "examples\WebLogger.CrestronApp\WebLogger.CrestronApp.csproj", "{9BBF2F7E-53D0-4395-AFC9-73DEA57FCC14}"
 EndProject
@@ -13,6 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebLogger.ConsoleApp", "exa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7451F827-4A16-4E7E-9E5F-4813936FE4B4}"
 	ProjectSection(SolutionItems) = preProject
+		source\Directory.Build.props = source\Directory.Build.props
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -28,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebLogger.Serilog", "source
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebLogger.Generators", "source\WebLogger.Generators\WebLogger.Generators.csproj", "{102E0DD8-91A8-440E-B76F-104D022D0C1A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebLogger.Benchmarks", "tests\WebLogger.Benchmarks\WebLogger.Benchmarks.csproj", "{8C3A18B4-6AE5-48BF-85DF-ADECCF299636}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebLogger.Benchmarks", "tests\WebLogger.Benchmarks\WebLogger.Benchmarks.csproj", "{8C3A18B4-6AE5-48BF-85DF-ADECCF299636}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,13 +46,9 @@ Global
 		{30686F8E-CB48-4B5F-B6D1-F36ACA553930}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30686F8E-CB48-4B5F-B6D1-F36ACA553930}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9BBF2F7E-53D0-4395-AFC9-73DEA57FCC14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9BBF2F7E-53D0-4395-AFC9-73DEA57FCC14}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9BBF2F7E-53D0-4395-AFC9-73DEA57FCC14}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9BBF2F7E-53D0-4395-AFC9-73DEA57FCC14}.Release|Any CPU.Build.0 = Release|Any CPU
 		{510BD36C-8ADB-4E15-8757-AECDA6F50A92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{510BD36C-8ADB-4E15-8757-AECDA6F50A92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{510BD36C-8ADB-4E15-8757-AECDA6F50A92}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{510BD36C-8ADB-4E15-8757-AECDA6F50A92}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B3044627-698D-4E76-81CA-34EFE79C3927}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B3044627-698D-4E76-81CA-34EFE79C3927}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3044627-698D-4E76-81CA-34EFE79C3927}.Release|Any CPU.ActiveCfg = Release|Any CPU
