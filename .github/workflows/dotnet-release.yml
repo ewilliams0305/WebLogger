@@ -102,7 +102,7 @@ jobs:
         name: Release ${{ needs.build.outputs.Version }}
         body: Released via github actions workflow, see repository README.md
         generateReleaseNotes: true
-        artifacts: "bin/nugetPackages/"  
+        artifacts: "bin/nugetPackages/*"  
         token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Push packages to Nuget
