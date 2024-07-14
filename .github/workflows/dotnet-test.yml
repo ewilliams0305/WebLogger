@@ -1,0 +1,36 @@
+name: DOTNET TEST
+
+on:
+
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches:
+    - "**"
+
+jobs:
+  dotnet-test:
+
+    env:
+      BUILD_CONFIG: 'Release'
+      SOLUTION: 'source/**.sln'
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.x
+        
+    - name: Restore dependencies
+      run: dotnet restore $SOLUTION
+      
+    - name: Build Solution
+      run: dotnet build $SOLUTION --no-restore
+
+    - name: Change Permissions
+      run: chmod +x /home/runner/work/simpl-sharp-targets/simpl-sharp-targets/source/SimplSharp.Tool/bin/Debug/net8.0/SimplSharp.Tool
+      
+    - name: Test Solution
+      run: dotnet test $SOLUTION --no-restore --verbosity normal

@@ -1,28 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>9</LangVersion>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>WebLogger Command Source Generators</Title>
     <Description>Source generators used to created custom CLI commands used by the WebLogger console.  Simply tag your handler methods with a specific attribute and your command will be generated.</Description>
-    <Copyright></Copyright>
-    <PackageProjectUrl>https://github.com/ewilliams0305/WebLogger</PackageProjectUrl>
-    <PackageIcon>log.png</PackageIcon>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/ewilliams0305/VirtualControlWeblogger</RepositoryUrl>
-    <PackageTags>Logging;Crestron;VirtualControl;Websocket</PackageTags>
-    <Version>1.1.9</Version>
-    <FileVersion>1.1.8</FileVersion>
-    <Company>ewilliams0305</Company>
-    <PackageReleaseNotes>
-      #### Version 1.1.5
-      - Created HTML Renders
-      - Moved Source Generator static files to WebLogger project to resolve issues with multiple projects in a single solution
-      - Serilog sink is now formatting HTML messages.
-      - WebLogger Options now includes a colors factory.
-    </PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

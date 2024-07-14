@@ -1,6 +1,6 @@
-﻿using System;
-using Crestron.SimplSharp;
+﻿using Crestron.SimplSharp;
 using Crestron.SimplSharp.CrestronIO;
+using System;
 using WebLogger.Utilities;
 
 namespace WebLogger.Crestron.Simpl

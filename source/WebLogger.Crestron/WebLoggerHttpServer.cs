@@ -13,7 +13,6 @@ namespace WebLogger.Crestron
     /// </summary>
     public sealed class WebLoggerHttpServer : IDisposable
     {
-        #region STATIC MEMBERS
 
         /// <summary>
         /// The extension content types
@@ -26,19 +25,13 @@ namespace WebLogger.Crestron
         /// <returns>System.String.</returns>
         public static string GetContentType(string extension)
         {
-            var type = ExtensionContentTypes.ContainsKey(extension) ? ExtensionContentTypes[extension] : "text/plain";
+            var type = ExtensionContentTypes.TryGetValue(extension, out var contentType) ? contentType : "text/plain";
             return type;
         }
-
-        #endregion
-
-        #region PRIVATE FIELDS
 
         private readonly HttpServer _server;
         private readonly string _directory;
         private bool _disposedValue;
-
-        #endregion
 
         /// <summary>
         /// Creates a new instance of the Logo Server and starts server
