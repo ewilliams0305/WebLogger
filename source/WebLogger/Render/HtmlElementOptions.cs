@@ -31,6 +31,7 @@ namespace WebLogger.Render
         /// <param name="color">Color</param>
         /// <param name="fontFamily">Font Attribute</param>
         /// <param name="fontSize">Style Attribute</param>
+        /// <param name="additionalStyles">Added styles to the element</param>
         public HtmlElementOptions(Color color = default, string fontFamily = default, int? fontSize = null, string additionalStyles = null)
         {
             Color = color;
@@ -39,7 +40,18 @@ namespace WebLogger.Render
             AdditionalStyles = additionalStyles;
         }
 
+        /// <summary>
+        /// Converts a color to an element
+        /// </summary>
+        /// <param name="color">the color</param>
+        /// <returns>the element</returns>
         public static implicit operator HtmlElementOptions(Color color) => new HtmlElementOptions(color);
+
+        /// <summary>
+        /// Converts a element to a color
+        /// </summary>
+        /// <param name="options">the color</param>
+        /// <returns>the color</returns>
         public static implicit operator Color(HtmlElementOptions options) => options.Color;
     }
 }

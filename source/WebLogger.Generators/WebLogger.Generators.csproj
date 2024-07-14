@@ -6,18 +6,9 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>WebLogger Command Source Generators</Title>
     <Description>Source generators used to created custom CLI commands used by the WebLogger console.  Simply tag your handler methods with a specific attribute and your command will be generated.</Description>
-  </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\..\log.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-    <None Include="..\..\README.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
+    <NoWarn>CS1591</NoWarn>
+  </PropertyGroup>
 
   
   <ItemGroup>

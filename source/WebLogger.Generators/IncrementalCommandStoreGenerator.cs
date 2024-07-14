@@ -1,4 +1,13 @@
-﻿using Microsoft.CodeAnalysis;
+﻿#pragma warning disable RS1024
+#pragma warning disable IDE0079
+
+#if NET6_0_OR_GREATER
+#pragma warning disable CA1067
+#else
+#pragma warning disable IDE1041
+#endif
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
@@ -16,8 +25,6 @@ namespace WebLogger.Generators
     {
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
-            //context.RegisterPostInitializationOutput(PostInitializationCallback);
-
             IncrementalValuesProvider<TargetClassCaptureContext> provider = context.SyntaxProvider
                 .CreateSyntaxProvider(SyntacticPredicate, SemanticTransform)
                 .Where(static ((INamedTypeSymbol, Dictionary<IMethodSymbol, List<string>>)? type) => type.HasValue)
@@ -27,23 +34,9 @@ namespace WebLogger.Generators
             context.RegisterSourceOutput(provider, Execute);
         }
 
-        private static void PostInitializationCallback(IncrementalGeneratorPostInitializationContext context)
-        {
-
-            //context.AddSource(Constants.CommandStoreAttributeFile, Constants.CommandStoreAttributeValue);
-            //context.AddSource(Constants.TargetCommandAttributeFile, Constants.TargetCommandAttributeValue);
-            //context.AddSource(Constants.StoredCommandsInterfaceExtensionsFile, Constants.StoredCommandsInterfaceExtensionsValue);
-            //context.AddSource(Constants.StoredCommandsInterfaceFile, Constants.StoredCommandsInterfaceValue);
-        }
-
         private static bool SyntacticPredicate(SyntaxNode node, CancellationToken cancellation)
         {
-            if (node is not AttributeSyntax { Name: IdentifierNameSyntax { Identifier: { Text: "CommandStore" } } } attribute)
-            {
-                return false;
-            }
-
-            return true;
+            return node is AttributeSyntax { Name: IdentifierNameSyntax { Identifier: { Text: "CommandStore" } } };
         }
 
         private static (INamedTypeSymbol, Dictionary<IMethodSymbol, List<string>>)? SemanticTransform(GeneratorSyntaxContext context, CancellationToken cancellation)
@@ -58,7 +51,7 @@ namespace WebLogger.Generators
                 return null;
 
             // 2. Ensure the class does not already implement the command store and ensure the attribute is applied
-            ISymbol typeSymbol = context.SemanticModel.GetDeclaredSymbol(candidate);
+            ISymbol typeSymbol = context.SemanticModel.GetDeclaredSymbol(candidate, cancellation);
 
             if (typeSymbol is not INamedTypeSymbol type) 
                 return null;
@@ -279,14 +272,14 @@ namespace WebLogger.Generators
         /// </summary>
         internal class TargetClassCaptureContextComparer : IEqualityComparer<TargetClassCaptureContext>
         {
-            private static readonly Lazy<TargetClassCaptureContextComparer> _lazy = new(() => new TargetClassCaptureContextComparer());
-            public static TargetClassCaptureContextComparer Instance => _lazy.Value;
+            private static readonly Lazy<TargetClassCaptureContextComparer> Lazy = new(() => new TargetClassCaptureContextComparer());
+            public static TargetClassCaptureContextComparer Instance => Lazy.Value;
 
             public bool Equals(TargetClassCaptureContext x, TargetClassCaptureContext y)
             {
                 if (ReferenceEquals(x, y)) return true;
-                if (ReferenceEquals(x, null)) return false;
-                if (ReferenceEquals(y, null)) return false;
+                if (x is null) return false;
+                if (y is null) return false;
                 if (x.GetType() != y.GetType()) return false;
 
                 return x.Equals(y);
@@ -343,11 +336,11 @@ namespace WebLogger.Generators
                 int i = 1;
                 foreach (var property in method.PropertyValues)
                 {
-                    methods.Append("\"").Append(i == 1? property.RemoveWhiteSpace().ToUpper() : property).Append("\"");
+                    methods.Append('\\').Append(i == 1? property.RemoveWhiteSpace().ToUpper() : property).Append('\\');
 
                     if (i != 3)
                     {
-                        methods.Append(",");
+                        methods.Append(',');
                     }
                     i++;
                 }
