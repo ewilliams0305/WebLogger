@@ -5,7 +5,8 @@
 ![GitHub issues](https://img.shields.io/github/issues/ewilliams0305/WebLogger)
 ![GitHub Repo stars](https://img.shields.io/github/stars/ewilliams0305/WebLogger?style=social)
 ![GitHub forks](https://img.shields.io/github/forks/ewilliams0305/WebLogger?style=social)
-[![DOTNET TEST](https://github.com/ewilliams0305/WebLogger/actions/workflows/dotnet-test.yml/badge.svg)](https://github.com/ewilliams0305/WebLogger/actions/workflows/dotnet-test.yml)
+[![DOTNET TEST](https://github.com/ewilliams0305/WebLogger/actions/workflows/dotnet-test.yml/badge.svg)](https://github.com/ewilliams0305/WebLogger/actions/workflows/dotnet-test.yml) 
+[![PUBLISH RELEASE](https://github.com/ewilliams0305/WebLogger/actions/workflows/dotnet-release.yml/badge.svg)](https://github.com/ewilliams0305/WebLogger/actions/workflows/dotnet-release.yml)
 
 The WebLogger is a websocket server designed to provide an accessible console application served to an html user interface. The WebLogger library targets .netstandard 2.0 and can be used in any .net framework 4.7 and .net Core application. WebLogger will manage the server and provide an easy way to create a custom CLI using commands and prompts.
 This library also includes an HTML front end using vanilla JS to handle the user interface component.
