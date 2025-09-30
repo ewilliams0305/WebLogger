@@ -112,6 +112,7 @@ jobs:
         generateReleaseNotes: true
         artifacts: "bin/nugetPackages/*"  
         prerelease: true
+        allowUpdates: true
         token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Push packages to Nuget

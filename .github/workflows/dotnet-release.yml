@@ -103,6 +103,7 @@ jobs:
         body: Released via github actions workflow, see repository README.md
         generateReleaseNotes: true
         artifacts: "bin/nugetPackages/*"  
+        allowUpdates: true
         token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Push packages to Nuget
