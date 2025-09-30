@@ -24,8 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Crestron.SimplSharp.SDK.Library" Version="2.20.66" />
-    <PackageReference Include="SimplSharp.Library.Targets" Version="0.1.9" />
+    <PackageReference Include="Crestron.SimplSharp.SDK.Library" Version="2.21.157" />
+    <PackageReference Include="SimplSharp.Library.Targets" Version="0.2.0" />
   </ItemGroup>
 
   <ItemGroup>
