@@ -14,6 +14,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7451F827-4A16-4E7E-9E5F-4813936FE4B4}"
 	ProjectSection(SolutionItems) = preProject
 		source\Directory.Build.props = source\Directory.Build.props
+		.github\workflows\dotnet-beta.yml = .github\workflows\dotnet-beta.yml
+		.github\workflows\dotnet-release.yml = .github\workflows\dotnet-release.yml
+		.github\workflows\dotnet-test.yml = .github\workflows\dotnet-test.yml
 		README.md = README.md
 	EndProjectSection
 EndProject
