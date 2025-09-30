@@ -1,5 +1,0 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="build">
-  <Target Name="SimplSharpClean" />
-  <Target Name="SimplSharpPostProcess" />
-  <Target Name="SimplSharpPostProcess47" />
-</Project>
