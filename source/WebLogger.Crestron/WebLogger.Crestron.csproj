@@ -9,7 +9,7 @@
       This was originally created for use on Crestron VC4 but has since been migrated to netstandard for use in native runtime application.
       Wraps the weblogger for the use within the crestron SDK
     </Description>
-    <TargetFrameworks>net472;net6.0;</TargetFrameworks>
+    <TargetFrameworks>net472;net8.0;</TargetFrameworks>
     <Version>1.5.5</Version>
   </PropertyGroup>
 
